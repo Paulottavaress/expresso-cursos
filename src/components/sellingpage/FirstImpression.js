@@ -27,7 +27,7 @@ const FirstImpression = ({ logo, title, subtitle, backgroundImage }) => {
         <div className='d-flex flex-column align-items-center text-center'>
           <Link to="/">
             <img
-              style={{ width: '40%' }}
+              style={{ width: '70%' }}
               src={logo}
               alt="logo"
             />
@@ -41,7 +41,7 @@ const FirstImpression = ({ logo, title, subtitle, backgroundImage }) => {
           >
             {title}
           </p>
-          <p className='h3'>
+          <p className='h3 text-align-left-important'>
             {subtitle}
           </p>
         </div>

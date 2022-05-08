@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Partners from './Partners';
+import { Link } from 'react-router-dom';
 
 const FirstImpression = ({ logo, title, subtitle, backgroundImage }) => {
-  const [partnersLogos, setPartnersLogos] = useState(
+  const [partnersLogos] = useState(
     [
       '/assets/images/detran-mg-transparent.png',
       '/assets/images/inove-transparent-resized.png'
@@ -24,11 +25,13 @@ const FirstImpression = ({ logo, title, subtitle, backgroundImage }) => {
     }}>
       <div className='container text-light'>
         <div className='d-flex flex-column align-items-center text-center'>
-          <img
-          style={{ width: '60%' }}
-            src={logo}
-            alt="logo"
-          />
+          <Link to="/">
+            <img
+              style={{ width: '40%' }}
+              src={logo}
+              alt="logo"
+            />
+          </Link>
           <p
             className='h1'
             style={{

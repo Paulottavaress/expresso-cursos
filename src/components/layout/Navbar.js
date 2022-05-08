@@ -1,33 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-const Navbar = ({ title, icon }) => {
+const Navbar = ({ logo }) => {
   return (
     <div className="navbar bg-primary">
       <h1>
-        <i className={icon} /> {title}
+        <Link to="/">
+          <img
+            src={logo}
+            alt=""
+            style={{ width:'50%' }}
+          />
+        </Link>
       </h1>
-      {/* <ul>
+      <ul>
         <li>
-          <Link to='/'>Home</Link>
-          <Link to='/about'>About</Link>
-          <Link to='/register'>Register</Link>
-          <Link to='/login'>Login</Link>
+          <Link to='/mopp'>
+            <p className='h3'>Mopp</p>
+          </Link>
         </li>
-      </ul> */}
+      </ul>
     </div>
   )
 }
 
 Navbar.propTypes = {
-  title: PropTypes.string.isRequired,
-  icon: PropTypes.string
+  logo: PropTypes.string.isRequired
 }
 
 Navbar.defaultProps = {
-  title: 'Expresso Cursos',
-  icon: 'fa-solid fa-truck'
+  logo: '/assets/images/logo-v2-resized.png'
 }
 
 export default Navbar;

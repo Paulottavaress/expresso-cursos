@@ -6,28 +6,32 @@ import { Link } from 'react-router-dom';
 const FirstImpression = ({ logo, title, subtitle, backgroundImage }) => {
   const [partnersLogos] = useState(
     [
-      '/assets/images/detran-mg-transparent.png',
-      '/assets/images/inove-transparent-resized.png'
+      '/assets/images/logos/detran-mg-transparent.png',
+      '/assets/images/logos/inove-transparent-resized.png'
     ]
   )
 
   return (
     <div 
-    className='d-flex flex-column'
-    style={{
-      height: '100vh',
-      background: 'linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('+ backgroundImage +') no-repeat center center fixed',
-      backgroundSize: 'cover',
-      WebkitBackgroundSize: 'cover',
-      OBackgroundSize: 'cover',
-      MozBackgroundSize: 'cover',
-      opacity: 0.9
-    }}>
+      className='d-flex flex-column ios-background-image'
+      style={{
+        height: '100vh',
+        background: 'linear-gradient( rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5) ), url('+ backgroundImage +') no-repeat center center fixed',
+        backgroundSize: 'cover',
+        WebkitBackgroundSize: 'cover',
+        OBackgroundSize: 'cover',
+        MozBackgroundSize: 'cover',
+        opacity: 0.9
+      }}
+    >
       <div className='container text-light'>
         <div className='d-flex flex-column align-items-center text-center'>
           <Link to="/">
             <img
-              style={{ width: '70%' }}
+              style={{
+                width: '70%',
+                marginBottom: '30px'
+              }}
               src={logo}
               alt="logo"
             />
@@ -59,10 +63,10 @@ FirstImpression.propTypes = {
 }
 
 FirstImpression.defaultProps = {
-  logo: '/assets/images/logo-v1-resized.png',
+  logo: '/assets/images/logos/logo-v1-resized.png',
   title: 'TITLE',
   subtitle: 'SUBTITLE',
-  backgroundImage: '/assets/images/mopp.jpeg'
+  backgroundImage: '/assets/images/backgrounds/mopp.jpeg'
 }
 
 export default FirstImpression;

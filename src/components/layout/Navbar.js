@@ -4,20 +4,20 @@ import { Link } from 'react-router-dom';
 
 const Navbar = ({ logo }) => {
   return (
-    <div className="navbar bg-primary">
+    <div className="navbar position-absolute">
       <h1>
         <Link to="/">
           <img
             src={logo}
-            alt=""
-            style={{ width:'50%' }}
+            alt='logo'
+            className='navbar-logo'
           />
         </Link>
       </h1>
       <ul>
         <li>
           <Link to='/mopp'>
-            <p className='h3'>Mopp</p>
+            <p className='h3 text-primary'>Mopp</p>
           </Link>
         </li>
       </ul>
@@ -30,7 +30,7 @@ Navbar.propTypes = {
 }
 
 Navbar.defaultProps = {
-  logo: '/assets/images/logo-v2-resized.png'
+  logo: '/assets/images/logos/logo-v1-resized.png'
 }
 
 export default Navbar;

@@ -131,6 +131,28 @@ img {
   }
 }
 
+@media (max-width: 768px) {
+  .homepage {
+    .courses-area {
+      .grid {
+        display: flex; 
+        flex-direction: column;
+        grid-gap: 0px;
+
+        .courses-card {
+          margin-bottom: 20px;
+        }
+
+        .courses-card:last-child {
+          background-color: red;
+          margin-bottom: 0px;
+        }
+      }
+      
+    }
+  }
+}
+
 /* Text Styles*/
 .x-large {
   font-size: 4rem;

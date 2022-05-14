@@ -4,8 +4,7 @@ const SchoolInfo = () => {
   return (
     <div className='bg-secondary'>
       <div
-        className="container"
-        style={{ padding: '20px'}}
+        className="container py-5"
       >
         <p
           className="h1 text-center"

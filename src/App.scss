@@ -29,7 +29,7 @@ $success: #28a745;
 }
 
 body {
-  font-family: 'Oswald', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 1rem;
   line-height: 1.6;
   background-color: #fff;
@@ -60,15 +60,28 @@ img {
   max-width: 1440px !important;
 }
 
+.bg-tertiary {
+  background-color: $tertiary;
+}
+
 /* Utilities */
 .box {
   width: 310px;
-  height: 500px;
+  height: 620px;
   border: 5px solid #333;
   border-radius: 10px;
   margin: auto;
   margin: 4px 0 0 4px;
   padding: 8px;
+
+  i {
+    font-size: 50px;
+  }
+
+  .fa-flag-checkered {
+    position: relative;
+    right: 5px
+  }
 }
 
 .container {
@@ -79,7 +92,43 @@ img {
 }
 
 .navbar-logo {
-  width: 50%;
+  width: 35%;
+}
+
+.font-weight-bold {
+  font-weight: bold;
+}
+
+.btn {
+  margin-right: 0px !important;
+}
+
+.homepage {
+  .courses-area {
+    .grid {
+      grid-gap: 20px;
+  
+      .courses-card {
+        padding: 16px;
+        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+  
+        .img-container {
+          display: flex;
+          align-items: center;
+  
+          img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+          }
+        }
+      }
+    }
+  }
 }
 
 /* Text Styles*/
@@ -331,7 +380,8 @@ img {
 }
 
 /* Forms */
-input {
+input,
+select {
   margin: 1.2rem 0;
 }
 
@@ -396,7 +446,6 @@ table th {
   padding: 0.7rem 2rem;
   z-index: 1;
   width: 100%;
-  border-bottom: solid 1px var(--primary-color);
   opacity: 0.9;
   margin-bottom: 1rem;
 
@@ -479,7 +528,11 @@ table th {
   }
 
   .box {
-    height: 400px;
+    height: 540px;
+    .fa-flag-checkered {
+      position: relative;
+      right: 0px
+    }
   }
 
   .ios-background-image {
@@ -487,7 +540,26 @@ table th {
   }
 
   .navbar-logo {
+    width: 50%;
     max-width: 160px;
     max-height: 90px;
+  }
+}
+
+@media (max-width: 350px) {
+  .box {
+    i {
+      font-size: 35px;
+    }
+  }
+}
+
+@media (max-width: 319px) {
+  .box {
+    height: 640px;
+
+    p {
+      font-size: 20px;
+    }
   }
 }

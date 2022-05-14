@@ -16,9 +16,9 @@ const Navbar = ({ logo }) => {
       </h1>
       <ul>
         <li>
-          <Link to='/mopp'>
-            <p className='h3 text-primary'>Mopp</p>
-          </Link>
+          {/* <Link to='/mopp'>
+            <p className='h3 text-primary'>MOPP</p>
+          </Link> */}
         </li>
       </ul>
     </div>
@@ -30,7 +30,7 @@ Navbar.propTypes = {
 }
 
 Navbar.defaultProps = {
-  logo: '/assets/images/logos/logo-v1-resized.png'
+  logo: '/assets/images/logos/logo-v1-white-resized.png'
 }
 
 export default Navbar;

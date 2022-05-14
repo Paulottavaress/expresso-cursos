@@ -29,7 +29,7 @@ const FirstImpression = ({ logo, title, subtitle, backgroundImage }) => {
           <Link to="/">
             <img
               style={{
-                width: '70%',
+                width: '50%',
                 marginBottom: '30px'
               }}
               src={logo}
@@ -63,7 +63,7 @@ FirstImpression.propTypes = {
 }
 
 FirstImpression.defaultProps = {
-  logo: '/assets/images/logos/logo-v1-resized.png',
+  logo: '/assets/images/logos/logo-v1-white-resized.png',
   title: 'TITLE',
   subtitle: 'SUBTITLE',
   backgroundImage: '/assets/images/backgrounds/mopp.jpeg'

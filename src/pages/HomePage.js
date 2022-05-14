@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
-import Navbar from '../components/layout/Navbar';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import SchoolInfo from '../components/common/SchoolInfo';
 
 const HomePage = () => {
   const [backgroundImage] = useState('/assets/images/backgrounds/truck-in-a-road.jpg');
@@ -7,8 +8,7 @@ const HomePage = () => {
   const [subtitle] = useState('Não é necessário perder dias de trabalho para fazer o seu curso de transportes especializados. Faça no seu próprio horário, 100% online e saia com um curso devidamente credenciado pelo DETRAN/MG.');
 
   return (
-    <div>
-      <Navbar />
+    <div className='homepage'>
       <div 
         className='d-flex flex-column ios-background-image'
         style={{
@@ -22,20 +22,60 @@ const HomePage = () => {
         }}
       >
         <div className="container text-light">
-        <div className='d-flex flex-column align-items-center text-center'>
-          <p
-            className='h1'
-            style={{
-              fontWeight: 'bold',
-              marginBottom: '30px'
-            }}
-          >
-            {title}
-          </p>
-          <p className='h3 text-align-left-important'>
-            {subtitle}
-          </p>
+          <div className='d-flex flex-column align-items-center text-center'>
+            <p
+              className='h1'
+              style={{
+                fontWeight: 'bold',
+                marginBottom: '30px'
+              }}
+            >
+              {title}
+            </p>
+            <p className='h3 text-align-left-important'>
+              {subtitle}
+            </p>
+          </div>
         </div>
+      </div>
+      <SchoolInfo />
+      <div
+        className="courses-area bg-primary"
+      >
+        <div className='container py-5 '>
+          <div className='text-center mb-5'>
+            <h1 className='font-weight-bold'>CONHEÇA NOSSOS CURSOS</h1>
+            <h3>Todos os cursos são 100% online e credenciados</h3>
+          </div>
+          <div className="grid row">
+            <div className="col-md bg-secondary courses-card">
+              <h1 className='text-primary font-weight-bold text-center m-0'>MOPP</h1>
+              <div className='img-container my-3'>
+                <div>
+                  <Link
+                    to='/mopp'
+                  >
+                    <img
+                      src="/assets/images/backgrounds/mopp.jpeg"
+                      alt="mopp" 
+                    />
+                  </Link>
+                </div>
+              </div>
+              <Link
+                to='/mopp'
+                className="btn btn-block btn-success"
+              >
+                <h3 className='font-weight-bold m-0 text-light'>SAIBA MAIS</h3>
+              </Link>
+            </div>
+            <div className="col-md bg-secondary courses-card">
+            <h3 className='font-weight-bold m-0 text-light'> Muito em breve um novo curso...</h3>
+            </div>
+            <div className="col-md bg-secondary courses-card">
+              <h3 className='font-weight-bold m-0 text-light'> Muito em breve um novo curso...</h3>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -4,7 +4,8 @@ import {
   Routes,
   Route
 } from 'react-router-dom';
-import HomePage from './pages/HomePage';
+import ScrollToTop from './utils/ScrollToTop';
+import MainLayout from './components/layout/MainLayout';
 import MoppSellingPage from './pages/MoppSellingPage';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
@@ -13,9 +14,16 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <ScrollToTop />
         <Routes>
-          <Route path='/' element={<HomePage />}/>
-          <Route path='/mopp' element={<MoppSellingPage />}></Route>
+          <Route
+            path='/'
+            element={<MainLayout route='homepage' />}
+          />
+          <Route
+            path='/mopp'
+            element={<MoppSellingPage />} 
+          />
         </Routes>
       </div>
     </Router>

@@ -4,11 +4,10 @@ import BuyBtn from '../common/BuyBtn';
 const AboutTheCourse = () => {
   return (
     <div className='bg-primary'>
-      <div style={{ padding: '20px'}}>
+      <div className='container py-5'>
         <p
-          className="h1 text-center"
+          className="h1 text-center font-weight-bold"
           style={{
-            fontWeight: 'bold',
             marginBottom: '30px'
           }}
         >
@@ -17,14 +16,8 @@ const AboutTheCourse = () => {
         <div className="row align-items-center justify-content-center">
           <div className="row mr-1 mt-3 box">
             <div className="row pt-3">
-              <i
-                className="fa fa-mobile col-2"
-                style={{fontSize: '50px'}}
-              />
-              <p
-                className="h3 col-10 text-center"
-                style={{fontWeight: 'bold'}}
-              >
+              <i className="fa fa-mobile col-2" />
+              <p className="h3 col-10 text-center font-weight-bold">
                 O CURSO É 100% ONLINE
               </p>
             </div>
@@ -34,14 +27,8 @@ const AboutTheCourse = () => {
           </div>
           <div className="row mr-1 mt-3 box">
             <div className="row pt-3">
-              <i
-                className="fa-solid fa-road col-2"
-                style={{fontSize: '50px'}}
-              />
-              <p
-                className="h3 col-10 text-center"
-                style={{fontWeight: 'bold'}}
-              >
+              <i className="fa-solid fa-road col-2" />
+              <p className="h3 col-10 text-center font-weight-bold">
                 DURANTE O CURSO
               </p>
             </div>
@@ -51,14 +38,8 @@ const AboutTheCourse = () => {
           </div>
           <div className="row mr-1 mt-3 box">
             <div className="row pt-3">
-              <i
-                className="fa-solid fa-clock col-2"
-                style={{fontSize: '50px'}}
-              />
-              <p
-                className="h3 col-10 text-center"
-                style={{fontWeight: 'bold'}}
-              >
+              <i className="fa-solid fa-clock col-2" />
+              <p className="h3 col-10 text-center font-weight-bold">
                 OS HORÁRIOS DO CURSO
               </p>
             </div>
@@ -68,14 +49,8 @@ const AboutTheCourse = () => {
           </div>
           <div className="row mr-1 mt-3 box">
             <div className="row pt-3">
-              <i
-                className="fa-solid fa-flag-checkered col-2"
-                style={{fontSize: '50px'}}
-              />
-              <p
-                className="h3 col-10 text-center"
-                style={{fontWeight: 'bold'}}
-              >
+              <i className="fa-solid fa-flag-checkered col-2" />
+              <p className="h3 col-10 text-center font-weight-bold">
                 AO TERMINAR O CURSO
               </p>
             </div>
@@ -84,11 +59,12 @@ const AboutTheCourse = () => {
             </div>
           </div>
         </div>
-        <div
-          className="d-flex justify-content-center"
-          style= {{ paddingTop: '46px'}}
-        >
-          <BuyBtn text="Receba um atendimento atencioso e retire suas dúvidas por WhatsApp agora!"/>
+        <div className="d-flex justify-content-center pt-5">
+          <BuyBtn
+            btnText="Receba um atendimento atencioso e retire suas dúvidas por WhatsApp agora!"
+            wppMsg="Olá! Gostaria de saber mais sobre o curso do Mopp."
+            phone="5531991373568"
+          />
         </div>
       </div>
     </div>

@@ -1,14 +1,21 @@
 import React from 'react';
 
-const BuyBtn = ({ text }) => {
+const BuyBtn = ({
+  btnText,
+  wppMsg,
+  phone 
+}) => {
   return (
-    <button type="button" className="btn btn-success">
+    <button
+      type="button"
+      className="btn btn-success p-1"
+    >
       <a
-        href="https://api.whatsapp.com/send?phone=5531991373568"
+        href={'https://api.whatsapp.com/send?phone=' + phone + '&text=' + wppMsg}
         target="_blank"
         rel="noreferrer"
       >
-        <p className='h1'>{ text }</p>
+        <p className='h1 m-0'>{ btnText }</p>
       </a>
     </button>
   )

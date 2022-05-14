@@ -21,6 +21,10 @@ function App() {
             element={<MainLayout route='homepage' />}
           />
           <Route
+            path='/'
+            element={<MainLayout route='cart' />}
+          />
+          <Route
             path='/mopp'
             element={<MoppSellingPage />} 
           />

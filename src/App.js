@@ -5,32 +5,41 @@ import {
   Route
 } from 'react-router-dom';
 import ScrollToTop from './utils/ScrollToTop';
+import SetCart from './utils/SetCart';
 import MainLayout from './components/layout/MainLayout';
 import MoppSellingPage from './pages/MoppSellingPage';
+import CartState from './context/cart/CartState';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.scss';
 
-function App() {
+const App = () => {
   return (
-    <Router>
-      <div className="App">
-        <ScrollToTop />
-        <Routes>
-          <Route
-            path='/'
-            element={<MainLayout route='homepage' />}
-          />
-          <Route
-            path='/'
-            element={<MainLayout route='cart' />}
-          />
-          <Route
-            path='/mopp'
-            element={<MoppSellingPage />} 
-          />
-        </Routes>
-      </div>
-    </Router>
+    <CartState>
+      <Router>
+        <div className="App">
+          <ScrollToTop />
+          <SetCart />
+          <Routes>
+            <Route
+              path='/'
+              element={<MainLayout route='homepage' />}
+            />
+            <Route
+              path='/cart'
+              element={<MainLayout route='cart' />}
+            />
+            <Route
+              path='/checkout'
+              element={<MainLayout route='checkout' />}
+            />
+            <Route
+              path='/mopp'
+              element={<MoppSellingPage />} 
+            />
+          </Routes>
+        </div>
+      </Router>
+    </CartState>
   );
 }
 

@@ -1,15 +1,23 @@
 import React from 'react';
-import HomePage from '../../pages/HomePage';
-import Cart from '../../pages/Cart';
 import Navbar from './Navbar';
+import Cart from '../../pages/Cart';
+import Checkout from '../../pages/Checkout'; 
+import HomePage from '../../pages/HomePage';
 
 const MainLayout = ({ route }) => {
   switch (route) {
     case 'cart':
       return (
-        <div>
-          <Navbar />
+        <div className='cart-container'>
+          <Navbar backgroundColor='bg-secondary' />
           <Cart />
+        </div>
+      )
+    case 'checkout':
+      return (
+        <div className='checkout-container'>
+          <Navbar backgroundColor='bg-secondary' />
+          <Checkout />
         </div>
       )
     default:

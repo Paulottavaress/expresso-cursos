@@ -61,9 +61,10 @@ const AboutTheCourse = () => {
         </div>
         <div className="d-flex justify-content-center pt-5">
           <BuyBtn
-            btnText="Receba um atendimento atencioso e retire suas dúvidas por WhatsApp agora!"
-            wppMsg="Olá! Gostaria de saber mais sobre o curso do Mopp."
-            phone="5531991373568"
+            btnText='Receba um atendimento atencioso e retire suas dúvidas por WhatsApp agora!'
+            textSize='h1'
+            wppMsg='Oi! Gostaria de saber mais sobre o curso do Mopp.'
+            phone='5531991373568'
           />
         </div>
       </div>

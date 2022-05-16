@@ -2,9 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-const Navbar = ({ logo }) => {
+const Navbar = ({
+  logo,
+  backgroundColor
+}) => {
   return (
-    <div className="navbar position-absolute">
+    <div className={backgroundColor ? backgroundColor + ' navbar position-fixed' : ' navbar position-absolute'}>
       <h1>
         <Link to="/">
           <img
@@ -16,9 +19,11 @@ const Navbar = ({ logo }) => {
       </h1>
       <ul>
         <li>
-          {/* <Link to='/mopp'>
-            <p className='h3 text-primary'>MOPP</p>
-          </Link> */}
+          <Link to='/cart'>
+            <h3>Carrinho 
+              <i className="fa-solid fa-cart-shopping" />
+            </h3> 
+          </Link>
         </li>
       </ul>
     </div>
@@ -26,7 +31,8 @@ const Navbar = ({ logo }) => {
 }
 
 Navbar.propTypes = {
-  logo: PropTypes.string.isRequired
+  logo: PropTypes.string.isRequired,
+  backgroundColor: PropTypes.string
 }
 
 Navbar.defaultProps = {

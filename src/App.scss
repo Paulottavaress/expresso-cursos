@@ -7,6 +7,7 @@ $dark: #131515;
 $light: #ffffff;
 $danger: #d00000;
 $success: #28a745;
+$remove: #007185;
 
 @import '../node_modules/bootstrap/scss/bootstrap';
 
@@ -19,6 +20,7 @@ $success: #28a745;
   --light-color: #ffffff;
   --danger-color: #d00000;
   --success-color: #28a745;
+  --remove-color: #007185;
 }
 
 
@@ -100,7 +102,7 @@ img {
 }
 
 .btn {
-  margin-right: 0px !important;
+  margin-right: 0px;
 }
 
 .homepage {
@@ -126,30 +128,81 @@ img {
             border-radius: 5px;
           }
         }
+
+        .btn {
+          margin-right: 0px !important;
+        }
       }
     }
   }
 }
 
-@media (max-width: 768px) {
-  .homepage {
-    .courses-area {
-      .grid {
-        display: flex; 
-        flex-direction: column;
-        grid-gap: 0px;
+.cart-container {
+  background-color: $primary;
 
-        .courses-card {
-          margin-bottom: 20px;
+  .cart {
+    padding-top: 150px;
+    min-height: 100vh;
+  
+    .courses-group {
+      .course {
+        position: relative;
+        border-width: 80%;
+        gap: 10px;
+  
+        &:first-child {
+          border-radius: 10px 10px 0px 0px;
         }
-
-        .courses-card:last-child {
-          background-color: red;
-          margin-bottom: 0px;
+  
+        &:last-child {
+          border-radius: 0px 0px 10px 10px;
+        }
+    
+        .img-container {
+          max-width: 33%;
+  
+          img {
+            border-radius: 10px;
+          }
+        }
+  
+        .content-container {
+          .text-primary {
+            cursor: pointer;
+            border: 1px $light solid;
+            padding: 5px;
+            border-radius: 10px;
+  
+            &:hover {
+              background-color: $light;
+              color: $secondary !important;
+            }
+          }
         }
       }
-      
     }
+  
+    .subtotal-area {
+      border-radius: 10px;
+  
+      .btn-area {
+        gap: 10px;
+      }
+    }
+  
+    .btn-area {
+      border-radius: 10px;
+      gap: 10px;
+    }
+  }
+}
+
+.checkout-container {
+  background-color: $primary;
+
+  .checkout {
+    padding-top: 150px;
+    min-height: 100vh;
   }
 }
 
@@ -250,6 +303,18 @@ img {
 .mr-3 {
   margin-right: 3rem;
 }
+.ml {
+  margin-left: 0.5rem;
+}
+.ml-1 {
+  margin-left: 1rem;
+}
+.ml-2 {
+  margin-left: 2rem;
+}
+.ml-3 {
+  margin-left: 3rem;
+}
 
 /* Grid */
 .grid-2 {
@@ -280,7 +345,6 @@ img {
   display: inline-block;
   background: var(--light-color);
   color: #333;
-  padding: 0.4rem 1.3rem;
   font-size: 1rem;
   border: none;
   cursor: pointer;
@@ -362,6 +426,8 @@ img {
 .alert-danger {
   background: var(--danger-color);
   color: #fff;
+  max-width: 90%;
+  border-radius: 10px;
 }
 
 .btn-success,
@@ -370,7 +436,23 @@ img {
 .alert-success {
   background: var(--success-color);
   max-width: 90%;
-  border-radius: 25px;
+  border-radius: 10px;
+  margin-right: 0px;
+}
+
+.btn-remove,
+.bg-remove,
+.badge-remove,
+.alert-remove {
+  background: var(--success-color);
+  max-width: 90%;
+  border-radius: 10px;
+  border: none !important;
+  margin-right: 0px;
+}
+
+.text-remove {
+  color: $remove;
 }
 
 .btn-success {
@@ -385,6 +467,15 @@ img {
 .alert-white {
   background: #fff;
   color: #333;
+  border: #ccc solid 1px;
+}
+
+.btn-remove,
+.bg-remove,
+.badge-remove,
+.alert-remove {
+  background: $remove;
+  color: $light;
   border: #ccc solid 1px;
 }
 
@@ -468,7 +559,6 @@ table th {
   padding: 0.7rem 2rem;
   z-index: 1;
   width: 100%;
-  opacity: 0.9;
   margin-bottom: 1rem;
 
   ul {
@@ -478,13 +568,23 @@ table th {
     
     li {
       padding-left: 0.5rem;
+      cursor: pointer;
+      border-bottom: 2px solid $primary;
+
+      :hover {
+        color: $primary;
+      }
 
       a {
         color: #fff;
-        p{
-          margin-bottom: 0px;
+        h3 {
+          margin-bottom: 0.2rem;
         }
       }
+    }
+
+    li:first-child {
+      padding-left: 0px;
     }
   }
 }
@@ -511,6 +611,26 @@ table th {
 
 /* Mobile Styles */
 @media (max-width: 768px) {
+  .homepage {
+    .courses-area {
+      .grid {
+        display: flex; 
+        flex-direction: column;
+        grid-gap: 0px;
+
+        .courses-card {
+          margin-bottom: 20px;
+        }
+
+        .courses-card:last-child {
+          background-color: red;
+          margin-bottom: 0px;
+        }
+      }
+      
+    }
+  }
+
   .hide-sm {
     display: none;
   }

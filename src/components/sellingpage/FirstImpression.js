@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import Partners from './Partners';
 import { Link } from 'react-router-dom';
 
-const FirstImpression = ({ logo, title, subtitle, backgroundImage }) => {
+const FirstImpression = ({
+  logo,
+  title,
+  subtitle,
+  backgroundImage,
+  displayCenteredLogo 
+}) => {
   const [partnersLogos] = useState(
     [
       '/assets/images/logos/detran-mg-transparent.png',
@@ -26,7 +32,10 @@ const FirstImpression = ({ logo, title, subtitle, backgroundImage }) => {
     >
       <div className='container text-light'>
         <div className='d-flex flex-column align-items-center text-center'>
-          <Link to="/">
+          <Link
+            to="/"
+            style={{ display: displayCenteredLogo}}
+          >
             <img
               style={{
                 width: '50%',
@@ -59,14 +68,16 @@ FirstImpression.propTypes = {
   logo: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   subtitle: PropTypes.string,
-  backgroundImage: PropTypes.string.isRequired
+  backgroundImage: PropTypes.string.isRequired,
+  displayCenteredLogo: PropTypes.string
 }
 
 FirstImpression.defaultProps = {
   logo: '/assets/images/logos/logo-v1-white-resized.png',
   title: 'TITLE',
   subtitle: 'SUBTITLE',
-  backgroundImage: '/assets/images/backgrounds/mopp.jpeg'
+  backgroundImage: '/assets/images/backgrounds/mopp.jpeg',
+  displayCenteredLogo: 'none'
 }
 
 export default FirstImpression;

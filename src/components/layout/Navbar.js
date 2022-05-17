@@ -8,21 +8,23 @@ const Navbar = ({
 }) => {
   return (
     <div className={backgroundColor ? backgroundColor + ' navbar position-fixed' : ' navbar position-absolute'}>
-      <h1>
-        <Link to="/">
-          <img
-            src={logo}
-            alt='logo'
-            className='navbar-logo'
-          />
-        </Link>
-      </h1>
+      <Link to="/">
+        <img
+          src={logo}
+          alt='logo'
+          className='logo'
+        />
+      </Link>
       <ul>
         <li>
           <Link to='/cart'>
+            {(window.innerWidth > 319) ? (
             <h3>Carrinho 
               <i className="fa-solid fa-cart-shopping" />
             </h3> 
+            ) : (
+            <i className="fa-solid fa-cart-shopping" />
+            )}
           </Link>
         </li>
       </ul>

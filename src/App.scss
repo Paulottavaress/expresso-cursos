@@ -93,10 +93,6 @@ img {
   padding: 0 2rem;
 }
 
-.navbar-logo {
-  width: 35%;
-}
-
 .font-weight-bold {
   font-weight: bold;
 }
@@ -145,21 +141,19 @@ img {
     min-height: 100vh;
   
     .courses-group {
+      border-radius: 10px;
+
       .course {
         position: relative;
         border-width: 80%;
-        gap: 10px;
-  
-        &:first-child {
-          border-radius: 10px 10px 0px 0px;
+
+        &:not(:first-child) {
+          padding-top: 1rem;
         }
-  
-        &:last-child {
-          border-radius: 0px 0px 10px 10px;
-        }
-    
+
         .img-container {
           max-width: 33%;
+          margin-right: 10px;
   
           img {
             border-radius: 10px;
@@ -186,13 +180,18 @@ img {
       border-radius: 10px;
   
       .btn-area {
-        gap: 10px;
+        a:first-child {
+          margin-right: 10px;
+        }
       }
     }
   
     .btn-area {
       border-radius: 10px;
-      gap: 10px;
+
+      a:first-child {
+        margin-right: 10px;
+      }
     }
   }
 }
@@ -561,11 +560,15 @@ table th {
   width: 100%;
   margin-bottom: 1rem;
 
+  .logo {
+    width: 35%;
+  }
+
   ul {
     display: flex;
     padding: 0px;
     margin: 0px;
-    
+
     li {
       padding-left: 0.5rem;
       cursor: pointer;
@@ -577,6 +580,11 @@ table th {
 
       a {
         color: #fff;
+
+        &:hover {
+          color: var(--light-color);
+        }
+
         h3 {
           margin-bottom: 0.2rem;
         }
@@ -587,10 +595,6 @@ table th {
       padding-left: 0px;
     }
   }
-}
-
-.navbar a:hover {
-  color: var(--light-color);
 }
 
 /* Animation (Add After) */
@@ -609,8 +613,34 @@ table th {
   transition: opacity 1000ms ease-in;
 }
 
+@media (max-width: 780px) {
+  .navbar {
+    .logo {
+      width: 30%;
+    }
+
+    ul {
+      li {
+        a {
+          h3 {
+            font-size: 23px;
+          }
+        }
+      }
+    }
+  }
+}
+
 /* Mobile Styles */
 @media (max-width: 768px) {
+  .navbar {
+    .logo {
+      width: 70%;
+      max-width: 160px;
+      max-height: 90px;
+    }
+  }
+
   .homepage {
     .courses-area {
       .grid {
@@ -623,11 +653,15 @@ table th {
         }
 
         .courses-card:last-child {
-          background-color: red;
           margin-bottom: 0px;
         }
       }
-      
+    }
+  }
+
+  .cart-container {
+    .cart {
+      padding-top: 95px;
     }
   }
 
@@ -654,21 +688,6 @@ table th {
     font-size: 1rem;
   }
 
-  /* Navbar */
-  .navbar {
-    display: block;
-    text-align: center;
-  }
-
-  .navbar h1 {
-    margin-bottom: 0.6rem;
-  }
-
-  .navbar ul {
-    text-align: center;
-    justify-content: center;
-  }
-
   .box {
     height: 540px;
     .fa-flag-checkered {
@@ -680,11 +699,15 @@ table th {
   .ios-background-image {
     background-attachment: scroll !important;
   }
+}
 
-  .navbar-logo {
-    width: 50%;
-    max-width: 160px;
-    max-height: 90px;
+@media (max-width: 425px) {
+  .navbar {
+    padding: 0.7rem 1rem;
+  }
+
+  .container {
+    padding: 0 1rem;
   }
 }
 
@@ -697,6 +720,18 @@ table th {
 }
 
 @media (max-width: 319px) {
+  .navbar {
+    ul {
+      li {
+        a {
+          i {
+            font-size: 25px;
+          }
+        }
+      }
+    }
+  }
+
   .box {
     height: 640px;
 

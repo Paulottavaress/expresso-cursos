@@ -3,6 +3,7 @@ import Navbar from './Navbar';
 import Cart from '../../pages/Cart';
 import Checkout from '../../pages/Checkout'; 
 import HomePage from '../../pages/HomePage';
+import MoppSellingPage from '../../pages/MoppSellingPage';
 
 const MainLayout = ({ route }) => {
   switch (route) {
@@ -18,6 +19,13 @@ const MainLayout = ({ route }) => {
         <div className='checkout-container'>
           <Navbar backgroundColor='bg-secondary' />
           <Checkout />
+        </div>
+      )
+    case 'mopp':
+      return (
+        <div className='checkout-container'>
+          <Navbar backgroundColor='' />
+          <MoppSellingPage />
         </div>
       )
     default:

@@ -34,7 +34,7 @@ const App = () => {
             />
             <Route
               path='/mopp'
-              element={<MoppSellingPage />} 
+              element={<MainLayout route='mopp' />}
             />
           </Routes>
         </div>

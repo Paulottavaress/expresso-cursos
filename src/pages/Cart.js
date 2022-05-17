@@ -18,10 +18,10 @@ const Cart = () => {
   return (
     <div className='cart container bg-primary'>
       <h1 className='text-center font-weight-bold text-secondary py-3'>Carrinho de compras</h1>
-      <div className="courses-group d-flex flex-column">
+      <div className="courses-group d-flex flex-column bg-secondary p-3">
         {(courses && courses.length > 0) ? courses.map(course => (
           <div
-            className='course d-flex p-3 bg-secondary'
+            className='course d-flex'
             key={course.position}
           >
             <div className='img-container'>
@@ -51,7 +51,7 @@ const Cart = () => {
         {(window.innerWidth > 768) && (
         <div className='btn-area d-flex'>
         <BuyBtn
-          btnText="Entrar em contato!"
+          btnText="Entrar em contato"
           textSize="h6"
           wppMsg="Olá! Gostaria de tirar algumas dúvidas antes de fazer minha matrícula!"
           phone="5531991373568"
@@ -68,7 +68,7 @@ const Cart = () => {
       {(window.innerWidth <= 768) && (
       <div className='btn-area bg-secondary my-3 p-3 d-flex justify-content-center align-items-center'>
         <BuyBtn
-          btnText="Entrar em contato!"
+          btnText="Entrar em contato"
           wppMsg="Oi! Gostaria de tirar algumas dúvidas antes de fazer minha matrícula."
           phone="5531991373568"
         />

@@ -1,0 +1,96 @@
+.checkout-container {
+  background-color: $primary;
+
+  #checkout {
+    padding-top: 150px;
+    min-height: 100vh;
+
+    input,
+    select {
+      border-radius: 5px;
+    }
+
+    .form-payment-info {
+      border-radius: 10px;
+    }
+
+    .btn-area {
+      justify-content: flex-end;
+      border-radius: 10px;
+
+      .btn-group {
+        button:first-child {
+          margin-right: 10px !important;
+        }
+
+        button {
+          border-radius: 10px;
+        }
+      }
+    }
+
+    .form-group {
+      display: flex;
+      margin: 0.6rem 0;
+
+      .form-field {
+        display: flex;
+        flex-direction: column;
+        width: 50%;
+
+        &:first-child {
+          margin-right: 5px;
+        }
+
+        &:last-child {
+          margin-left: 5px;
+        }
+
+        input {
+          margin: 0.2rem 0;
+          line-height: 23px;
+        }
+
+        select {
+          margin: 0.2rem 0;
+        }
+      }
+    }
+
+    .payment-method {
+      .form-radio {
+        input {
+          margin-right: 5px !important;
+          margin: 0px;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .checkout-container {
+    #checkout {
+      padding-top: 95px;
+
+      .btn-area {
+        justify-content: center;
+      }
+    }
+  }
+}
+
+@media (max-width: 425px) {
+  .checkout-container {
+    #checkout {
+      .form-group {
+        flex-direction: column;
+      
+        .form-field {
+          width: 100%;
+          margin: 0px !important;
+        }
+      }
+    }
+  }
+}

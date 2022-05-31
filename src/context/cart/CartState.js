@@ -1,7 +1,8 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect } from 'react';
 import CartContext from './cartContext';
 import { cartReducer } from './cartReducer';
 import {
+  SET_AVAILABLE_COURSES,
   SET_CART,
   ADD_TO_CART,
   REMOVE_FROM_CART
@@ -9,11 +10,33 @@ import {
 
 const CartState = props => {
   const initialState = {
+    availableCourses: [],
     courses: [],
     subtotal: 0
   }
 
   const [state, dispatch] = useReducer(cartReducer, initialState);
+
+  useEffect(() => {
+    setAvailableCourses();
+  }, []);
+
+  const setAvailableCourses = async () => {
+    try {
+      let res = await fetch(process.env.REACT_APP_BASE_URL + process.env.REACT_APP_AVAILABLE_COURSES_URL, {
+        method: "GET",
+      });
+
+      res = await res.json();
+
+      dispatch({
+        type: SET_AVAILABLE_COURSES,
+        payload: res
+      })
+    } catch (err) {
+      console.log('Error while trying to fetch available courses: ', err)
+    }
+  }
 
   const setCart = courses => {
     let subtotal = 0;
@@ -32,44 +55,15 @@ const CartState = props => {
   }
 
   const addToCart = courseId => {
-    let course;
-
-    switch(courseId) {
-      case '1':
-        course = {
-          id: '1',
-          name: 'MOPP',
-          type: 'Formação',
-          value: 350,
-          image: 'assets/images/backgrounds/mopp.jpeg',
-          position: state.courses.length + 1
-        };
-        break;
-      case '2':
-        course = {
-          id: '2',
-          name: 'MOPP',
-          type: 'Atualização',
-          value: 300,
-          image: 'assets/images/backgrounds/mopp.jpeg',
-          position: state.courses.length + 1
-        };
-        break;
-      default:
-        course = null;
-    }
-
-    if (course) {
-      dispatch({
-        type: ADD_TO_CART,
-        payload: course
-      })
-    }
+    dispatch({
+      type: ADD_TO_CART,
+      payload: courseId
+    })
   }
 
-  const removeFromCart = coursePosition => {
-    const courses = state.courses.filter(course => course.position.toString() !== coursePosition);
-    const removedCourse = state.courses.filter(course => course.position.toString() === coursePosition);
+  const removeFromCart = courseId => {
+    const courses = state.courses.filter(course => course.id !== courseId);
+    const removedCourse = state.courses.filter(course => course.id === courseId);
 
     dispatch({
       type: REMOVE_FROM_CART,
@@ -83,6 +77,7 @@ const CartState = props => {
   return (
     <CartContext.Provider
       value={{
+        availableCourses: state.availableCourses,
         courses: state.courses,
         subtotal: state.subtotal,
         setCart,

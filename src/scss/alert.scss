@@ -1,0 +1,43 @@
+#personalized-alert {
+  bottom: 0;
+  position: fixed;
+  left: 50%;
+  transform: translate(-50%, 0);
+  cursor: pointer;
+
+  .alert {
+    width: 100%;
+  }
+
+  .alert-danger,
+  .alert-primary,
+  .alert-secondary,
+  .alert-success,
+  .alert-warning,
+  .alert-info,
+  .alert-light,
+  .alert-dark {
+    max-width: 100% !important;
+  }
+
+  .alert-warning {
+    color: #664d03;
+    background-color: #fff3cd;
+    border-color: #ffecb5;
+  }
+
+  p {
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  .fa-triangle-exclamation {
+    font-size: 32px;
+    margin: 16px;
+  }
+
+  .fa-window-close {
+    color: $danger;
+    margin: 1rem;
+  }
+}

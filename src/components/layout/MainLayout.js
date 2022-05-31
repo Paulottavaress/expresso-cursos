@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Navbar from './Navbar';
 import Cart from '../../pages/Cart';
 import Checkout from '../../pages/Checkout'; 
 import HomePage from '../../pages/HomePage';
 import MoppSellingPage from '../../pages/MoppSellingPage';
+import Alert from '../common/Alert';
+import AlertContext from '../../context/alert/alertContext';
 
 const MainLayout = ({ route }) => {
+  const alertContext = useContext(AlertContext);
+  const { alerts } = alertContext;
+
   switch (route) {
     case 'cart':
       return (
@@ -30,9 +35,16 @@ const MainLayout = ({ route }) => {
       )
     default:
       return (
-        <div>
+        <div className='bg-primary'>
           <Navbar />
           <HomePage />
+          {(alerts && alerts.length > 0) && (
+          <Alert
+            key={alert.id}
+            type={alert.type}
+            text={alert.text}
+          />
+          )}
         </div>
       )
   }

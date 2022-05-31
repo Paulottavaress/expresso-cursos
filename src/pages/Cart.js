@@ -19,26 +19,26 @@ const Cart = () => {
     <div className='cart container bg-primary'>
       <h1 className='text-center font-weight-bold text-secondary py-3'>Carrinho de compras</h1>
       <div className="courses-group d-flex flex-column bg-secondary p-3">
-        {(courses && courses.length > 0) ? courses.map(course => (
-          <div
-            className='course d-flex'
-            key={course.position}
-          >
-            <div className='img-container'>
-              <img src={course.image} alt={course.name} />
+        {(courses && courses.length > 0) ? courses.map((course, i) => (
+          <div key={course.id}>
+            <div className='course d-flex'>
+              <div className='img-container'>
+                <img src={course.image} alt={course.name} />
+              </div>
+              <div className='content-container'>
+                <h3 className='text-light'>{course.name} - curso de {course.type.toLowerCase()}</h3>
+                <h4 className='text-success'>{course.value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</h4>
+                <h6 className='text-light'>Aceitamos PIX ou parcelamos em até 5x sem juros!</h6>
+                <span
+                  id={course.id}
+                  className='text-primary m-0'
+                  onClick={onRemoveBtnClick}
+                >
+                  remover
+                </span>
+              </div>
             </div>
-            <div className='content-container'>
-              <h3 className='text-light'>{course.name} - curso de {course.type.toLowerCase()}</h3>
-              <h4 className='text-success'>{course.value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</h4>
-              <h6 className='text-light'>Aceitamos PIX ou parcelamos em até 12x sem juros!</h6>
-              <span
-                id={course.position}
-                className='text-primary m-0'
-                onClick={onRemoveBtnClick}
-              >
-                remover
-              </span>
-            </div>
+            {(courses.length - 1 !== i) && (<hr className='primary-hr'/>)}
           </div>
         )) : (
           <div>
@@ -50,18 +50,18 @@ const Cart = () => {
         <h4 className='m-0 text-center'>Subtotal: <span className='text-success'>{subtotal.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</span></h4>
         {(window.innerWidth > 768) && (
         <div className='btn-area d-flex'>
-        <BuyBtn
-          btnText="Entrar em contato"
-          textSize="h6"
-          wppMsg="Olá! Gostaria de tirar algumas dúvidas antes de fazer minha matrícula!"
-          phone="5531991373568"
-        />
-        <Link
-          to='/checkout'
-          className="btn btn-success text-white"
-        >
-          Fazer matrícula
-        </Link>
+          <BuyBtn
+            btnText="Entrar em contato"
+            textSize="h6"
+            wppMsg="Olá! Gostaria de tirar algumas dúvidas antes de fazer minha matrícula!"
+            phone="5531991373568"
+          />
+          <Link
+            to='/checkout'
+            className="btn btn-success text-white"
+          >
+            Fazer matrícula
+          </Link>
         </div>
         )}
       </div>

@@ -1,4 +1,5 @@
 import {
+  SET_AVAILABLE_COURSES,
   SET_CART,
   ADD_TO_CART,
   REMOVE_FROM_CART
@@ -6,6 +7,11 @@ import {
 
 export const cartReducer = (state, action) => {
   switch(action.type) {
+    case SET_AVAILABLE_COURSES:
+      return {
+        ...state,
+        availableCourses: action.payload
+      };
     case SET_CART:
       return {
         ...state,
@@ -21,12 +27,23 @@ export const cartReducer = (state, action) => {
         subtotal: state.subtotal - action.payload.removedCourse[0].value
       };
     case ADD_TO_CART:
-      localStorage.setItem('expresso-cursos-cart', JSON.stringify([...state.courses, action.payload]));
+      const course = state.availableCourses.filter(course => course.id === action.payload);
+
+      localStorage.setItem(
+        'expresso-cursos-cart',
+        JSON.stringify([
+          ...state.courses, 
+          course[0]
+        ])
+      );
 
       return {
         ...state,
-        courses: [...state.courses, action.payload],
-        subtotal: state.subtotal + action.payload.value
+        courses: [
+          ...state.courses,
+          course[0]
+        ],
+        subtotal: state.subtotal + course[0].value
       };
     default:
       return state;

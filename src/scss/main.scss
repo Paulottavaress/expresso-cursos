@@ -9,7 +9,7 @@ $danger: #d00000;
 $success: #28a745;
 $remove: #007185;
 
-@import '../node_modules/bootstrap/scss/bootstrap';
+@import '../../node_modules/bootstrap/scss/bootstrap';
 
 /* Global Styles */
 :root {
@@ -60,6 +60,16 @@ img {
 
 .container {
   max-width: 1440px !important;
+  margin: auto;
+  overflow: hidden;
+  padding: 0 2rem;
+}
+
+.primary-hr {
+  height: 1.5px;
+  width: 75%;
+  margin-left: 12.5%;
+  background-color: $primary;
 }
 
 .bg-tertiary {
@@ -84,13 +94,6 @@ img {
     position: relative;
     right: 5px
   }
-}
-
-.container {
-  max-width: 1100px;
-  margin: auto;
-  overflow: hidden;
-  padding: 0 2rem;
 }
 
 .font-weight-bold {
@@ -193,15 +196,6 @@ img {
         margin-right: 10px;
       }
     }
-  }
-}
-
-.checkout-container {
-  background-color: $primary;
-
-  .checkout {
-    padding-top: 150px;
-    min-height: 100vh;
   }
 }
 
@@ -521,14 +515,6 @@ button {
   font: inherit;
 }
 
-.form-group {
-  margin: 1.2rem 0;
-}
-
-.form-group input {
-  margin: 0.2rem 0;
-}
-
 .form-container {
   max-width: 500px;
   margin: 2rem auto;
@@ -709,6 +695,7 @@ table th {
   .container {
     padding: 0 1rem;
   }
+
 }
 
 @media (max-width: 350px) {
@@ -740,3 +727,11 @@ table th {
     }
   }
 }
+
+// pages
+@import './checkout.scss';
+
+// components
+@import './checkoutRegistration.scss';
+@import './checkoutReview.scss';
+@import './alert.scss';

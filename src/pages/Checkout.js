@@ -1,820 +1,114 @@
-import React, { useState, useEffect  } from 'react';
-import { useMercadopago } from 'react-sdk-mercadopago';
+import React, { useState, useContext } from 'react';
+import { useNavigate } from "react-router-dom";
+import CheckoutContext from '../context/checkout/checkoutContext';
+import Registration from '../components/checkout/Registration';
+import MercadoPagoCreditCardForm from '../components/checkout/MercadoPagoCreditCardForm';
+import Review from '../components/checkout/Review';
 
 const Checkout = () => {
-  const mercadoPagoPublickKey = 'TEST-39cc9171-be60-4778-8e16-d641d1912043';
-
-  const mercadopago = useMercadopago.v2(mercadoPagoPublickKey, {
-    locale: 'en-US'
-  });
-
-  useEffect(() => {
-    console.log('mercadopago', mercadopago);
-    if (mercadopago) {
-      // mercadopago.checkout({
-      //   preference: {
-      //     id: 'YOUR_PREFERENCE_ID'
-      //   },
-      //   render: {
-      //     container: '#form-checkout',
-      //     label: 'Pay',
-      //   }
-      // });
-      
-      console.log('mercadopago', mercadopago);
-    }
-  }, [mercadopago])
-
-  const [registrationInfo, setRegistrationInfo] = useState({
-    fullName: '',
-    identificationType: '',
-    identificationNumber: '',
-    country: '',
-    zipCode: '',
-    address: '',
-    addressNumber: '',
-    addressComplement: '',
-    neighbourhood: '',
-    city: '',
-    state: '',
-    phoneNumber: '',
-    email: '',
-    birthDate: '',
-    driversLicenseNumber: '',
-    driversLicenseCategory: '',
-    driversLicenseExpiryDate: '',
-    password: '',
-  });
-
+  const checkoutContext = useContext(CheckoutContext);
   const {
-    fullName,
-    identificationType,
-    identificationNumber,
-    country,
-    zipCode,
-    address,
-    addressNumber,
-    addressComplement,
-    neighbourhood,
-    city,
-    state,
-    phoneNumber,
-    email,
-    birthDate,
-    driversLicenseNumber,
-    driversLicenseCategory,
-    driversLicenseExpiryDate,
-    password
-  } = registrationInfo;
+    currentPage,
+    changePage
+  } = checkoutContext;
 
-  const [paymentInfo, setPaymentInfo] = useState({
-    cardNumber: '',
-    expirationDate: '',
-    cardholderName: '',
-    cardholderEmail: '',
-    securityCode: '',
-    issuer: '',
-    // identificationType: '',
-    // identificationNumber: '',
-    installments: ''
+  const navigate = useNavigate();
+
+  const [paymentMethod, setPaymentMethod] = useState('');
+
+  const onChange = e => {
+    setPaymentMethod(e.target.value)
+  };
+
+  const nextPage = (() => {
+    changePage(currentPage + 1);
   });
 
-  const {
-    cardNumber,
-    expirationDate,
-    cardholderName,
-    cardholderEmail,
-    securityCode,
-    issuer,
-    // identificationType,
-    // identificationNumber,
-    installments
-  } = paymentInfo;
-
-  const onChange = e => setRegistrationInfo({
-    ...registrationInfo,
-    [e.target.name]: e.target.value
+  const previousPage = (() => {
+    (currentPage === 1) 
+      ? navigate('/cart')
+      : changePage(currentPage - 1);
   });
-
-  const onSubmit = e => {
-    e.preventDefault();
-
-    const cardForm = mercadopago.cardForm({
-      amount: '10',
-      autoMount: true,
-      form: {
-          id: "form-checkout",
-          cardholderName: {
-            id: "form-checkout__cardholderName",
-            placeholder: "Titular do cartão",
-          },
-          cardholderEmail: {
-            id: "form-checkout__cardholderEmail",
-            placeholder: "E-mail",
-          },
-          cardNumber: {
-            id: "form-checkout__cardNumber",
-            placeholder: "Número do cartão",
-          },
-          cardExpirationDate: {
-            id: "form-checkout__expirationDate",
-            placeholder: "Data de vencimento (MM/YYYY)",
-          },
-          securityCode: {
-            id: "form-checkout__securityCode",
-            placeholder: "Código de segurança",
-          },
-          installments: {
-            id: "form-checkout__installments",
-            placeholder: "Parcelas",
-          },
-          identificationType: {
-            id: "form-checkout__identificationType",
-          },
-          identificationNumber: {
-            id: "form-checkout__identificationNumber",
-            placeholder: "Identification number",
-          },
-          issuer: {
-            id: "form-checkout__issuer",
-            placeholder: "Issuer",
-          },
-      },
-      callbacks: {
-          onFormMounted: error => {
-              if (error)
-                  return console.warn("Form Mounted handling error: ", error);
-              console.log("Form mounted");
-          },
-          onSubmit: event => {
-              event.preventDefault();
-              document.getElementById("loading-message").style.display = "block";
-
-              const {
-                  paymentMethodId,
-                  issuerId,
-                  cardholderEmail: email,
-                  amount,
-                  token,
-                  installments,
-                  identificationNumber,
-                  identificationType,
-              } = cardForm.getCardFormData();
-
-              fetch("/process_payment", {
-                  method: "POST",
-                  headers: {
-                      "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                      token,
-                      issuerId,
-                      paymentMethodId,
-                      transactionAmount: Number(amount),
-                      installments: Number(installments),
-                      description: 'productDescription',
-                      payer: {
-                          email,
-                          identification: {
-                              type: identificationType,
-                              number: identificationNumber,
-                          },
-                      },
-                  }),
-              })
-                  .then(response => {
-                      return response.json();
-                  })
-                  .then(result => {
-                      if(!result.hasOwnProperty("error_message")) {
-                          document.getElementById("success-response").style.display = "block";
-                          document.getElementById("payment-id").innerText = result.id;
-                          document.getElementById("payment-status").innerText = result.status;
-                          document.getElementById("payment-detail").innerText = result.detail;
-                      } else {
-                          document.getElementById("error-message").textContent = result.error_message;
-                          document.getElementById("fail-response").style.display = "block";
-                      }
-                  })
-                  .catch(error => {
-                      alert("Unexpected error\n"+JSON.stringify(error));
-                  });
-          },
-          onFetching: (resource) => {
-              console.log("Fetching resource: ", resource);
-              const payButton = document.getElementById("form-checkout__submit");
-              payButton.setAttribute('disabled', true);
-              return () => {
-                  payButton.removeAttribute("disabled");
-              };
-          },
-      },
-  });
-  }
 
   return (
-    <div className='checkout'>
-      <form
-        id="form-checkout"
-        className='container'
-        onSubmit={onSubmit}
-      >
-        <script src="https://sdk.mercadopago.com/js/v2"></script>
-        <h1 className='text-center font-weight-bold text-secondary py-3'>Dados para matrícula</h1>
-        <label
-          htmlFor="form__full-name"
-          className='font-weight-bold'
-        >Nome completo</label>
-        <input
-          id="form__full-name"
-          type="text"
-          placeholder="Nome completo"
-          name="fullName"
-          value={fullName}
-          onChange={onChange}
-        />
-        <label
-          htmlFor="form-checkout__identificationType"
-          className='font-weight-bold'
-        >Tipo de pessoa</label>
-        <select
-          id="form-checkout__identificationType"
-          name="identificationType"
-          value={identificationType}
-          onChange={onChange}
-          required
-        >
-          <option value="PF">Pessoa física</option>
-          <option value="PJ">Pessoa jurídica</option>
-        </select>
-        <label
-          htmlFor="form-checkout__identificationType"
-          className='font-weight-bold'
-        >{identificationType === 'PF' ? 'CPF' : 'CNPJ'}</label>
-        <input
-          id="form__identificationNumber"
-          type="text"
-          placeholder={identificationType === 'PF' ? 'CPF' : 'CNPJ'}
-          name="identificationNumber"
-          value={identificationNumber}
-          onChange={onChange}
-        />
-        <label
-          htmlFor="form__country"
-          className='font-weight-bold'
-        >País</label>
-        <select
-          id="form__country"
-          name="country"
-          value={country}
+    <div 
+      id="checkout" 
+      className='container'
+    >
+      <h1 className='text-center font-weight-bold text-secondary py-3'>
+        { currentPage === 1 && 'Dados para a matrícula' }
+        { currentPage === 2 && 'Dados para pagamento' }
+        { currentPage === 3 && 'Revise a sua compra' }
+      </h1>
+      { (currentPage === 1 ) &&
+        <Registration />
+      }
+      { (currentPage === 2) && (
+      <div className='form-payment-info bg-secondary p-3'>
+        <div
+          className="payment-method"
           onChange={onChange}
         >
-          <option value="Brasil" selected="selected">Brasil</option>
-          <option value="Afeganistão">Afeganistão</option>
-          <option value="África do Sul">África do Sul</option>
-          <option value="Albânia">Albânia</option>
-          <option value="Alemanha">Alemanha</option>
-          <option value="Andorra">Andorra</option>
-          <option value="Angola">Angola</option>
-          <option value="Anguilla">Anguilla</option>
-          <option value="Antilhas Holandesas">Antilhas Holandesas</option>
-          <option value="Antárctida">Antárctida</option>
-          <option value="Antígua e Barbuda">Antígua e Barbuda</option>
-          <option value="Argentina">Argentina</option>
-          <option value="Argélia">Argélia</option>
-          <option value="Armênia">Armênia</option>
-          <option value="Aruba">Aruba</option>
-          <option value="Arábia Saudita">Arábia Saudita</option>
-          <option value="Austrália">Austrália</option>
-          <option value="Áustria">Áustria</option>
-          <option value="Azerbaijão">Azerbaijão</option>
-          <option value="Bahamas">Bahamas</option>
-          <option value="Bahrein">Bahrein</option>
-          <option value="Bangladesh">Bangladesh</option>
-          <option value="Barbados">Barbados</option>
-          <option value="Belize">Belize</option>
-          <option value="Benim">Benim</option>
-          <option value="Bermudas">Bermudas</option>
-          <option value="Bielorrússia">Bielorrússia</option>
-          <option value="Bolívia">Bolívia</option>
-          <option value="Botswana">Botswana</option>
-          <option value="Brunei">Brunei</option>
-          <option value="Bulgária">Bulgária</option>
-          <option value="Burkina Faso">Burkina Faso</option>
-          <option value="Burundi">Burundi</option>
-          <option value="Butão">Butão</option>
-          <option value="Bélgica">Bélgica</option>
-          <option value="Bósnia e Herzegovina">Bósnia e Herzegovina</option>
-          <option value="Cabo Verde">Cabo Verde</option>
-          <option value="Camarões">Camarões</option>
-          <option value="Camboja">Camboja</option>
-          <option value="Canadá">Canadá</option>
-          <option value="Catar">Catar</option>
-          <option value="Cazaquistão">Cazaquistão</option>
-          <option value="Chade">Chade</option>
-          <option value="Chile">Chile</option>
-          <option value="China">China</option>
-          <option value="Chipre">Chipre</option>
-          <option value="Colômbia">Colômbia</option>
-          <option value="Comores">Comores</option>
-          <option value="Coreia do Norte">Coreia do Norte</option>
-          <option value="Coreia do Sul">Coreia do Sul</option>
-          <option value="Costa do Marfim">Costa do Marfim</option>
-          <option value="Costa Rica">Costa Rica</option>
-          <option value="Croácia">Croácia</option>
-          <option value="Cuba">Cuba</option>
-          <option value="Dinamarca">Dinamarca</option>
-          <option value="Djibouti">Djibouti</option>
-          <option value="Dominica">Dominica</option>
-          <option value="Egito">Egito</option>
-          <option value="El Salvador">El Salvador</option>
-          <option value="Emirados Árabes Unidos">Emirados Árabes Unidos</option>
-          <option value="Equador">Equador</option>
-          <option value="Eritreia">Eritreia</option>
-          <option value="Escócia">Escócia</option>
-          <option value="Eslováquia">Eslováquia</option>
-          <option value="Eslovênia">Eslovênia</option>
-          <option value="Espanha">Espanha</option>
-          <option value="Estados Federados da Micronésia">Estados Federados da Micronésia</option>
-          <option value="Estados Unidos">Estados Unidos</option>
-          <option value="Estônia">Estônia</option>
-          <option value="Etiópia">Etiópia</option>
-          <option value="Fiji">Fiji</option>
-          <option value="Filipinas">Filipinas</option>
-          <option value="Finlândia">Finlândia</option>
-          <option value="França">França</option>
-          <option value="Gabão">Gabão</option>
-          <option value="Gana">Gana</option>
-          <option value="Geórgia">Geórgia</option>
-          <option value="Gibraltar">Gibraltar</option>
-          <option value="Granada">Granada</option>
-          <option value="Gronelândia">Gronelândia</option>
-          <option value="Grécia">Grécia</option>
-          <option value="Guadalupe">Guadalupe</option>
-          <option value="Guam">Guam</option>
-          <option value="Guatemala">Guatemala</option>
-          <option value="Guernesei">Guernesei</option>
-          <option value="Guiana">Guiana</option>
-          <option value="Guiana Francesa">Guiana Francesa</option>
-          <option value="Guiné">Guiné</option>
-          <option value="Guiné Equatorial">Guiné Equatorial</option>
-          <option value="Guiné-Bissau">Guiné-Bissau</option>
-          <option value="Gâmbia">Gâmbia</option>
-          <option value="Haiti">Haiti</option>
-          <option value="Honduras">Honduras</option>
-          <option value="Hong Kong">Hong Kong</option>
-          <option value="Hungria">Hungria</option>
-          <option value="Ilha Bouvet">Ilha Bouvet</option>
-          <option value="Ilha de Man">Ilha de Man</option>
-          <option value="Ilha do Natal">Ilha do Natal</option>
-          <option value="Ilha Heard e Ilhas McDonald">Ilha Heard e Ilhas McDonald</option>
-          <option value="Ilha Norfolk">Ilha Norfolk</option>
-          <option value="Ilhas Cayman">Ilhas Cayman</option>
-          <option value="Ilhas Cocos (Keeling)">Ilhas Cocos (Keeling)</option>
-          <option value="Ilhas Cook">Ilhas Cook</option>
-          <option value="Ilhas Feroé">Ilhas Feroé</option>
-          <option value="Ilhas Geórgia do Sul e Sandwich do Sul">Ilhas Geórgia do Sul e Sandwich do Sul</option>
-          <option value="Ilhas Malvinas">Ilhas Malvinas</option>
-          <option value="Ilhas Marshall">Ilhas Marshall</option>
-          <option value="Ilhas Menores Distantes dos Estados Unidos">Ilhas Menores Distantes dos Estados Unidos</option>
-          <option value="Ilhas Salomão">Ilhas Salomão</option>
-          <option value="Ilhas Virgens Americanas">Ilhas Virgens Americanas</option>
-          <option value="Ilhas Virgens Britânicas">Ilhas Virgens Britânicas</option>
-          <option value="Ilhas Åland">Ilhas Åland</option>
-          <option value="Indonésia">Indonésia</option>
-          <option value="Inglaterra">Inglaterra</option>
-          <option value="Índia">Índia</option>
-          <option value="Iraque">Iraque</option>
-          <option value="Irlanda do Norte">Irlanda do Norte</option>
-          <option value="Irlanda">Irlanda</option>
-          <option value="Irã">Irã</option>
-          <option value="Islândia">Islândia</option>
-          <option value="Israel">Israel</option>
-          <option value="Itália">Itália</option>
-          <option value="Iêmen">Iêmen</option>
-          <option value="Jamaica">Jamaica</option>
-          <option value="Japão">Japão</option>
-          <option value="Jersey">Jersey</option>
-          <option value="Jordânia">Jordânia</option>
-          <option value="Kiribati">Kiribati</option>
-          <option value="Kuwait">Kuwait</option>
-          <option value="Laos">Laos</option>
-          <option value="Lesoto">Lesoto</option>
-          <option value="Letônia">Letônia</option>
-          <option value="Libéria">Libéria</option>
-          <option value="Liechtenstein">Liechtenstein</option>
-          <option value="Lituânia">Lituânia</option>
-          <option value="Luxemburgo">Luxemburgo</option>
-          <option value="Líbano">Líbano</option>
-          <option value="Líbia">Líbia</option>
-          <option value="Macau">Macau</option>
-          <option value="Macedônia">Macedônia</option>
-          <option value="Madagáscar">Madagáscar</option>
-          <option value="Malawi">Malawi</option>
-          <option value="Maldivas">Maldivas</option>
-          <option value="Mali">Mali</option>
-          <option value="Malta">Malta</option>
-          <option value="Malásia">Malásia</option>
-          <option value="Marianas Setentrionais">Marianas Setentrionais</option>
-          <option value="Marrocos">Marrocos</option>
-          <option value="Martinica">Martinica</option>
-          <option value="Mauritânia">Mauritânia</option>
-          <option value="Maurícia">Maurícia</option>
-          <option value="Mayotte">Mayotte</option>
-          <option value="Moldávia">Moldávia</option>
-          <option value="Mongólia">Mongólia</option>
-          <option value="Montenegro">Montenegro</option>
-          <option value="Montserrat">Montserrat</option>
-          <option value="Moçambique">Moçambique</option>
-          <option value="Myanmar">Myanmar</option>
-          <option value="México">México</option>
-          <option value="Mônaco">Mônaco</option>
-          <option value="Namíbia">Namíbia</option>
-          <option value="Nauru">Nauru</option>
-          <option value="Nepal">Nepal</option>
-          <option value="Nicarágua">Nicarágua</option>
-          <option value="Nigéria">Nigéria</option>
-          <option value="Niue">Niue</option>
-          <option value="Noruega">Noruega</option>
-          <option value="Nova Caledônia">Nova Caledônia</option>
-          <option value="Nova Zelândia">Nova Zelândia</option>
-          <option value="Níger">Níger</option>
-          <option value="Omã">Omã</option>
-          <option value="Palau">Palau</option>
-          <option value="Palestina">Palestina</option>
-          <option value="Panamá">Panamá</option>
-          <option value="Papua-Nova Guiné">Papua-Nova Guiné</option>
-          <option value="Paquistão">Paquistão</option>
-          <option value="Paraguai">Paraguai</option>
-          <option value="País de Gales">País de Gales</option>
-          <option value="Países Baixos">Países Baixos</option>
-          <option value="Peru">Peru</option>
-          <option value="Pitcairn">Pitcairn</option>
-          <option value="Polinésia Francesa">Polinésia Francesa</option>
-          <option value="Polônia">Polônia</option>
-          <option value="Porto Rico">Porto Rico</option>
-          <option value="Portugal">Portugal</option>
-          <option value="Quirguistão">Quirguistão</option>
-          <option value="Quênia">Quênia</option>
-          <option value="Reino Unido">Reino Unido</option>
-          <option value="República Centro-Africana">República Centro-Africana</option>
-          <option value="República Checa">República Checa</option>
-          <option value="República Democrática do Congo">República Democrática do Congo</option>
-          <option value="República do Congo">República do Congo</option>
-          <option value="República Dominicana">República Dominicana</option>
-          <option value="Reunião">Reunião</option>
-          <option value="Romênia">Romênia</option>
-          <option value="Ruanda">Ruanda</option>
-          <option value="Rússia">Rússia</option>
-          <option value="Saara Ocidental">Saara Ocidental</option>
-          <option value="Saint Martin">Saint Martin</option>
-          <option value="Saint-Barthélemy">Saint-Barthélemy</option>
-          <option value="Saint-Pierre e Miquelon">Saint-Pierre e Miquelon</option>
-          <option value="Samoa Americana">Samoa Americana</option>
-          <option value="Samoa">Samoa</option>
-          <option value="Santa Helena, Ascensão e Tristão da Cunha">Santa Helena, Ascensão e Tristão da Cunha</option>
-          <option value="Santa Lúcia">Santa Lúcia</option>
-          <option value="Senegal">Senegal</option>
-          <option value="Serra Leoa">Serra Leoa</option>
-          <option value="Seychelles">Seychelles</option>
-          <option value="Singapura">Singapura</option>
-          <option value="Somália">Somália</option>
-          <option value="Sri Lanka">Sri Lanka</option>
-          <option value="Suazilândia">Suazilândia</option>
-          <option value="Sudão">Sudão</option>
-          <option value="Suriname">Suriname</option>
-          <option value="Suécia">Suécia</option>
-          <option value="Suíça">Suíça</option>
-          <option value="Svalbard e Jan Mayen">Svalbard e Jan Mayen</option>
-          <option value="São Cristóvão e Nevis">São Cristóvão e Nevis</option>
-          <option value="São Marino">São Marino</option>
-          <option value="São Tomé e Príncipe">São Tomé e Príncipe</option>
-          <option value="São Vicente e Granadinas">São Vicente e Granadinas</option>
-          <option value="Sérvia">Sérvia</option>
-          <option value="Síria">Síria</option>
-          <option value="Tadjiquistão">Tadjiquistão</option>
-          <option value="Tailândia">Tailândia</option>
-          <option value="Taiwan">Taiwan</option>
-          <option value="Tanzânia">Tanzânia</option>
-          <option value="Terras Austrais e Antárticas Francesas">Terras Austrais e Antárticas Francesas</option>
-          <option value="Território Britânico do Oceano Índico">Território Britânico do Oceano Índico</option>
-          <option value="Timor-Leste">Timor-Leste</option>
-          <option value="Togo">Togo</option>
-          <option value="Tonga">Tonga</option>
-          <option value="Toquelau">Toquelau</option>
-          <option value="Trinidad e Tobago">Trinidad e Tobago</option>
-          <option value="Tunísia">Tunísia</option>
-          <option value="Turcas e Caicos">Turcas e Caicos</option>
-          <option value="Turquemenistão">Turquemenistão</option>
-          <option value="Turquia">Turquia</option>
-          <option value="Tuvalu">Tuvalu</option>
-          <option value="Ucrânia">Ucrânia</option>
-          <option value="Uganda">Uganda</option>
-          <option value="Uruguai">Uruguai</option>
-          <option value="Uzbequistão">Uzbequistão</option>
-          <option value="Vanuatu">Vanuatu</option>
-          <option value="Vaticano">Vaticano</option>
-          <option value="Venezuela">Venezuela</option>
-          <option value="Vietname">Vietname</option>
-          <option value="Wallis e Futuna">Wallis e Futuna</option>
-          <option value="Zimbabwe">Zimbabwe</option>
-          <option value="Zâmbia">Zâmbia</option>
-        </select>
-        <label
-          htmlFor="form__zip-code"
-          className='font-weight-bold'
-        >CEP</label>
-        <input
-          id="form__zip-code"
-          type="text"
-          placeholder="CEP"
-          name="zipCode"
-          value={zipCode}
-          onChange={onChange}
-        />
-        <label
-          htmlFor="form__address"
-          className='font-weight-bold'
-        >Endereço</label>
-        <input
-          id="form__address"
-          type="text"
-          placeholder="Endereço"
-          name="address"
-          value={address}
-          onChange={onChange}
-        />
-        <label
-          htmlFor="form__address-number"
-          className='font-weight-bold'
-        >Número</label>
-        <input
-          id="form__address-number"
-          type="text"
-          placeholder="Número"
-          name="addressNumber"
-          value={addressNumber}
-          onChange={onChange}
-        />
-        <label
-          htmlFor="form__address-complement"
-          className='font-weight-bold'
-        >Complemento (opcional)</label>
-        <input
-          id="form__address-complement"
-          type="text"
-          placeholder="Apartamento, suíte, unidade, bloco, etc... (opcional)"
-          name="addressComplement"
-          value={addressComplement}
-          onChange={onChange}
-        />
-        <label
-          htmlFor="form__neighbourhood"
-          className='font-weight-bold'
-        >Bairro</label>
-        <input
-          id="form__neighbourhood"
-          type="text"
-          placeholder="Bairro"
-          name="neighbourhood"
-          value={neighbourhood}
-          onChange={onChange}
-        />
-        <label
-          htmlFor="form__city"
-          className='font-weight-bold'
-        >Cidade</label>
-        <input
-          id="form__city"
-          type="text"
-          placeholder="Cidade"
-          name="city"
-          value={city}
-          onChange={onChange}
-        />
-        <label
-          htmlFor="form_state"
-          className='font-weight-bold'
-        >Estado</label>
-        {country === 'Brasil' ? (
-        <select
-          id="form_state"
-          type="text"
-          name="state"
-          value={state}
-          onChange={onChange}
-        >
-          <option value="AC">Acre</option>
-          <option value="AL">Alagoas</option>
-          <option value="AP">Amapá</option>
-          <option value="AM">Amazonas</option>
-          <option value="BA">Bahia</option>
-          <option value="CE">Ceará</option>
-          <option value="DF">Distrito Federal</option>
-          <option value="ES">Espírito Santo</option>
-          <option value="GO">Goiás</option>
-          <option value="MA">Maranhão</option>
-          <option value="MT">Mato Grosso</option>
-          <option value="MS">Mato Grosso do Sul</option>
-          <option value="MG">Minas Gerais</option>
-          <option value="PA">Pará</option>
-          <option value="PB">Paraíba</option>
-          <option value="PR">Paraná</option>
-          <option value="PE">Pernambuco</option>
-          <option value="PI">Piauí</option>
-          <option value="RJ">Rio de Janeiro</option>
-          <option value="RN">Rio Grande do Norte</option>
-          <option value="RS">Rio Grande do Sul</option>
-          <option value="RO">Rondônia</option>
-          <option value="RR">Roraima</option>
-          <option value="SC">Santa Catarina</option>
-          <option value="SP">São Paulo</option>
-          <option value="SE">Sergipe</option>
-          <option value="TO">Tocantins</option>
-        </select>
-        ) : (
-        <input
-          id="form_state"
-          type="text"
-          placeholder="Estado"
-          name="state"
-          value={state}
-          onChange={onChange}
-        />
+          <div className="form-radio">
+            <input
+              type="radio"
+              value="PIX"
+              name="paymentMethod"
+              required
+            />
+            <label htmlFor="pix">PIX</label>
+          </div>
+          <div className="form-radio">              
+            <input
+              type="radio"
+              value="Bank slip"
+              name="paymentMethod"
+              required
+            />
+            <label htmlFor="bank-slip">Boleto bancário</label>
+          </div>
+          <div className="form-radio">
+            <input
+              type="radio"
+              value="Credit card"
+              name="paymentMethod"
+              required
+            />
+            <label htmlFor="credit-card">Cartão de crédito</label>
+          </div>
+        </div>
+        { (paymentMethod === 'Credit card') && (
+        <div className="credit-card-method">
+          <MercadoPagoCreditCardForm />
+        </div>
         )}
-        <label
-          htmlFor="form_phone"
-          className='font-weight-bold'
-        >Celular</label>
-        <input
-          id="form_phone"
-          type="text"
-          placeholder="Celular"
-          name="phoneNumber"
-          value={phoneNumber}
-          onChange={onChange}
-        />
-        <label
-          htmlFor="form_email"
-          className='font-weight-bold'
-        >E-mail</label>
-        <input
-          id="form_email"
-          type="text"
-          placeholder="E-mail"
-          name="email"
-          value={email}
-          onChange={onChange}
-        />
-        <label
-          htmlFor="form_birth-date"
-          className='font-weight-bold'
-        >Data de nascimento</label>
-        <input
-          id="form_birth-date"
-          type="text"
-          placeholder="dd/mm/aaaa"
-          name="birthDate"
-          value={birthDate}
-          onChange={onChange}
-        />
-        <label
-          htmlFor="form_driver-license-number"
-          className='font-weight-bold'
-        >Número da CNH</label>
-        <input
-          id="form_driver-license-number"
-          type="text"
-          placeholder="Número da CNH"
-          name="driversLicenseNumber"
-          value={driversLicenseNumber}
-          onChange={onChange}
-        />
-        <label
-          htmlFor="form_driver-license-category"
-          className='font-weight-bold'
-        >Categoria da CNH</label>
-        <select
-          id="form_state"
-          type="text"
-          name="driversLicenseCategory"
-          value={driversLicenseCategory}
-          onChange={onChange}
-        >
-          <option value="Categoria A">Categoria A</option>
-          <option value="Categoria B">Categoria B</option>
-          <option value="Categoria C">Categoria C</option>
-          <option value="Categoria D">Categoria D</option>
-          <option value="Categoria E">Categoria E</option>
-          <option value="Categoria AB">Categoria AB</option>
-          <option value="Categoria AC">Categoria AC</option>
-          <option value="Categoria AD">Categoria AD</option>
-          <option value="Categoria AE">Categoria AE</option>
-          <option value="Permissão ACC">Permissão ACC</option>
-        </select>
-        <label
-          htmlFor="form_driver-license-expiry-date"
-          className='font-weight-bold'
-        >Data de vencimento da CNH</label>
-        <input
-          id="form_driver-license-expiry-date"
-          type="text"
-          placeholder="dd/mm/aaaa"
-          name="driversLicenseExpiryDate"
-          value={driversLicenseExpiryDate}
-          onChange={onChange}
-        />
-        <label
-          htmlFor="form_password"
-          className='font-weight-bold'
-        >Senha para sua conta na plataforma de cursos da INOVE</label>
-        <input
-          id="form_password"
-          type="password"
-          placeholder="Senha"
-          name="password"
-          value={password}
-          onChange={onChange}
-        />
-        {/* <h1 className='text-center font-weight-bold text-secondary py-3'>Dados para pagamento</h1>
-        <input
-          id="form-checkout__cardNumber"
-          type="text"
-          placeholder="Número do cartão"
-          name="cardNumber"
-          value={cardNumber}
-          onChange={onChange}
-        />
-        <input
-          id="form-checkout__expirationDate"
-          type="text"
-          placeholder="Data de vencimento (MM/YYYY)"
-          name="expirationDate"
-          value={expirationDate}
-          onChange={onChange}
-        />
-        <input
-          id="form-checkout__cardholderName"
-          type="text"
-          placeholder="Titular do cartão"
-          name="cardholderName"
-          value={cardholderName}
-          onChange={onChange}
-        />
-        <input
-          id="form-checkout__cardholderEmail"
-          type="email"
-          placeholder="E-mail"
-          name="cardholderEmail"
-          value={cardholderEmail}
-          onChange={onChange}
-        />
-        <input
-          id="form-checkout__securityCode"
-          type="text"
-          placeholder="Código de segurança"
-          name="securityCode"
-          value={securityCode}
-          onChange={onChange}
-        />
-        <select
-          id="form-checkout__issuer"
-          placeholder='Banco emissor'
-          name="Banco emissor"
-          value={issuer}
-          onChange={onChange}
-        />
-        { <select
-          id="form-checkout__identificationType"
-          placeholder='Tipo de documento'
-          name="Tipo de documento"
-          value={identificationType}
-          onChange={onChange}
-        />
-        <input
-          id="form-checkout__identificationNumber"
-          type="text"
-          placeholder="Número do documento"
-          name="identificationNumber"
-          value={identificationNumber}
-          onChange={onChange}
-        />}
-        <select
-          id="form-checkout__installments"
-          placeholder="Parcelas"
-          name="installments"
-          value={installments}
-          onChange={onChange}
-        />
-        */}
-        <button
-          id="form-checkout__submit"
-          type="submit"
-          className="btn btn-secondary btn-block mb-4" 
-        >
-          Finalizar matrícula e realizar pagamento
-        </button>
-      </form>
+      </div>
+      )}
+      { (currentPage === 3 ) &&
+        <Review />
+      }
+      <div className='btn-area d-flex align-items-center bg-secondary my-3 p-3'>
+        <div className='btn-group d-flex'>
+          <button
+            id="form-previous-page"
+            type="button"
+            className="contact-btn btn btn-remove d-flex align-items-center"
+            onClick={previousPage}
+          >
+            Voltar
+          </button>
+          <button
+            id="form-next-page"
+            type="button"
+            className="btn btn-success text-white"
+            onClick={nextPage}
+          >
+            { currentPage === 1 && 'Ir para o pagamento' }
+            { currentPage === 2 && 'Revisar compra' }
+            { currentPage === 3 && 'Finalizar compra' }
+          </button>
+        </div>
+      </div>
     </div>
   )
 }

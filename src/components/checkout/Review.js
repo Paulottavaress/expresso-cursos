@@ -17,7 +17,7 @@ const Review = () => {
       {(courses && courses.length > 0) && courses.map(course => (
         <div
           className='course d-flex'
-          key={course.position}
+          key={course.id}
         >
           <div className='content-container'>
             <h3 className='text-light'>{course.name} - curso de {course.type.toLowerCase()}</h3>

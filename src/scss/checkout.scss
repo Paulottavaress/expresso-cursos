@@ -10,10 +10,6 @@
       border-radius: 5px;
     }
 
-    .form-payment-info {
-      border-radius: 10px;
-    }
-
     .btn-area {
       justify-content: flex-end;
       border-radius: 10px;
@@ -25,6 +21,22 @@
 
         button {
           border-radius: 10px;
+        }
+      }
+    }
+
+    #form-register {
+      .form-basic-info {
+        border-radius: 10px;
+      }
+    }
+
+    .form-payment-info {
+      .credit-card-method {
+        #form-checkout {
+          .form-checkout-group {
+            border-radius: 10px;
+          }
         }
       }
     }
@@ -58,6 +70,8 @@
     }
 
     .payment-method {
+      border-radius: 10px;
+
       .form-radio {
         input {
           margin-right: 5px !important;

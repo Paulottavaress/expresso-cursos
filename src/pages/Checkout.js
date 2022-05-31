@@ -1,33 +1,136 @@
 import React, { useState, useContext } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useMercadopago } from 'react-sdk-mercadopago';
+import CartContext from '../context/cart/cartContext';
 import CheckoutContext from '../context/checkout/checkoutContext';
 import Registration from '../components/checkout/Registration';
 import MercadoPagoCreditCardForm from '../components/checkout/MercadoPagoCreditCardForm';
 import Review from '../components/checkout/Review';
 
 const Checkout = () => {
+  const cartContext = useContext(CartContext);
+  const { subtotal } = cartContext;
+
   const checkoutContext = useContext(CheckoutContext);
   const {
     currentPage,
     changePage
   } = checkoutContext;
 
-  const navigate = useNavigate();
-
   const [paymentMethod, setPaymentMethod] = useState('');
+  const [isCardInstatiated, setCardInstance] = useState(false);
 
   const onChange = e => {
     setPaymentMethod(e.target.value)
   };
 
   const nextPage = (() => {
-    changePage(currentPage + 1);
+    if (!isCardInstatiated) {
+      loadCard();
+      setCardInstance(true);
+    }
+
+    changePage(2);
   });
 
-  const previousPage = (() => {
-    (currentPage === 1) 
-      ? navigate('/cart')
-      : changePage(currentPage - 1);
+  const mercadopago = useMercadopago.v2(
+    process.env.REACT_APP_MERCADO_PAGO_PUBLIC_KEY,
+    { locale: 'pt-BR'}
+  );
+
+  const loadCard = (() => {
+    const cardForm = mercadopago.cardForm({
+      amount: subtotal.toString(),
+      autoMount: true,
+      form: {
+        id: "form-checkout",
+        cardholderName: {
+          id: "form-checkout__cardholderName",
+          placeholder: "Titular do cartão",
+        },
+        cardholderEmail: {
+          id: "form-checkout__cardholderEmail",
+          placeholder: "E-mail",
+        },
+        cardNumber: {
+          id: "form-checkout__cardNumber",
+          placeholder: "Número do cartão",
+        },
+        expirationDate: {
+          id: "form-checkout__expirationDate",
+          placeholder: "Data de vencimento (MM/YYYY)",
+        },
+        securityCode: {
+          id: "form-checkout__securityCode",
+          placeholder: "Código de segurança",
+        },
+        installments: {
+          id: "form-checkout__installments",
+          placeholder: "Parcelas",
+        },
+        identificationType: {
+          id: "form-checkout__identificationType",
+          placeholder: "Tipo de documento",
+        },
+        identificationNumber: {
+          id: "form-checkout__identificationNumber",
+          placeholder: "Número do documento",
+        },
+        issuer: {
+          id: "form-checkout__issuer",
+          placeholder: "Banco emissor",
+        },
+      },
+      callbacks: {
+        onFormMounted: error => {
+          if (error) return console.warn("Form Mounted handling error: ", error);
+        },
+        onSubmit: event => {
+          event.preventDefault();
+          const {
+            paymentMethodId: payment_method_id,
+            issuerId: issuer_id,
+            cardholderEmail: email,
+            amount,
+            token,
+            installments,
+            identificationNumber,
+            identificationType,
+          } = cardForm.getCardFormData();
+          console.log('token', token);
+          fetch(process.env.REACT_APP_BASE_URL + process.env.REACT_APP_MERCADO_PAGO_PAYMENT_URL, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              token,
+              issuer_id,
+              payment_method_id,
+              transaction_amount: Number(amount),
+              installments: Number(installments),
+              description: "Descrição do produto",
+              payer: {
+                email,
+                identification: {
+                  type: identificationType,
+                  number: identificationNumber,
+                },
+              },
+            }),
+          }).then(response => {
+            console.log('response', response);
+            return response.json();
+          }).then(result => {
+            console.log('result', result);
+        }).catch(error => {
+            alert("Unexpected error\n"+JSON.stringify(error));
+        });
+        },
+        onFetching: (resource) => {
+          console.log("Fetching resource: ", resource);
+        }
+      },
+    });
   });
 
   return (
@@ -41,12 +144,11 @@ const Checkout = () => {
         { currentPage === 3 && 'Revise a sua compra' }
       </h1>
       { (currentPage === 1 ) &&
-        <Registration />
+        <Registration nextPage={nextPage} />
       }
-      { (currentPage === 2) && (
-      <div className='form-payment-info bg-secondary p-3'>
+      <div className={(currentPage === 2) ? 'd-block form-payment-info' : 'd-none'}>
         <div
-          className="payment-method"
+          className="payment-method bg-secondary p-3 my-3"
           onChange={onChange}
         >
           <div className="form-radio">
@@ -77,38 +179,34 @@ const Checkout = () => {
             <label htmlFor="credit-card">Cartão de crédito</label>
           </div>
         </div>
-        { (paymentMethod === 'Credit card') && (
-        <div className="credit-card-method">
+        <div className={(paymentMethod === 'Credit card') ? 'credit-card-method' : 'd-none'}>
           <MercadoPagoCreditCardForm />
+        </div>
+        {paymentMethod === '' && (
+        <div className='btn-area d-flex align-items-center bg-secondary my-3 p-3'>
+          <div className='btn-group d-flex'>
+            <button
+              className="form-previous-page contact-btn btn btn-remove d-flex align-items-center"
+              type="button"
+              onClick={() => changePage(1)}
+            >
+              Voltar
+            </button>
+            <button
+              clas="form-next-page"
+              type="button"
+              className="btn btn-success text-white"
+              onClick={() => changePage(3)}
+            >
+              Revisar compra
+            </button>
+          </div>
         </div>
         )}
       </div>
-      )}
       { (currentPage === 3 ) &&
         <Review />
       }
-      <div className='btn-area d-flex align-items-center bg-secondary my-3 p-3'>
-        <div className='btn-group d-flex'>
-          <button
-            id="form-previous-page"
-            type="button"
-            className="contact-btn btn btn-remove d-flex align-items-center"
-            onClick={previousPage}
-          >
-            Voltar
-          </button>
-          <button
-            id="form-next-page"
-            type="button"
-            className="btn btn-success text-white"
-            onClick={nextPage}
-          >
-            { currentPage === 1 && 'Ir para o pagamento' }
-            { currentPage === 2 && 'Revisar compra' }
-            { currentPage === 3 && 'Finalizar compra' }
-          </button>
-        </div>
-      </div>
     </div>
   )
 }

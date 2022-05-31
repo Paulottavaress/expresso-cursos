@@ -77,6 +77,22 @@ img {
 }
 
 /* Utilities */
+.d-none {
+  display: none;
+}
+
+.d-block {
+  display: block;
+}
+
+.d-inline-block {
+  display: inline-block;
+}
+
+.d-flex {
+  display: flex;
+}
+
 .box {
   width: 310px;
   height: 620px;
@@ -732,6 +748,5 @@ table th {
 @import './checkout.scss';
 
 // components
-@import './checkoutRegistration.scss';
 @import './checkoutReview.scss';
 @import './alert.scss';

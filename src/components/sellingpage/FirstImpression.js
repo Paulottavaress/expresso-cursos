@@ -34,7 +34,7 @@ const FirstImpression = ({
         <div className='d-flex flex-column align-items-center text-center'>
           <Link
             to="/"
-            style={{ display: displayCenteredLogo}}
+            style={{ display: displayCenteredLogo }}
           >
             <img
               style={{

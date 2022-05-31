@@ -1,24 +1,23 @@
 import React, { useContext } from 'react';
 import CheckoutContext from '../../context/checkout/checkoutContext';
-// import FormatDate from '../utils/FormatDate';
+import { useNavigate } from 'react-router-dom';
 
-const Registration = () => {
+const Registration = ({ nextPage }) => {
   const checkoutContext = useContext(CheckoutContext);
   const { 
     setRegistrationInfo,
     registrationInfo
   } = checkoutContext;
 
+  const navigate = useNavigate();
+
   const onChange = e => {
     setRegistrationInfo(e);
   };
 
   return (
-    <form
-      id="form-register"
-      className="bg-secondary p-3"
-    >
-      <div className="form-basic-info">
+    <form id="form-register">
+      <div className="form-basic-info bg-secondary p-3">
         <div className='form-group'>
           <div className='form-field'>
             <label
@@ -35,11 +34,11 @@ const Registration = () => {
           </div>
           <div className="form-field">
             <label
-              htmlFor="form-checkout__identificationType"
+              htmlFor="form-register__identificationType"
               className='font-weight-bold'
             >Tipo de pessoa<span className='text-danger'> *</span></label>
             <select
-              id="form-checkout__identificationType"
+              id="form-register__identificationType"
               name="identificationType"
               onChange={onChange}
             >
@@ -51,11 +50,11 @@ const Registration = () => {
         <div className='form-group'>
           <div className='form-field'>
             <label
-              htmlFor="form-checkout__identificationNumber"
+              htmlFor="form-register__identificationNumber"
               className='font-weight-bold'
             >{registrationInfo.identificationType === 'PF' ? 'CPF' : 'CNPJ'}<span className='text-danger'> *</span></label>
             <input
-              id="form-checkout__identificationNumber"
+              id="form-register__identificationNumber"
               type="text"
               name="identificationNumber"
               required
@@ -478,11 +477,11 @@ const Registration = () => {
         <div className='form-group'>
           <div className='form-field'>
             <label
-              htmlFor="form-checkout__cardholderEmail"
+              htmlFor="form-register__cardholderEmail"
               className='font-weight-bold'
             >E-mail<span className='text-danger'> *</span></label>
             <input
-              id="form-checkout__cardholderEmail"
+              id="form-register__cardholderEmail"
               type="text"
               name="email"
               required
@@ -524,7 +523,7 @@ const Registration = () => {
               className='font-weight-bold'
             >Categoria da CNH<span className='text-danger'> *</span></label>
             <select
-              id="form_state"
+              id="form_drivers_license_category"
               name="driversLicenseCategory"
               onChange={onChange}
             >
@@ -571,6 +570,24 @@ const Registration = () => {
           </div>
         </div>
       </div>
+      <div className='btn-area d-flex align-items-center bg-secondary my-3 p-3'>
+          <div className='btn-group d-flex'>
+            <button
+              className="form-previous-page contact-btn btn btn-remove d-flex align-items-center"
+              type="button"
+              onClick={() => navigate('/cart')}
+            >
+              Voltar
+            </button>
+            <button
+              className="form-next-page btn btn-success text-white"
+              type="button"
+              onClick={() => nextPage()}
+            >
+              Ir para o pagamento
+            </button>
+          </div>
+        </div>
     </form>
   )
 };

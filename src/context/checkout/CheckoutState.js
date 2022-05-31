@@ -3,7 +3,8 @@ import CheckoutContext from './checkoutContext';
 import { checkoutReducer } from './checkoutReducer';
 import {
   CHANGE_PAGE,
-  SET_REGISTRATION_INFO
+  SET_REGISTRATION_INFO,
+  SET_PAYMENT_INFO
 } from '../types';
 
 const CheckoutState = props => {
@@ -29,7 +30,8 @@ const CheckoutState = props => {
       "phoneNumber": "",
       "state": "",
       "zipCode": ""
-    }
+    },
+    paymentInfo: null
   }
 
   const [state, dispatch] = useReducer(checkoutReducer, initialState);
@@ -39,22 +41,31 @@ const CheckoutState = props => {
       type: CHANGE_PAGE,
       payload: page
     })
-  }
+  };
 
   const setRegistrationInfo = e => {
     dispatch({
       type: SET_REGISTRATION_INFO,
       payload: e
     })
-  }
+  };
+
+  const setPaymentInfo = paymentInfo => {
+    dispatch({
+      type: SET_PAYMENT_INFO,
+      payload: paymentInfo
+    })
+  };
 
   return (
     <CheckoutContext.Provider
       value={{
         currentPage: state.currentPage,
         registrationInfo: state.registrationInfo,
+        paymentInfo: state.paymentInfo,
         changePage,
-        setRegistrationInfo
+        setRegistrationInfo,
+        setPaymentInfo
       }}
     >
       { props.children }

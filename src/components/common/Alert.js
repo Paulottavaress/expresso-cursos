@@ -38,15 +38,15 @@ const Alert = () => {
       onClick={alert.url && (() => goToUrl(alert.url))}
     >
       <div className='d-flex align-items-center'>
-        {alert.type === 'warning'} {
-        <i className='fa fa-triangle-exclamation'/>
-        }
-        {alert.type === 'danger'} {
-        <i className='fa-exclamation-circle' />
-        }
-        {alert.type === 'success'} {
+        {(alert.type === 'warning') && (
+          <i className='fa fa-triangle-exclamation'/>
+        )}
+        {(alert.type === 'danger') && (
+          <i className='fa-exclamation-circle' />
+        )}
+        {(alert.type === 'success') && (
           <i class='fa-solid fa-check' />
-        }
+        )}
         <p>{alert.text}</p>
         <i
           className='fa fa-window-close'

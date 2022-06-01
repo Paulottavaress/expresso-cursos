@@ -5,7 +5,7 @@ import CheckoutContext from '../context/checkout/checkoutContext';
 import AlertContext from '../context/alert/alertContext';
 import Registration from '../components/checkout/Registration';
 import MercadoPagoCreditCardForm from '../components/checkout/MercadoPagoCreditCardForm';
-import { useNavigate } from 'react-router-dom';
+import MercadoPagoSuccessfulPurchase from '../components/checkout/MercadoPagoSuccessfulPurchase';
 // import Review from '../components/checkout/Review';
 
 const Checkout = () => {
@@ -20,8 +20,6 @@ const Checkout = () => {
     currentPage,
     changePage
   } = checkoutContext;
-
-  const navigate = useNavigate();
 
   const [isError, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
@@ -147,12 +145,8 @@ const Checkout = () => {
             console.log('result', result);
             if(!result.hasOwnProperty('error_message')) {
               setError(false);
-              setAlert({
-                type: 'success',
-                text: `Obrigado por comprar com a gente! Sua compra foi confirmada. Entraremos em contato dentro das próximas horas para disponibilizar suas credencias de acesso ao curso. Sinta-se à vontade para entrar em contato conosco a qualquer momento pelo número ${process.env.REACT_APP_CONTACT_NUMBER_MATEUS}`
-              });
+              changePage(1)
               // Remove items that were bought from the cart
-              navigate('/cart');
             } else {
               setErrorMsg('Ocorreu um erro ao tentar realizar o pagamento. Por favor, confira seus dados e tente novamente. Se o erro persistir, clique aqui para entrar em contato conosco pelo Whatsapp')
               setError(true);
@@ -177,6 +171,7 @@ const Checkout = () => {
         { currentPage === 1 && 'Dados para a matrícula' }
         { currentPage === 2 && 'Dados para pagamento' }
         { currentPage === 3 && 'Revise a sua compra' }
+        { currentPage === 4 && 'Obrigado por comprar com a gente!' }
       </h1>
       { (currentPage === 1 ) &&
         <Registration nextPage={nextPage} />
@@ -234,6 +229,9 @@ const Checkout = () => {
       {/* { (currentPage === 3 ) &&
         <Review />
       } */}
+      { (currentPage === 4 ) &&
+        <MercadoPagoSuccessfulPurchase />
+      }
     </div>
   )
 }

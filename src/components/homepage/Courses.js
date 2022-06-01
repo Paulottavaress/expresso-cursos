@@ -1,35 +1,26 @@
 import React, { useContext }  from 'react';
 import { Link } from 'react-router-dom';
 import CartContext from '../../context/cart/cartContext';
-import AlertContext from '../../context/alert/alertContext';
 import { useNavigate } from "react-router-dom";
 
 const Courses = () => {
   const navigate = useNavigate();
 
-  const alertContext = useContext(AlertContext);
-  const { setAlert } = alertContext;
-
   const cartContext = useContext(CartContext);
   const { 
     addToCart,
+    removeFromCart,
     courses,
     availableCourses
   } = cartContext;
 
   const onBuyBtnClick = async (e) => {
-    const isDuplicate = courses.filter(course => (course.id === e.currentTarget.value)).length > 0;
+    const duplicateCourses = courses.filter(course => (course.id.slice(0, 8) === e.currentTarget.value.slice(0, 8)));
+    const isDuplicate = (duplicateCourses.length > 0);
 
-    if (isDuplicate) {
-      setAlert({
-        type: 'warning',
-        text: 'Você já adicionou esse curso ao carrinho de compras! Clique aqui pra ir pra lá!',
-        url: '/cart'
-      });
-    } else {
-      addToCart(e.currentTarget.value);
-      navigate('/cart');
-    }
+    if (isDuplicate) removeFromCart(duplicateCourses[0].id);
+    addToCart(e.currentTarget.value);
+    navigate('/cart');
   }
 
   return (

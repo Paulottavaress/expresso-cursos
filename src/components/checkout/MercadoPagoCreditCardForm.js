@@ -5,10 +5,6 @@ const MercadoPagoCreditCardForm = () => {
   const checkoutContext = useContext(CheckoutContext);
   const { changePage } = checkoutContext;
 
-  const nextPage = (() => {
-    changePage(3);
-  });
-
   return (
     <form id="form-checkout">
       <div className='form-checkout-group bg-secondary p-3 my-3'>
@@ -162,9 +158,8 @@ const MercadoPagoCreditCardForm = () => {
             id="form-checkout__submit"
             className="btn btn-success text-white"
             type="submit"
-            onClick={nextPage}
           >
-            Revisar compra
+            Finalizar compra
           </button>
         </div>
       </div>

@@ -54,7 +54,7 @@ const Cart = () => {
             btnText="Entrar em contato"
             textSize="h6"
             wppMsg="Olá! Gostaria de tirar algumas dúvidas antes de fazer minha matrícula!"
-            phone="5531991373568"
+            phone={process.env.REACT_APP_CONTACT_NUMBER_MATEUS}
           />
           <Link
             to='/checkout'
@@ -70,7 +70,7 @@ const Cart = () => {
         <BuyBtn
           btnText="Entrar em contato"
           wppMsg="Oi! Gostaria de tirar algumas dúvidas antes de fazer minha matrícula."
-          phone="5531991373568"
+          phone={process.env.REACT_APP_CONTACT_NUMBER_MATEUS}
         />
         <Link
           to='/checkout'

@@ -1,12 +1,17 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useMercadopago } from 'react-sdk-mercadopago';
 import CartContext from '../context/cart/cartContext';
 import CheckoutContext from '../context/checkout/checkoutContext';
+import AlertContext from '../context/alert/alertContext';
 import Registration from '../components/checkout/Registration';
 import MercadoPagoCreditCardForm from '../components/checkout/MercadoPagoCreditCardForm';
-import Review from '../components/checkout/Review';
+import { Navigate } from 'react-router-dom';
+// import Review from '../components/checkout/Review';
 
 const Checkout = () => {
+  const alertContext = useContext(AlertContext);
+  const { setAlert } = alertContext;
+
   const cartContext = useContext(CartContext);
   const { subtotal } = cartContext;
 
@@ -16,8 +21,20 @@ const Checkout = () => {
     changePage
   } = checkoutContext;
 
+  const [isError, setError] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [isCardInstatiated, setCardInstance] = useState(false);
+
+  useEffect(() => {
+    if (isError) {
+      setAlert({
+        type: 'danger',
+        text: errorMsg,
+        url: `https://api.whatsapp.com/send?phone=${process.env.REACT_APP_CONTACT_NUMBER_MATEUS}&text=Oi! Estou com problemas para realizar o pagamento da compra de um curso. Pode me ajudar?`
+      });
+    }
+  }, [isError]);
 
   const onChange = e => {
     setPaymentMethod(e.target.value)
@@ -38,6 +55,8 @@ const Checkout = () => {
   );
 
   const loadCard = (() => {
+    setError(false);
+
     const cardForm = mercadopago.cardForm({
       amount: subtotal.toString(),
       autoMount: true,
@@ -87,7 +106,7 @@ const Checkout = () => {
         onSubmit: event => {
           event.preventDefault();
           const {
-            paymentMethodId: payment_method_id,
+            paymentMethodId,
             issuerId: issuer_id,
             cardholderEmail: email,
             amount,
@@ -96,7 +115,14 @@ const Checkout = () => {
             identificationNumber,
             identificationType,
           } = cardForm.getCardFormData();
-          console.log('token', token);
+          
+          // validate fields
+
+          // email
+          if (email === '') {
+            
+          }
+
           fetch(process.env.REACT_APP_BASE_URL + process.env.REACT_APP_MERCADO_PAGO_PAYMENT_URL, {
             method: "POST",
             headers: {
@@ -105,8 +131,8 @@ const Checkout = () => {
             body: JSON.stringify({
               token,
               issuer_id,
-              payment_method_id,
-              transaction_amount: Number(amount),
+              paymentMethodId,
+              transactionAmount: Number(amount),
               installments: Number(installments),
               description: "Descrição do produto",
               payer: {
@@ -122,6 +148,18 @@ const Checkout = () => {
             return response.json();
           }).then(result => {
             console.log('result', result);
+            if(!result.hasOwnProperty('error_message')) {
+              setError(false);
+              setAlert({
+                type: 'success',
+                text: `Obrigado por comprar com a gente! Sua compra foi confirmada. Entraremos em contato dentro das próximas horas para disponibilizar suas credencias de acesso ao curso. Sinta-se à vontade para entrar em contato conosco a qualquer momento pelo número ${process.env.REACT_APP_CONTACT_NUMBER_MATEUS}`
+              });
+              // Remove items that were bought from the cart
+              Navigate('/cart');
+            } else {
+              setErrorMsg('Ocorreu um erro ao tentar realizar o pagamento. Por favor, confira seus dados e tente novamente. Se o erro persistir, clique aqui para entrar em contato conosco pelo Whatsapp')
+              setError(true);
+            };
         }).catch(error => {
             alert("Unexpected error\n"+JSON.stringify(error));
         });
@@ -192,21 +230,13 @@ const Checkout = () => {
             >
               Voltar
             </button>
-            <button
-              clas="form-next-page"
-              type="button"
-              className="btn btn-success text-white"
-              onClick={() => changePage(3)}
-            >
-              Revisar compra
-            </button>
           </div>
         </div>
         )}
       </div>
-      { (currentPage === 3 ) &&
+      {/* { (currentPage === 3 ) &&
         <Review />
-      }
+      } */}
     </div>
   )
 }

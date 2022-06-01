@@ -14,15 +14,12 @@ const Alert = () => {
   const navigate = useNavigate();
 
   const closeAlert = (alertId) => {
-    console.log('alertId', alertId);
     isCloseAlertBtnClicked = true;
-    console.log('isCloseAlertBtnClicked', isCloseAlertBtnClicked);
 
     removeAlert(alertId);
   }
 
   const goToUrl = (alertUrl) => {
-    console.log('goToUrl');
     if (!isCloseAlertBtnClicked) {
       navigate(alertUrl);
     }
@@ -41,13 +38,18 @@ const Alert = () => {
       onClick={alert.url && (() => goToUrl(alert.url))}
     >
       <div className='d-flex align-items-center'>
-        <i
-          className="fa fa-triangle-exclamation"
-          aria-hidden="true"
-        />
+        {alert.type === 'warning'} {
+        <i className='fa fa-triangle-exclamation'/>
+        }
+        {alert.type === 'danger'} {
+        <i className='fa-exclamation-circle' />
+        }
+        {alert.type === 'success'} {
+          <i class='fa-solid fa-check' />
+        }
         <p>{alert.text}</p>
         <i
-          className="fa fa-window-close"
+          className='fa fa-window-close'
           aria-hidden="true"
           onClick={() => closeAlert(alert.id)}
         />

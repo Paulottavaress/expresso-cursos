@@ -64,7 +64,7 @@ const AboutTheCourse = () => {
             btnText='Receba um atendimento atencioso e retire suas dúvidas por WhatsApp agora!'
             textSize='h1'
             wppMsg='Oi! Gostaria de saber mais sobre o curso do Mopp.'
-            phone='5531991373568'
+            phone={process.env.REACT_APP_CONTACT_NUMBER_MATEUS}
           />
         </div>
       </div>

@@ -17,6 +17,13 @@ const MainLayout = ({ route }) => {
         <div className='cart-container'>
           <Navbar backgroundColor='bg-secondary' />
           <Cart />
+          {(alerts && alerts.length > 0) && (
+            <Alert
+              key={alert.id}
+              type={alert.type}
+              text={alert.text}
+            />
+          )}
         </div>
       )
     case 'checkout':
@@ -24,6 +31,13 @@ const MainLayout = ({ route }) => {
         <div className='checkout-container'>
           <Navbar backgroundColor='bg-secondary' />
           <Checkout />
+          {(alerts && alerts.length > 0) && (
+            <Alert
+              key={alert.id}
+              type={alert.type}
+              text={alert.text}
+            />
+          )}
         </div>
       )
     case 'mopp':
@@ -31,6 +45,13 @@ const MainLayout = ({ route }) => {
         <div className='checkout-container'>
           <Navbar backgroundColor='' />
           <MoppSellingPage />
+          {(alerts && alerts.length > 0) && (
+            <Alert
+              key={alert.id}
+              type={alert.type}
+              text={alert.text}
+            />
+          )}
         </div>
       )
     default:

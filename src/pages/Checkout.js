@@ -5,7 +5,7 @@ import CheckoutContext from '../context/checkout/checkoutContext';
 import AlertContext from '../context/alert/alertContext';
 import Registration from '../components/checkout/Registration';
 import MercadoPagoCreditCardForm from '../components/checkout/MercadoPagoCreditCardForm';
-import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // import Review from '../components/checkout/Review';
 
 const Checkout = () => {
@@ -20,6 +20,8 @@ const Checkout = () => {
     currentPage,
     changePage
   } = checkoutContext;
+
+  const navigate = useNavigate();
 
   const [isError, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
@@ -118,11 +120,6 @@ const Checkout = () => {
           
           // validate fields
 
-          // email
-          if (email === '') {
-            
-          }
-
           fetch(process.env.REACT_APP_BASE_URL + process.env.REACT_APP_MERCADO_PAGO_PAYMENT_URL, {
             method: "POST",
             headers: {
@@ -155,7 +152,7 @@ const Checkout = () => {
                 text: `Obrigado por comprar com a gente! Sua compra foi confirmada. Entraremos em contato dentro das próximas horas para disponibilizar suas credencias de acesso ao curso. Sinta-se à vontade para entrar em contato conosco a qualquer momento pelo número ${process.env.REACT_APP_CONTACT_NUMBER_MATEUS}`
               });
               // Remove items that were bought from the cart
-              Navigate('/cart');
+              navigate('/cart');
             } else {
               setErrorMsg('Ocorreu um erro ao tentar realizar o pagamento. Por favor, confira seus dados e tente novamente. Se o erro persistir, clique aqui para entrar em contato conosco pelo Whatsapp')
               setError(true);

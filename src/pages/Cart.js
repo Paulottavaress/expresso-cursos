@@ -42,7 +42,7 @@ const Cart = () => {
           </div>
         )) : (
           <div>
-            <h4>Seu carrinho está vazio. Adicione algum curso!</h4>
+            <h4 className='m-0'>Seu carrinho está vazio. Adicione algum curso!</h4>
           </div>
         )}
       </div>
@@ -56,12 +56,14 @@ const Cart = () => {
             wppMsg="Olá! Gostaria de tirar algumas dúvidas antes de fazer minha matrícula!"
             phone={process.env.REACT_APP_CONTACT_NUMBER_MATEUS}
           />
+          {(courses && courses.length > 0) && (
           <Link
             to='/checkout'
-            className="btn btn-success text-white"
+            className="ml-1 btn btn-success text-white"
           >
             Fazer matrícula
           </Link>
+          )}
         </div>
         )}
       </div>
@@ -72,12 +74,14 @@ const Cart = () => {
           wppMsg="Oi! Gostaria de tirar algumas dúvidas antes de fazer minha matrícula."
           phone={process.env.REACT_APP_CONTACT_NUMBER_MATEUS}
         />
+        {(courses && courses.length > 0) && (
         <Link
           to='/checkout'
-          className="btn btn-success text-white"
+          className="ml-1 btn btn-success text-white"
         >
           Fazer matrícula
         </Link>
+        )}
       </div>
       )}
     </div>

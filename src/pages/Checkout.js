@@ -6,6 +6,7 @@ import AlertContext from '../context/alert/alertContext';
 import Registration from '../components/checkout/Registration';
 import MercadoPagoCreditCardForm from '../components/checkout/MercadoPagoCreditCardForm';
 import MercadoPagoSuccessfulPurchase from '../components/checkout/MercadoPagoSuccessfulPurchase';
+import FormatPhone from '../utils/FormatPhone';
 // import Review from '../components/checkout/Review';
 
 const Checkout = () => {
@@ -13,7 +14,11 @@ const Checkout = () => {
   const { setAlert } = alertContext;
 
   const cartContext = useContext(CartContext);
-  const { subtotal } = cartContext;
+  const {
+    courses,
+    subtotal,
+    removeFromCart
+  } = cartContext;
 
   const checkoutContext = useContext(CheckoutContext);
   const {
@@ -26,12 +31,15 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState('');
   const [isCardInstatiated, setCardInstance] = useState(false);
 
+  let isLoading = false;
+
   useEffect(() => {
     if (isError) {
       setAlert({
         type: 'danger',
         text: errorMsg,
-        url: `https://api.whatsapp.com/send?phone=${process.env.REACT_APP_CONTACT_NUMBER_MATEUS}&text=Oi! Estou com problemas para realizar o pagamento da compra de um curso. Pode me ajudar?`
+        time: 10000
+        // url: `https://api.whatsapp.com/send?phone=${process.env.REACT_APP_CONTACT_NUMBER_MATEUS}&text=Oi! Estou com problemas para realizar o pagamento da compra de um curso. Pode me ajudar?`
       });
     }
   }, [isError]);
@@ -105,6 +113,8 @@ const Checkout = () => {
         },
         onSubmit: event => {
           event.preventDefault();
+          isLoading = true;
+
           const {
             paymentMethodId,
             issuerId: issuer_id,
@@ -139,19 +149,22 @@ const Checkout = () => {
               },
             }),
           }).then(response => {
-            console.log('response', response);
+            isLoading = false;
             return response.json();
           }).then(result => {
-            console.log('result', result);
             if(!result.hasOwnProperty('error_message')) {
               setError(false);
-              changePage(1)
-              // Remove items that were bought from the cart
+              courses.forEach((course) => {
+                removeFromCart(course.id);
+              });
+              changePage(4);
             } else {
-              setErrorMsg('Ocorreu um erro ao tentar realizar o pagamento. Por favor, confira seus dados e tente novamente. Se o erro persistir, clique aqui para entrar em contato conosco pelo Whatsapp')
+              setErrorMsg(`Ocorreu um erro ao tentar realizar o pagamento. Por favor, confira seus dados e tente novamente. Se o erro persistir, entre em contato conosco pelo número ${FormatPhone(process.env.REACT_APP_CONTACT_NUMBER_MATEUS)}`)
               setError(true);
             };
+            isLoading = false;
         }).catch(error => {
+            isLoading = false;
             alert("Unexpected error\n"+JSON.stringify(error));
         });
         },
@@ -173,12 +186,12 @@ const Checkout = () => {
         { currentPage === 3 && 'Revise a sua compra' }
         { currentPage === 4 && 'Obrigado por comprar com a gente!' }
       </h1>
-      { (currentPage === 1 ) &&
+      <div className={(currentPage === 1) ?  'd-block' : 'd-none'}>
         <Registration nextPage={nextPage} />
-      }
+      </div>
       <div className={(currentPage === 2) ? 'd-block form-payment-info' : 'd-none'}>
         <div
-          className="payment-method bg-secondary p-3 my-3"
+          className={isLoading ? 'd-none' : 'payment-method bg-secondary p-3 my-3'}
           onChange={onChange}
         >
           <div className="form-radio">
@@ -210,7 +223,7 @@ const Checkout = () => {
           </div>
         </div>
         <div className={(paymentMethod === 'Credit card') ? 'credit-card-method' : 'd-none'}>
-          <MercadoPagoCreditCardForm />
+          <MercadoPagoCreditCardForm isLoading={isLoading}/>
         </div>
         {paymentMethod === '' && (
         <div className='btn-area d-flex align-items-center bg-secondary my-3 p-3'>

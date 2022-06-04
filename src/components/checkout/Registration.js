@@ -1,8 +1,13 @@
 import React, { useContext } from 'react';
-import CheckoutContext from '../../context/checkout/checkoutContext';
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
+import AlertContext from '../../context/alert/alertContext';
+import CheckoutContext from '../../context/checkout/checkoutContext';
 
 const Registration = ({ nextPage }) => {
+  const alertContext = useContext(AlertContext);
+  const { setAlert } = alertContext;
+
   const checkoutContext = useContext(CheckoutContext);
   const { 
     setRegistrationInfo,
@@ -11,12 +16,157 @@ const Registration = ({ nextPage }) => {
 
   const navigate = useNavigate();
 
+  let isError = false;
+  let errorMsg = '';
+
   const onChange = e => {
+    if (e.target.name === 'zipCode' && e.target.value.length === 8 && registrationInfo.country === 'Brasil') {
+      getCep(e.target.value);
+    } 
+
     setRegistrationInfo(e);
   };
 
+  const getCep = (cep) => {
+    fetch(process.env.REACT_APP_CEP_API + cep + '/json/', {
+      method: "GET"
+    }).then((res) => {
+      return res.json();
+    }).then(data => {
+      if (!data.hasOwnProperty('erro')) {
+        const address = {
+          target: {}
+        };
+        address.target.name = 'address';
+        address.target.value = document.getElementById('form__address').value =`${data.logradouro}`;
+        setRegistrationInfo(address);
+        
+        const addressComplement = {
+          target: {}
+        };
+
+        addressComplement.target.name = 'addressComplement';
+        addressComplement.target.value = document.getElementById('form__address-complement').value =`${data.complemento}`;
+        setRegistrationInfo(addressComplement);
+
+        const neighbourhood = {
+          target: {}
+        };
+  
+        neighbourhood.target.name = 'neighbourhood';
+        neighbourhood.target.value = document.getElementById('form__neighbourhood').value =`${data.bairro}`;
+        setRegistrationInfo(neighbourhood);
+  
+        const city = {
+          target: {}
+        };
+
+        city.target.name = 'city';
+        city.target.value = document.getElementById('form__city').value =`${data.localidade}`;
+        setRegistrationInfo(city);
+
+        const state = {
+          target: {}
+        };
+
+        state.target.name = 'state';
+        state.target.value = document.getElementById('form_state_brazil').value =`${data.uf}`;
+        setRegistrationInfo(state);
+      }
+    }).catch((err) => {
+      console.log('It was no possible to find the CEP:' + cep)
+    })
+  }
+
+  const validateFields = (e) => {
+    e.preventDefault();
+    errorMsg = '';
+    isError = true;
+
+    const fields = Object.values(registrationInfo);
+
+    const emptyFields = fields.filter((field) => {
+      return field === '';
+    });
+
+    if (emptyFields.length >= 1 && registrationInfo.addressComplement !== '') { 
+      errorMsg = 'Favor preencher todos os campos. O único campo opcional é o de complemento.';
+    } else if (registrationInfo.phoneNumber.length < 10) {
+      errorMsg = 'Favor incluir o DDD. O número do telefone deve conter, no mínimo, 10 caracteres.';
+    } else if (!registrationInfo.email.includes('@')) {
+      errorMsg = 'Favor inserir um e-mail válido.';
+    } else if (validateBirthday()) {
+      errorMsg = 'Favor inserir a data de aniversário no formato DD/MM/AAAA, com as barras. Por exemplo: 01/01/2000. Você precisa ser ter 18 anos completos para realizar a compra.';
+    } else if (registrationInfo.identificationType === 'PF' && registrationInfo.identificationNumber.length !== 11) {
+      errorMsg = 'Favor conferir o CPF inserido. O número deve conter 11 caracteres, sem traços e pontos.';
+    } else if (registrationInfo.identificationType === 'PJ' && registrationInfo.identificationNumber.length !== 14) {
+      errorMsg = 'Favor conferir o CNPJ inserido. O número deve conter 14 caracteres, sem traços e pontos.';
+    } else if (registrationInfo.driversLicenseNumber.length !== 11) {
+      errorMsg = 'Favor conferir o CNH inserido. O número deve conter 11 caracteres, sem traços e pontos.';
+    } else if (validateCNH()) {
+      errorMsg = 'Favor inserir a de vencimento do CNH no formato DD/MM/AAAA. com as barras. Por exemplo: 01/01/2027. A sua CNH não pode estar vencida para realizar a compra.';
+    } else if (registrationInfo.zipCode.length !== 8) {
+      errorMsg = 'Favor conferir o número do CEP inserido. O número deve conter 8 caracteres, sem traços e pontos.';
+    } else {
+      isError = false;
+    }
+
+    if (!isError) {
+      nextPage();
+    } else {
+      setAlert({
+        type: 'danger',
+        text: errorMsg,
+        time: 5000
+      });
+    }; 
+  }
+
+  const validateBirthday = () => {
+    const regex = /(((0|1)[0-9]|2[0-9]|3[0-1])\/(0[1-9]|1[0-2])\/((19|20)\d\d))$/;
+    const { birthDate } = registrationInfo;
+
+    if (regex.test(birthDate)) {
+      const parts = birthDate.split("/");
+      const dtDOB = new Date(parts[1] + "/" + parts[0] + "/" + parts[2]);
+      const dtCurrent = new Date();
+
+      if (dtCurrent.getFullYear() - dtDOB.getFullYear() < 18) return true;
+
+      if (dtCurrent.getFullYear() - dtDOB.getFullYear() === 18) {
+        if (dtCurrent.getMonth() < dtDOB.getMonth()) return true;
+
+        if (dtCurrent.getMonth() === dtDOB.getMonth()) {
+          if (dtCurrent.getDate() < dtDOB.getDate()) return true;
+        }
+      }
+      return false;
+    }
+
+    return true;
+  }
+
+  const validateCNH = () => {
+    const splicedDate = registrationInfo.driversLicenseExpiryDate.split('/');
+    const formattedDate = moment(splicedDate[1] + '/' + splicedDate[0] + '/' + splicedDate[2]);
+
+    if (!moment(formattedDate)._isValid) return true;
+
+    const now = moment(new Date());
+    
+    const duration = moment.duration(formattedDate.diff(now));
+    const days = duration.asDays();
+
+    if (days < 0) return true;
+
+    return false;
+  }
+
   return (
-    <form id="form-register">
+    <form
+      id="form-register"
+      onSubmit={(e) => validateFields(e)}
+    >
       <div className="form-basic-info bg-secondary p-3">
         <div className='form-group'>
           <div className='form-field'>
@@ -32,6 +182,51 @@ const Registration = ({ nextPage }) => {
               onChange={onChange}
             />
           </div>
+          <div className='form-field'>
+            <label
+              htmlFor="form_phone"
+              className='font-weight-bold'
+            >Celular com DDD<span className='text-danger'> *</span></label>
+            <input
+              id="form_phone"
+              type="text"
+              name="phoneNumber"
+              placeholder={`exemplo: ${process.env.REACT_APP_CONTACT_NUMBER_MATEUS.slice(2)}`}
+              required
+              onChange={onChange}
+            />
+          </div>
+        </div>
+        <div className='form-group'>
+          <div className='form-field'>
+            <label
+              htmlFor="form-register__cardholderEmail"
+              className='font-weight-bold'
+            >E-mail<span className='text-danger'> *</span></label>
+            <input
+              id="form-register__cardholderEmail"
+              type="text"
+              name="email"
+              required
+              onChange={onChange}
+            />
+          </div>
+          <div className='form-field'>
+            <label
+              htmlFor="form_birth-date"
+              className='font-weight-bold'
+            >Data de nascimento<span className='text-danger'> *</span></label>
+            <input
+              id="form_birth-date"
+              type="text"
+              placeholder="dd/mm/aaaa"
+              name="birthDate"
+              required
+              onChange={onChange}
+            />
+          </div>
+        </div>
+        <div className='form-group'>
           <div className="form-field">
             <label
               htmlFor="form-register__identificationType"
@@ -46,8 +241,6 @@ const Registration = ({ nextPage }) => {
               <option value="PJ">Pessoa jurídica</option>
             </select>
           </div>
-        </div>
-        <div className='form-group'>
           <div className='form-field'>
             <label
               htmlFor="form-register__identificationNumber"
@@ -55,12 +248,66 @@ const Registration = ({ nextPage }) => {
             >{registrationInfo.identificationType === 'PF' ? 'CPF' : 'CNPJ'}<span className='text-danger'> *</span></label>
             <input
               id="form-register__identificationNumber"
-              type="text"
+              type="number"
               name="identificationNumber"
+              maxLength={registrationInfo.identificationType === 'PF' ? "11" : "14"}
               required
               onChange={onChange}
             />
           </div>
+        </div>
+        <div className='form-group'>
+          <div className='form-field'>
+            <label
+              htmlFor="form_driver-license-number"
+              className='font-weight-bold'
+            >Número da CNH<span className='text-danger'> *</span></label>
+            <input
+              id="form_driver-license-number"
+              type="text"
+              name="driversLicenseNumber"
+              required
+              onChange={onChange}
+            />
+          </div>
+          <div className='form-field'>
+            <label
+              htmlFor="form_driver-license-category"
+              className='font-weight-bold'
+            >Categoria da CNH<span className='text-danger'> *</span></label>
+            <select
+              id="form_drivers_license_category"
+              name="driversLicenseCategory"
+              onChange={onChange}
+            >
+              <option value="Categoria A">Categoria A</option>
+              <option value="Categoria B">Categoria B</option>
+              <option value="Categoria C">Categoria C</option>
+              <option value="Categoria D">Categoria D</option>
+              <option value="Categoria E">Categoria E</option>
+              <option value="Categoria AB">Categoria AB</option>
+              <option value="Categoria AC">Categoria AC</option>
+              <option value="Categoria AD">Categoria AD</option>
+              <option value="Categoria AE">Categoria AE</option>
+              <option value="Permissão ACC">Permissão ACC</option>
+            </select>
+          </div>
+          <div className='form-field'>
+            <label
+              htmlFor="form_driver-license-expiry-date"
+              className='font-weight-bold'
+            >Data de vencimento da CNH<span className='text-danger'> *</span></label>
+            <input
+              id="form_driver-license-expiry-date"
+              type="text"
+              placeholder="dd/mm/aaaa"
+              name="driversLicenseExpiryDate"
+              required
+              onChange={onChange}
+            />
+          </div>
+        </div>
+        <div className='form-group'>
           <div className='form-field'>
             <label
               htmlFor="form__country"
@@ -323,8 +570,6 @@ const Registration = ({ nextPage }) => {
               <option value="Zâmbia">Zâmbia</option>
             </select>
           </div>
-        </div>
-        <div className='form-group'>
           <div className='form-field'>
             <label
               htmlFor="form__zip-code"
@@ -338,256 +583,147 @@ const Registration = ({ nextPage }) => {
               onChange={onChange}
             />
           </div>
-          <div className='form-field'>
-            <label
-              htmlFor="form__address"
-              className='font-weight-bold'
-            >Endereço<span className='text-danger'> *</span></label>
-            <input
-              id="form__address"
-              type="text"
-              placeholder="Nome da rua"
-              name="address"
-              required
-              onChange={onChange}
-            />
-          </div>
         </div>
-        <div className='form-group'>
-          <div className='form-field'>
-            <label
-              htmlFor="form__address-number"
-              className='font-weight-bold'
-            >Número<span className='text-danger'> *</span></label>
-            <input
-              id="form__address-number"
-              type="text"
-              name="addressNumber"
-              required
-              onChange={onChange}
-            />
+        <div className={((registrationInfo.country === 'Brasil' && registrationInfo.zipCode.length === 8) || registrationInfo.country !== 'Brasil') ? 'd-block' : 'd-none'}>
+          <div className='form-group'>
+            <div className='form-field'>
+              <label
+                htmlFor="form__address"
+                className='font-weight-bold'
+              >Endereço<span className='text-danger'> *</span></label>
+              <input
+                id="form__address"
+                type="text"
+                placeholder="Nome da rua"
+                name="address"
+                required={((registrationInfo.country === 'Brasil' && registrationInfo.zipCode.length === 8) || registrationInfo.country !== 'Brasil')}
+                onChange={onChange}
+              />
+            </div>
+            <div className='form-field'>
+              <label
+                htmlFor="form__address-number"
+                className='font-weight-bold'
+              >Número<span className='text-danger'> *</span></label>
+              <input
+                id="form__address-number"
+                type="text"
+                name="addressNumber"
+                required={((registrationInfo.country === 'Brasil' && registrationInfo.zipCode.length === 8) || registrationInfo.country !== 'Brasil')}
+                onChange={onChange}
+              />
+            </div>
+            <div className='form-field'>
+              <label
+                htmlFor="form__address-complement"
+                className='font-weight-bold'
+              >Complemento (opcional)</label>
+              <input
+                id="form__address-complement"
+                type="text"
+                placeholder="Apartamento, suíte, unidade, bloco, etc... (opcional)"
+                name="addressComplement"
+                onChange={onChange}
+              />
+            </div>
           </div>
-          <div className='form-field'>
-            <label
-              htmlFor="form__address-complement"
-              className='font-weight-bold'
-            >Complemento (opcional)</label>
-            <input
-              id="form__address-complement"
-              type="text"
-              placeholder="Apartamento, suíte, unidade, bloco, etc... (opcional)"
-              name="addressComplement"
-              onChange={onChange}
-            />
-          </div>
-        </div>
-        <div className='form-group'>
-          <div className='form-field'>
-            <label
-              htmlFor="form__neighbourhood"
-              className='font-weight-bold'
-            >Bairro<span className='text-danger'> *</span></label>
-            <input
-              id="form__neighbourhood"
-              type="text"
-              name="neighbourhood"
-              required
-              onChange={onChange}
-            />
-          </div>
-          <div className='form-field'>
-            <label
-              htmlFor="form__city"
-              className='font-weight-bold'
-            >Cidade<span className='text-danger'> *</span></label>
-            <input
-              id="form__city"
-              type="text"
-              name="city"
-              required
-              onChange={onChange}
-            />
-          </div>
-        </div>
-        <div className='form-group'>
-          <div className='form-field'>
-            <label
-              htmlFor={registrationInfo.country === 'Brasil' ? 'form_state_brazil' : 'form_state'}
-              className='font-weight-bold'
-            >Estado<span className='text-danger'> *</span></label>
-            {registrationInfo.country === 'Brasil' ? (
-            <select
-              id="form_state_brazil"
-              type="text"
-              name="state"
-              onChange={onChange}
-            >
-              <option value="AC">Acre</option>
-              <option value="AL">Alagoas</option>
-              <option value="AP">Amapá</option>
-              <option value="AM">Amazonas</option>
-              <option value="BA">Bahia</option>
-              <option value="CE">Ceará</option>
-              <option value="DF">Distrito Federal</option>
-              <option value="ES">Espírito Santo</option>
-              <option value="GO">Goiás</option>
-              <option value="MA">Maranhão</option>
-              <option value="MT">Mato Grosso</option>
-              <option value="MS">Mato Grosso do Sul</option>
-              <option value="MG">Minas Gerais</option>
-              <option value="PA">Pará</option>
-              <option value="PB">Paraíba</option>
-              <option value="PR">Paraná</option>
-              <option value="PE">Pernambuco</option>
-              <option value="PI">Piauí</option>
-              <option value="RJ">Rio de Janeiro</option>
-              <option value="RN">Rio Grande do Norte</option>
-              <option value="RS">Rio Grande do Sul</option>
-              <option value="RO">Rondônia</option>
-              <option value="RR">Roraima</option>
-              <option value="SC">Santa Catarina</option>
-              <option value="SP">São Paulo</option>
-              <option value="SE">Sergipe</option>
-              <option value="TO">Tocantins</option>
-            </select>
-            ) : (
-            <input
-              id="form_state"
-              type="text"
-              name="state"
-              required
-              onChange={onChange}
-            />
-            )}
-          </div>
-          <div className='form-field'>
-            <label
-              htmlFor="form_phone"
-              className='font-weight-bold'
-            >Celular<span className='text-danger'> *</span></label>
-            <input
-              id="form_phone"
-              type="text"
-              name="phoneNumber"
-              required
-              onChange={onChange}
-            />
-          </div>
-        </div>
-        <div className='form-group'>
-          <div className='form-field'>
-            <label
-              htmlFor="form-register__cardholderEmail"
-              className='font-weight-bold'
-            >E-mail<span className='text-danger'> *</span></label>
-            <input
-              id="form-register__cardholderEmail"
-              type="text"
-              name="email"
-              required
-              onChange={onChange}
-            />
-          </div>
-          <div className='form-field'>
-            <label
-              htmlFor="form_birth-date"
-              className='font-weight-bold'
-            >Data de nascimento<span className='text-danger'> *</span></label>
-            <input
-              id="form_birth-date"
-              type="text"
-              placeholder="dd/mm/aaaa"
-              name="birthDate"
-              required
-              onChange={onChange}
-            />
-          </div>
-        </div>
-        <div className='form-group'>
-          <div className='form-field'>
-            <label
-              htmlFor="form_driver-license-number"
-              className='font-weight-bold'
-            >Número da CNH<span className='text-danger'> *</span></label>
-            <input
-              id="form_driver-license-number"
-              type="text"
-              name="driversLicenseNumber"
-              required
-              onChange={onChange}
-            />
-          </div>
-          <div className='form-field'>
-            <label
-              htmlFor="form_driver-license-category"
-              className='font-weight-bold'
-            >Categoria da CNH<span className='text-danger'> *</span></label>
-            <select
-              id="form_drivers_license_category"
-              name="driversLicenseCategory"
-              onChange={onChange}
-            >
-              <option value="Categoria A">Categoria A</option>
-              <option value="Categoria B">Categoria B</option>
-              <option value="Categoria C">Categoria C</option>
-              <option value="Categoria D">Categoria D</option>
-              <option value="Categoria E">Categoria E</option>
-              <option value="Categoria AB">Categoria AB</option>
-              <option value="Categoria AC">Categoria AC</option>
-              <option value="Categoria AD">Categoria AD</option>
-              <option value="Categoria AE">Categoria AE</option>
-              <option value="Permissão ACC">Permissão ACC</option>
-            </select>
-          </div>
-        </div>
-        <div className='form-group'>
-          <div className='form-field'>
-            <label
-              htmlFor="form_driver-license-expiry-date"
-              className='font-weight-bold'
-            >Data de vencimento da CNH<span className='text-danger'> *</span></label>
-            <input
-              id="form_driver-license-expiry-date"
-              type="text"
-              placeholder="dd/mm/aaaa"
-              name="driversLicenseExpiryDate"
-              required
-              onChange={onChange}
-            />
-          </div>
-          <div className='form-field'>
-            <label
-              htmlFor="form_password"
-              className='font-weight-bold'
-            >Senha para sua conta na plataforma de cursos da INOVE<span className='text-danger'> *</span></label>
-            <input
-              id="form_password"
-              type="password"
-              name="password"
-              required
-              onChange={onChange}
-            />
+          <div className='form-group'>
+            <div className='form-field'>
+              <label
+                htmlFor="form__neighbourhood"
+                className='font-weight-bold'
+              >Bairro<span className='text-danger'> *</span></label>
+              <input
+                id="form__neighbourhood"
+                type="text"
+                name="neighbourhood"
+                required={((registrationInfo.country === 'Brasil' && registrationInfo.zipCode.length === 8) || registrationInfo.country !== 'Brasil')}
+                onChange={onChange}
+              />
+            </div>
+            <div className='form-field'>
+              <label
+                htmlFor="form__city"
+                className='font-weight-bold'
+              >Cidade<span className='text-danger'> *</span></label>
+              <input
+                id="form__city"
+                type="text"
+                name="city"
+                required={((registrationInfo.country === 'Brasil' && registrationInfo.zipCode.length === 8) || registrationInfo.country !== 'Brasil')}
+                onChange={onChange}
+              />
+            </div>
+            <div className='form-field'>
+              <label
+                htmlFor={registrationInfo.country === 'Brasil' ? 'form_state_brazil' : 'form_state'}
+                className='font-weight-bold'
+              >Estado<span className='text-danger'> *</span></label>
+              {registrationInfo.country === 'Brasil' ? (
+              <select
+                id="form_state_brazil"
+                type="text"
+                name="state"
+                onChange={onChange}
+              >
+                <option value="AC">Acre</option>
+                <option value="AL">Alagoas</option>
+                <option value="AP">Amapá</option>
+                <option value="AM">Amazonas</option>
+                <option value="BA">Bahia</option>
+                <option value="CE">Ceará</option>
+                <option value="DF">Distrito Federal</option>
+                <option value="ES">Espírito Santo</option>
+                <option value="GO">Goiás</option>
+                <option value="MA">Maranhão</option>
+                <option value="MT">Mato Grosso</option>
+                <option value="MS">Mato Grosso do Sul</option>
+                <option value="MG">Minas Gerais</option>
+                <option value="PA">Pará</option>
+                <option value="PB">Paraíba</option>
+                <option value="PR">Paraná</option>
+                <option value="PE">Pernambuco</option>
+                <option value="PI">Piauí</option>
+                <option value="RJ">Rio de Janeiro</option>
+                <option value="RN">Rio Grande do Norte</option>
+                <option value="RS">Rio Grande do Sul</option>
+                <option value="RO">Rondônia</option>
+                <option value="RR">Roraima</option>
+                <option value="SC">Santa Catarina</option>
+                <option value="SP">São Paulo</option>
+                <option value="SE">Sergipe</option>
+                <option value="TO">Tocantins</option>
+              </select>
+              ) : (
+              <input
+                id="form_state"
+                type="text"
+                name="state"
+                required
+                onChange={onChange}
+              />
+              )}
+            </div>
           </div>
         </div>
       </div>
       <div className='btn-area d-flex align-items-center bg-secondary my-3 p-3'>
-          <div className='btn-group d-flex'>
-            <button
-              className="form-previous-page contact-btn btn btn-remove d-flex align-items-center"
-              type="button"
-              onClick={() => navigate('/cart')}
-            >
-              Voltar
-            </button>
-            <button
-              className="form-next-page btn btn-success text-white"
-              type="button"
-              onClick={() => nextPage()}
-            >
-              Ir para o pagamento
-            </button>
-          </div>
+        <div className='btn-group d-flex'>
+          <button
+            className="form-previous-page contact-btn btn btn-remove d-flex align-items-center"
+            type="button"
+            onClick={() => navigate('/cart')}
+          >
+            Voltar
+          </button>
+          <button
+            className="form-next-page btn btn-success text-white"
+            type="submit"
+          >
+            Ir para o pagamento
+          </button>
         </div>
+      </div>
     </form>
   )
 };

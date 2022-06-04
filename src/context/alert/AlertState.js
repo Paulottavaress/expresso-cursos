@@ -25,7 +25,7 @@ const AlertState = props => {
 
     setTimeout(() => {
       removeAlert(id);
-    }, 10000);
+    }, alert.time);
   }
 
   const removeAlert = alertId => {

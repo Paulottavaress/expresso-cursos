@@ -27,19 +27,18 @@
   }
 
   p {
-    margin: 0;
+    margin-bottom: 0;
     flex-grow: 1;
   }
 
   .fa-triangle-exclamation,
-  .fa-triangle-exclamation,
+  .fa-exclamation-circle,
   .fa-check {
     font-size: 32px;
     margin: 16px;
   }
 
   .fa-window-close {
-    color: $danger;
     margin: 1rem;
   }
 }

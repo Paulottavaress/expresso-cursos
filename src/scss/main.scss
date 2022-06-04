@@ -197,20 +197,10 @@ img {
   
     .subtotal-area {
       border-radius: 10px;
-  
-      .btn-area {
-        a:first-child {
-          margin-right: 10px;
-        }
-      }
     }
   
     .btn-area {
       border-radius: 10px;
-
-      a:first-child {
-        margin-right: 10px;
-      }
     }
   }
 }
@@ -517,6 +507,7 @@ input[type='text'],
 input[type='email'],
 input[type='password'],
 input[type='date'],
+input[type='number'],
 select,
 textarea {
   display: block;
@@ -524,6 +515,16 @@ textarea {
   padding: 0.4rem;
   font-size: 1.2rem;
   border: 1px solid #ccc;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
 }
 
 input[type='submit'],

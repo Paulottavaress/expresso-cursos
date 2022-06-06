@@ -29,7 +29,7 @@ const Courses = () => {
     >
       <div className='container py-5 '>
         <div className='text-center mb-5'>
-          <h1 className='font-weight-bold'>CONHEÇA NOSSOS CURSOS</h1>
+          <h1 className='font-weight-bold'>NOSSOS CURSOS</h1>
           <h3>Todos os cursos são 100% online e credenciados</h3>
         </div>
         <div className="grid row">
@@ -68,9 +68,6 @@ const Courses = () => {
             </button>
           </div>
           ))}
-          {/* <div className="col-md bg-secondary courses-card">
-            <h3 className='font-weight-bold m-0 text-light'> Muito em breve um novo curso...</h3>
-          </div> */}
         </div>
       </div>
     </div>

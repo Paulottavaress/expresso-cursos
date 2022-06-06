@@ -1,5 +1,4 @@
 import React from 'react';
-import BuyBtn from '../common/BuyBtn';
 
 const AboutTheCourse = () => {
   return (
@@ -58,14 +57,6 @@ const AboutTheCourse = () => {
               <p className="h3 text-left">Ao concluir todas as etapas do curso, seu certificado será encaminhado ao DETRAN/MG para homologação. Uma vez com o certificado homologado, você pode trabalhar normalmente aplicando tudo que aprendeu.</p>
             </div>
           </div>
-        </div>
-        <div className="d-flex justify-content-center pt-5">
-          <BuyBtn
-            btnText='Receba um atendimento atencioso e retire suas dúvidas por WhatsApp agora!'
-            textSize='h1'
-            wppMsg='Oi! Gostaria de saber mais sobre o curso do Mopp.'
-            phone={process.env.REACT_APP_CONTACT_NUMBER_MATEUS}
-          />
         </div>
       </div>
     </div>

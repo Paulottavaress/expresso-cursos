@@ -36,8 +36,12 @@ const App = () => {
                   element={<MainLayout route='checkout' />}
                 />
                 <Route
-                  path='/mopp'
-                  element={<MainLayout route='mopp' />}
+                  path='/mopp-formacao'
+                  element={<MainLayout route='mopp-formacao' />}
+                />
+                <Route
+                  path='/mopp-atualizacao'
+                  element={<MainLayout route='mopp-atualizacao' />}
                 />
               </Routes>
             </div>

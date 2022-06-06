@@ -1,11 +1,29 @@
 import React, { useState } from 'react';
 import SchoolInfo from '../components/common/SchoolInfo';
 import Courses from '../components/homepage/Courses';
+import Team from '../components/common/Team';
 
 const HomePage = () => {
   const [backgroundImage] = useState('/assets/images/backgrounds/truck-in-a-road.jpg');
   const [title] = useState('CURSOS RÁPIDOS, 100% ONLINE E CREDENCIADOS');
   const [subtitle] = useState('Não é necessário perder dias de trabalho para fazer o seu curso de transportes especializados. Faça no seu próprio horário, 100% online e saia com um curso devidamente credenciado pelo DETRAN/MG.');
+  const [teamMember] = useState([
+    {
+      name: 'Mateus Battaglin',
+      photo: '/assets/images/common/mateus-photo.jpeg',
+      position: 'Comercial'
+    },
+    {
+      name: 'Paulo Andrade',
+      photo: '/assets/images/common/paulo-photo.jpg',
+      position: 'TI'
+    },
+    {
+      name: 'Laura Tavares',
+      photo: '/assets/images/common/laura-photo.jpg',
+      position: 'Marketing'
+    }
+  ])
 
   return (
     <div className='homepage'>
@@ -39,6 +57,7 @@ const HomePage = () => {
         </div>
       </div>
       <SchoolInfo />
+      <Team teamMember={teamMember}/>
       <Courses />
     </div>
   )

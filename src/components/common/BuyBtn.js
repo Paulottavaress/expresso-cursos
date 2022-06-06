@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const BuyBtn = ({
   btnText,
@@ -16,6 +17,13 @@ const BuyBtn = ({
       <p className={'m-0 text-light ' + textSize}>{ btnText }</p>
     </a>
   )
+};
+
+BuyBtn.propTypes = {
+  btnText: PropTypes.string.isRequired,
+  textSize: PropTypes.string.isRequired,
+  wppMsg: PropTypes.string.isRequired,
+  phone: PropTypes.string.isRequired
 }
 
 export default BuyBtn;

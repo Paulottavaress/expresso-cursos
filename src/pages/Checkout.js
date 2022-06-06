@@ -23,13 +23,15 @@ const Checkout = () => {
   const checkoutContext = useContext(CheckoutContext);
   const {
     currentPage,
-    changePage
+    changePage,
+    registrationInfo
   } = checkoutContext;
 
   const [isError, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('');
   const [isCardInstatiated, setCardInstance] = useState(false);
+  const [description, setDescription] = useState('');
 
   let isLoading = false;
 
@@ -39,10 +41,20 @@ const Checkout = () => {
         type: 'danger',
         text: errorMsg,
         time: 10000
-        // url: `https://api.whatsapp.com/send?phone=${process.env.REACT_APP_CONTACT_NUMBER_MATEUS}&text=Oi! Estou com problemas para realizar o pagamento da compra de um curso. Pode me ajudar?`
       });
     }
   }, [isError]);
+
+  useEffect(() => {
+    let description = '';
+
+    courses.forEach((course, i) => {
+      description += `${course.name} - ${course.type}`;
+      if (i !== (courses.length - 1)) description += ' / ';
+    });
+
+    setDescription(description);
+  }, [courses]);
 
   const onChange = e => {
     setPaymentMethod(e.target.value)
@@ -113,7 +125,6 @@ const Checkout = () => {
         },
         onSubmit: event => {
           event.preventDefault();
-          isLoading = true;
 
           const {
             paymentMethodId,
@@ -125,8 +136,6 @@ const Checkout = () => {
             identificationNumber,
             identificationType,
           } = cardForm.getCardFormData();
-          
-          // validate fields
 
           fetch(process.env.REACT_APP_BASE_URL + process.env.REACT_APP_MERCADO_PAGO_PAYMENT_URL, {
             method: "POST",
@@ -134,12 +143,13 @@ const Checkout = () => {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
+              registrationInfo,
               token,
               issuer_id,
               paymentMethodId,
               transactionAmount: Number(amount),
               installments: Number(installments),
-              description: "Descrição do produto",
+              description: description,
               payer: {
                 email,
                 identification: {
@@ -179,6 +189,7 @@ const Checkout = () => {
     <div 
       id="checkout" 
       className='container'
+      onSubmit={() => { isLoading = true }}
     >
       <h1 className='text-center font-weight-bold text-secondary py-3'>
         { currentPage === 1 && 'Dados para a matrícula' }

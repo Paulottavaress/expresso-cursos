@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom';
 const FirstImpression = ({
   logo,
   title,
+  courseName,
+  type,
   subtitle,
   backgroundImage,
   displayCenteredLogo 
@@ -45,14 +47,13 @@ const FirstImpression = ({
               alt="logo"
             />
           </Link>
+          <p className='h1 font-weight-bold'>{title}</p>
           <p
-            className='h1'
-            style={{
-              fontWeight: 'bold',
-              marginBottom: '30px'
-            }}
+            className='h5 text-primary font-weight-bold'
+            style={{marginBottom: '30px'}}
           >
-            {title}
+            { courseName }
+            <span className='text-danger'> { type }</span>
           </p>
           <p className='h3 text-align-left-important'>
             {subtitle}
@@ -67,6 +68,8 @@ const FirstImpression = ({
 FirstImpression.propTypes = {
   logo: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
+  courseName: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
   subtitle: PropTypes.string,
   backgroundImage: PropTypes.string.isRequired,
   displayCenteredLogo: PropTypes.string

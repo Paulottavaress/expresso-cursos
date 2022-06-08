@@ -43,6 +43,22 @@ const App = () => {
                   path='/mopp-atualizacao'
                   element={<MainLayout route='mopp-atualizacao' />}
                 />
+                <Route
+                  path='/transporte-coletivo-formacao'
+                  element={<MainLayout route='transporte-coletivo-formacao' />}
+                />
+                <Route
+                  path='/transporte-coletivo-atualizacao'
+                  element={<MainLayout route='transporte-coletivo-atualizacao' />}
+                />
+                <Route
+                  path='/transporte-escolar-formacao'
+                  element={<MainLayout route='transporte-escolar-formacao' />}
+                />
+                <Route
+                  path='/transporte-escolar-atualizacao'
+                  element={<MainLayout route='transporte-escolar-atualizacao' />}
+                />
               </Routes>
             </div>
           </Router>

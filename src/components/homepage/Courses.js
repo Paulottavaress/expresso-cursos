@@ -38,7 +38,7 @@ const Courses = () => {
             className="col-md bg-secondary courses-card"
             key={course.id}
           >
-          <h1 className='text-primary font-weight-bold text-center m-0'>{course.name}</h1>
+          <h1 className='text-primary font-weight-bold text-center m-0'>{course.name.toUpperCase()}</h1>
           <h1 className='text-primary font-weight-bold text-center m-0'>{course.type.toUpperCase()}</h1>
           <div className='img-container my-3'>
             <div>

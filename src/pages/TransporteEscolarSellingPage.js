@@ -7,9 +7,9 @@ import CourseContent from '../components/sellingpage/CourseContent';
 import CourseRequirements from '../components/sellingpage/CourseRequirements';
 import CourseMedias from '../components/sellingpage/CourseMedias';
 
-const MoppSellingPage = ({ type }) => {
-  const courseName = 'MOPP';
-  const baseCourseUrl = 'mopp';
+const TransporteEscolarSellingPage = ({ type }) => {
+  const courseName = 'TRANSPORTE ESCOLAR';
+  const baseCourseUrl = 'transporte-escolar';
   const [parsedType, setParsedType] = useState('');
   const [courseModules, setCourseModules] = useState([]);
   const [courseRequirements, setCourseRequirements] = useState([]);
@@ -37,14 +37,14 @@ const MoppSellingPage = ({ type }) => {
         },
         {
           number: 'Módulo IV',
-          name: 'Movimentação de Produtos Perigosos',
+          name: 'Relacionamento Interpessoal',
           duration: '15 (quinze) horas aula'
         }
       ]);
 
       setCourseRequirements([
         'Ser maior de 21 anos',
-        'Estar habilitado em uma das categorias “B”, “C”, “D” ou “E”',
+        'Estar habilitado na categoria “D” ou "E"',
         'Não ter cometido nenhuma infração grave ou gravíssima ou ser reincidente em infrações médias durante os últimos 12 (doze) meses',
         'Não estar cumprindo pena de suspensão'
       ]);
@@ -57,7 +57,7 @@ const MoppSellingPage = ({ type }) => {
         },
         {
           name: 'vídeo(s)',
-          amount: 22,
+          amount: 21,
           icon: 'fas fa-video'
         },
         {
@@ -90,17 +90,17 @@ const MoppSellingPage = ({ type }) => {
         },
         {
           number: 'Módulo IV',
-          name: 'Prevenção de Incêndio, Movimentação de Produtos Perigosos',
+          name: 'Relacionamento Interpessoal',
           duration: '5 (cinco) horas aula'
         }
       ]);
 
-      setCourseRequirements(['Ter o curso de capacitação de Movimentação de Produtos Perigosos descrito no campo de observações da CNH']);
+      setCourseRequirements(['Ter o curso de capacitação de Transporte Escolar descrito no campo de observações da CNH']);
 
       setCourseMedias([
         {
           name: 'texto(s)',
-          amount: 15,
+          amount: 11,
           icon: 'fas fa-book-open'
         },
         {
@@ -124,7 +124,7 @@ const MoppSellingPage = ({ type }) => {
         courseName={courseName.toUpperCase()}
         type={parsedType.toUpperCase()}
         subtitle="Não é necessário perder dias de trabalho para fazer o seu curso de transportes especializados. Faça no seu próprio horário, 100% online e saia com um curso devidamente credenciado pelo DETRAN/MG."
-        backgroundImage='/assets/images/backgrounds/mopp.jpeg'
+        backgroundImage='/assets/images/backgrounds/school-bus.jpg'
       />
       <SchoolInfo />
       <CourseContent
@@ -140,8 +140,8 @@ const MoppSellingPage = ({ type }) => {
   )
 };
 
-MoppSellingPage.propTypes = {
+TransporteEscolarSellingPage.propTypes = {
   type: PropTypes.string.isRequired
 }
 
-export default MoppSellingPage;
+export default TransporteEscolarSellingPage;

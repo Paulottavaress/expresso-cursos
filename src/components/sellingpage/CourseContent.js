@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 const CourseContent = ({
     type,
     courseName,
+    baseCourseUrl,
     modules
   }) => {
   return (
@@ -34,7 +35,7 @@ const CourseContent = ({
           </div>
           ))}
         </div>
-        <Link to={type === 'formacao' ? `/${courseName.toLowerCase()}-atualizacao` : `/${courseName.toLowerCase()}-formacao`} >
+        <Link to={type === 'formacao' ? `/${baseCourseUrl}-atualizacao` : `/${baseCourseUrl}-formacao`} >
         <p className='h4 mt-4 mb-0 text-danger font-weight-bold text-center cursor-pointer'>{`ESTÁ À PROCURA DO CURSO DE ${type === 'formacao' ? 'ATUALIZAÇÃO' : 'FORMAÇÃO'}? CLIQUE AQUI`}</p>
         </Link>
       </div>
@@ -43,7 +44,8 @@ const CourseContent = ({
 }
 
 CourseContent.propTypes = {
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
+  baseCourseUrl: PropTypes.string.isRequired
 }
 
 export default CourseContent;

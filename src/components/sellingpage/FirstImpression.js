@@ -49,11 +49,15 @@ const FirstImpression = ({
           </Link>
           <p className='h1 font-weight-bold'>{title}</p>
           <p
-            className='h5 text-primary font-weight-bold'
-            style={{marginBottom: '30px'}}
+            className='h5 text-danger font-weight-bold'
+            style={{
+              marginBottom: '30px',
+              background: 'rgba(255, 255, 255, 0.7)',
+              padding: '5px 20px',
+              borderRadius: '10px'
+            }}
           >
-            { courseName }
-            <span className='text-danger'> { type }</span>
+            { courseName } { type }
           </p>
           <p className='h3 text-align-left-important'>
             {subtitle}

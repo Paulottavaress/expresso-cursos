@@ -9,6 +9,7 @@ import CourseMedias from '../components/sellingpage/CourseMedias';
 import BuyTheCourse from '../components/sellingpage/BuyTheCourse';
 import CartContext from '../context/cart/cartContext';
 import { upperCaseParseType } from '../utils/ParseType';
+import Testimonials from '../components/sellingpage/Testimonials';
 
 const TransporteColetivoSellingPage = ({ type }) => {
   const cartContext = useContext(CartContext);
@@ -146,6 +147,7 @@ const TransporteColetivoSellingPage = ({ type }) => {
         modules={courseModules}
       />
       <CourseMedias medias={courseMedias}/>
+      <Testimonials />
       {(courseInfo.length > 0) && (<BuyTheCourse courseInfo={courseInfo[0]} />)}
     </div>
   )

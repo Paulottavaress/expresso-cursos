@@ -1,29 +1,54 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import CartContext from '../../context/cart/cartContext';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const BuyBtn = ({
-  btnText,
-  textSize,
-  wppMsg,
-  phone
+  courseId,
+  text,
+  textColor,
+  btnColor,
+  margin
 }) => {
+  const navigate = useNavigate();
+
+  const cartContext = useContext(CartContext);
+  const { 
+    addToCart,
+    removeFromCart,
+    courses
+  } = cartContext;
+
+  const onBuyBtnClick = async (e) => {
+    const duplicateCourses = courses.filter(course => (course.id.slice(0, 8) === e.currentTarget.value.slice(0, 8)));
+    const isDuplicate = (duplicateCourses.length > 0);
+
+    if (isDuplicate) removeFromCart(duplicateCourses[0].id);
+    addToCart(e.currentTarget.value);
+    navigate('/cart');
+  };
+
   return (
-    <a
-      href={'https://api.whatsapp.com/send?phone=' + phone + '&text=' + wppMsg}
-      target="_blank"
-      rel="noreferrer"
-      className="contact-btn btn btn-remove d-flex align-items-center"
+    <button
+      className={'btn btn-block ' + textColor + ' ' + btnColor + ' ' + margin}
+      type='button'
+      value={courseId}
+      onClick={onBuyBtnClick}
     >
-      <p className={'m-0 text-light ' + textSize}>{ btnText }</p>
-    </a>
+      <h3 className='font-weight-bold mb-0'>{ text }</h3>
+    </button>
   )
-};
+}
 
 BuyBtn.propTypes = {
-  btnText: PropTypes.string.isRequired,
-  textSize: PropTypes.string.isRequired,
-  wppMsg: PropTypes.string.isRequired,
-  phone: PropTypes.string.isRequired
+  courseId: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired
+}
+
+BuyBtn.defaultProps = {
+  textColor: 'text-light',
+  btnColor: 'btn-success',
+  margin: 'mb-0 mx-auto'
 }
 
 export default BuyBtn;

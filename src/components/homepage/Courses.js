@@ -1,27 +1,12 @@
 import React, { useContext }  from 'react';
 import { Link } from 'react-router-dom';
 import CartContext from '../../context/cart/cartContext';
-import { useNavigate } from "react-router-dom";
+import { upperCaseParseType } from '../../utils/ParseType';
+import BuyBtn from '../common/BuyBtn';
 
 const Courses = () => {
-  const navigate = useNavigate();
-
   const cartContext = useContext(CartContext);
-  const { 
-    addToCart,
-    removeFromCart,
-    courses,
-    availableCourses
-  } = cartContext;
-
-  const onBuyBtnClick = async (e) => {
-    const duplicateCourses = courses.filter(course => (course.id.slice(0, 8) === e.currentTarget.value.slice(0, 8)));
-    const isDuplicate = (duplicateCourses.length > 0);
-
-    if (isDuplicate) removeFromCart(duplicateCourses[0].id);
-    addToCart(e.currentTarget.value);
-    navigate('/cart');
-  }
+  const { availableCourses } = cartContext;
 
   return (
     <div
@@ -39,7 +24,7 @@ const Courses = () => {
             key={course.id}
           >
           <h1 className='text-primary font-weight-bold text-center m-0'>{course.name.toUpperCase()}</h1>
-          <h1 className='text-primary font-weight-bold text-center m-0'>{course.type.toUpperCase()}</h1>
+          <h1 className='text-primary font-weight-bold text-center m-0'>{upperCaseParseType(course.type)}</h1>
           <div className='img-container my-3'>
             <div>
               <Link
@@ -58,14 +43,11 @@ const Courses = () => {
             >
               <h3 className='font-weight-bold m-0 text-light'>SAIBA MAIS</h3>
             </Link>
-            <button
-              type='button'
-              value={course.id}
-              className="btn btn-block btn-success mt-3 font-weight-bold m-0 text-light"
-              onClick={onBuyBtnClick}
-            >
-              <h3 className='font-weight-bold m-0 text-light'>COMPRAR</h3>
-            </button>
+            <BuyBtn
+              courseId={course.id}
+              text='COMPRAR'
+              margin='mt-3'
+            />
           </div>
           ))}
         </div>

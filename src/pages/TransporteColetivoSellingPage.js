@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import PropTypes from 'prop-types';
 import FirstImpression from '../components/sellingpage/FirstImpression';
 import SchoolInfo from '../components/common/SchoolInfo';
@@ -6,18 +6,22 @@ import AboutTheCourse from '../components/sellingpage/AboutTheCourse';
 import CourseContent from '../components/sellingpage/CourseContent';
 import CourseRequirements from '../components/sellingpage/CourseRequirements';
 import CourseMedias from '../components/sellingpage/CourseMedias';
+import BuyTheCourse from '../components/sellingpage/BuyTheCourse';
+import CartContext from '../context/cart/cartContext';
+import { upperCaseParseType } from '../utils/ParseType';
 
 const TransporteColetivoSellingPage = ({ type }) => {
+  const cartContext = useContext(CartContext);
+  const { availableCourses } = cartContext;
+
   const courseName = 'TRANSPORTE COLETIVO DE PASSAGEIROS';
   const baseCourseUrl = 'transporte-coletivo';
-  const [parsedType, setParsedType] = useState('');
+  const [courseInfo, setCourseInfo] = useState([]);
   const [courseModules, setCourseModules] = useState([]);
   const [courseRequirements, setCourseRequirements] = useState([]);
   const [courseMedias, setCourseMedias] = useState([]);
 
   useEffect(() => {
-    setParsedType((type === 'formacao' ? 'formação' : 'atualização'));
-
     if (type === 'formacao') {
       setCourseModules([
         {
@@ -117,16 +121,24 @@ const TransporteColetivoSellingPage = ({ type }) => {
     }
   }, [type]);
 
+  useEffect(() => {
+    if (availableCourses.length > 0) {
+      setCourseInfo(availableCourses.filter((course) => (course.id.slice(0, 8) === process.env.REACT_APP_TRANSPORTE_COLETIVO_BASE_ID) && (course.type === type)));
+    }
+  }, [availableCourses]);
+
   return (
     <div>
       <FirstImpression
         title="FAÇA SEU CURSO NO CONFORTO DA SUA CASA"
         courseName={courseName.toUpperCase()}
-        type={parsedType.toUpperCase()}
+        type={upperCaseParseType(type)}
         subtitle="Não é necessário perder dias de trabalho para fazer o seu curso de transportes especializados. Faça no seu próprio horário, 100% online e saia com um curso devidamente credenciado pelo DETRAN/MG."
         backgroundImage='/assets/images/backgrounds/bus.jpg'
       />
       <SchoolInfo />
+      <AboutTheCourse />
+      <CourseRequirements requirements={courseRequirements}/>
       <CourseContent
         type={type}
         courseName={courseName}
@@ -134,8 +146,7 @@ const TransporteColetivoSellingPage = ({ type }) => {
         modules={courseModules}
       />
       <CourseMedias medias={courseMedias}/>
-      <AboutTheCourse />
-      <CourseRequirements requirements={courseRequirements}/>
+      {(courseInfo.length > 0) && (<BuyTheCourse courseInfo={courseInfo[0]} />)}
     </div>
   )
 };

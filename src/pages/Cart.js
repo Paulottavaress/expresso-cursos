@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import CartContext from '../context/cart/cartContext';
-import BuyBtn from '../components/common/BuyBtn';
+import HelpBtn from '../components/common/HelpBtn';
+import { parseType } from '../utils/ParseType';
 
 const Cart = () => {
   const cartContext = useContext(CartContext);
@@ -26,7 +27,7 @@ const Cart = () => {
                 <img src={course.image} alt={course.name} />
               </div>
               <div className='content-container'>
-                <h3 className='text-light'>{course.name} - curso de {course.type.toLowerCase()}</h3>
+                <h3 className='text-light'>{course.name} - curso de {parseType(course.type)}</h3>
                 <h4 className='text-success'>{course.value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</h4>
                 <h6 className='text-light'>Aceitamos PIX ou parcelamos em até 5x sem juros!</h6>
                 <span
@@ -50,7 +51,7 @@ const Cart = () => {
         <h4 className='m-0 text-center'>Subtotal: <span className='text-success'>{subtotal.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</span></h4>
         {(window.innerWidth > 768) && (
         <div className='btn-area d-flex'>
-          <BuyBtn
+          <HelpBtn
             btnText="Entrar em contato"
             textSize="h6"
             wppMsg="Olá! Gostaria de tirar algumas dúvidas antes de fazer minha matrícula!"
@@ -69,7 +70,7 @@ const Cart = () => {
       </div>
       {(window.innerWidth <= 768) && (
       <div className='btn-area bg-secondary my-3 p-3 d-flex justify-content-center align-items-center'>
-        <BuyBtn
+        <HelpBtn
           btnText="Entrar em contato"
           wppMsg="Oi! Gostaria de tirar algumas dúvidas antes de fazer minha matrícula."
           phone={process.env.REACT_APP_CONTACT_NUMBER_MATEUS}

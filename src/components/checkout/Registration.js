@@ -96,7 +96,7 @@ const Registration = ({ nextPage }) => {
     } else if (!registrationInfo.email.includes('@')) {
       errorMsg = 'Favor inserir um e-mail válido.';
     } else if (validateBirthday()) {
-      errorMsg = 'Favor inserir a data de aniversário no formato DD/MM/AAAA, com as barras. Por exemplo: 01/01/2000. Você precisa ser ter 18 anos completos para realizar a compra.';
+      errorMsg = 'Favor inserir a data de aniversário no formato DD/MM/AAAA, com as barras. Por exemplo: 01/01/2000. Você precisa ser ter 21 anos completos para realizar a compra.';
     } else if (registrationInfo.identificationType === 'PF' && registrationInfo.identificationNumber.length !== 11) {
       errorMsg = 'Favor conferir o CPF inserido. O número deve conter 11 caracteres, sem traços e pontos.';
     } else if (registrationInfo.identificationType === 'PJ' && registrationInfo.identificationNumber.length !== 14) {
@@ -131,9 +131,9 @@ const Registration = ({ nextPage }) => {
       const dtDOB = new Date(parts[1] + "/" + parts[0] + "/" + parts[2]);
       const dtCurrent = new Date();
 
-      if (dtCurrent.getFullYear() - dtDOB.getFullYear() < 18) return true;
+      if (dtCurrent.getFullYear() - dtDOB.getFullYear() < 21) return true;
 
-      if (dtCurrent.getFullYear() - dtDOB.getFullYear() === 18) {
+      if (dtCurrent.getFullYear() - dtDOB.getFullYear() === 21) {
         if (dtCurrent.getMonth() < dtDOB.getMonth()) return true;
 
         if (dtCurrent.getMonth() === dtDOB.getMonth()) {

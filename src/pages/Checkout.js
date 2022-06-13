@@ -5,8 +5,10 @@ import CheckoutContext from '../context/checkout/checkoutContext';
 import AlertContext from '../context/alert/alertContext';
 import Registration from '../components/checkout/Registration';
 import MercadoPagoCreditCardForm from '../components/checkout/MercadoPagoCreditCardForm';
+import MercadoPagoPixForm from '../components/checkout/MercadoPagoPixForm';
 import MercadoPagoSuccessfulPurchase from '../components/checkout/MercadoPagoSuccessfulPurchase';
 import FormatPhone from '../utils/FormatPhone';
+import { parseType } from '../utils/ParseType';
 // import Review from '../components/checkout/Review';
 
 const Checkout = () => {
@@ -49,7 +51,7 @@ const Checkout = () => {
     let description = '';
 
     courses.forEach((course, i) => {
-      description += `${course.name} - ${course.type}`;
+      description += `${course.name} - ${parseType(course.type)}`;
       if (i !== (courses.length - 1)) description += ' / ';
     });
 
@@ -137,7 +139,7 @@ const Checkout = () => {
             identificationType,
           } = cardForm.getCardFormData();
 
-          fetch(process.env.REACT_APP_BASE_URL + process.env.REACT_APP_MERCADO_PAGO_PAYMENT_URL, {
+          fetch(process.env.REACT_APP_BASE_URL + process.env.REACT_APP_MERCADO_PAGO_CREDIT_CARD_URL, {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -173,10 +175,10 @@ const Checkout = () => {
               setError(true);
             };
             isLoading = false;
-        }).catch(error => {
-            isLoading = false;
-            alert("Unexpected error\n"+JSON.stringify(error));
-        });
+          }).catch(error => {
+              isLoading = false;
+              alert("Unexpected error\n"+JSON.stringify(error));
+          });
         },
         onFetching: (resource) => {
           console.log("Fetching resource: ", resource);
@@ -235,6 +237,9 @@ const Checkout = () => {
         </div>
         <div className={(paymentMethod === 'Credit card') ? 'credit-card-method' : 'd-none'}>
           <MercadoPagoCreditCardForm isLoading={isLoading}/>
+        </div>
+        <div className={(paymentMethod === 'PIX') ? 'pix-method' : 'd-none'}>
+          <MercadoPagoPixForm />
         </div>
         {paymentMethod === '' && (
         <div className='btn-area d-flex align-items-center bg-secondary my-3 p-3'>

@@ -3,7 +3,6 @@
   position: fixed;
   left: 50%;
   transform: translate(-50%, 0);
-  cursor: pointer;
 
   .alert {
     width: 100%;
@@ -40,5 +39,42 @@
 
   .fa-window-close {
     margin: 1rem;
+  }
+}
+
+#docked-personalized-alert {
+  .alert-warning {
+    color: #664d03;
+    background-color: #fff3cd;
+    border-color: #ffecb5;
+  }
+
+  p {
+    margin-bottom: 0;
+    flex-grow: 1;
+  }
+
+  .fa-triangle-exclamation,
+  .fa-exclamation-circle,
+  .fa-check {
+    font-size: 32px;
+    margin: 16px;
+  }
+
+  @media (max-width: 768px) {
+    .fa-triangle-exclamation,
+    .fa-exclamation-circle,
+    .fa-check {
+      margin: 8px;
+    }
+  }
+
+  
+  @media (max-width: 768px) {
+    .fa-triangle-exclamation,
+    .fa-exclamation-circle,
+    .fa-check {
+      margin: 0px;
+    }
   }
 }

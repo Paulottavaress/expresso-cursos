@@ -8,6 +8,7 @@ $light: #ffffff;
 $danger: #d00000;
 $success: #28a745;
 $remove: #007185;
+$mark: rgba(255, 255, 255, 0.7);
 
 @import '../../node_modules/bootstrap/scss/bootstrap';
 
@@ -21,6 +22,7 @@ $remove: #007185;
   --danger-color: #d00000;
   --success-color: #28a745;
   --remove-color: #007185;
+  --mark-color: rgba(255, 255, 255, 0.7);
 }
 
 
@@ -54,8 +56,8 @@ img {
   width: 100%;
 }
 
-.row {
-  --bs-gutter-x: 0;
+.cursor-pointer {
+  cursor: pointer;
 }
 
 .container {
@@ -92,6 +94,10 @@ img {
 
 .bg-tertiary {
   background-color: $tertiary;
+}
+
+.bg-mark {
+  background-color: $mark;
 }
 
 /* Utilities */
@@ -140,15 +146,12 @@ img {
 
 .homepage {
   .courses-area {
-    .grid {
-      grid-gap: 20px;
-  
+    .grid {  
       .courses-card {
         padding: 16px;
         border-radius: 5px;
         display: flex;
         flex-direction: column;
-        justify-content: center;
         align-items: center;
   
         .img-container {
@@ -342,6 +345,33 @@ img {
 }
 .py-3 {
   padding: 3rem 0;
+}
+.px-1 {
+  padding: 0 1rem;
+}
+.px-2 {
+  padding: 0 2rem;
+}
+.px-3 {
+  padding: 0 3rem;
+}
+.pr-1 {
+  padding-right: 1rem;
+}
+.pr-2 {
+  padding-right: 2rem;
+}
+.pr-3 {
+  padding-right: 3rem;
+}
+.pl-1 {
+  padding-left: 1rem;
+}
+.pl-2 {
+  padding-left: 2rem;
+}
+.pl-3 {
+  padding-left: 3rem;
 }
 
 /* Margin */

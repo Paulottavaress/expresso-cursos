@@ -14,8 +14,9 @@ const FirstImpression = ({
 }) => {
   const [partnersLogos] = useState(
     [
-      '/assets/images/logos/detran-mg-transparent.png',
-      '/assets/images/logos/inove-transparent-resized.png'
+      '/assets/images/logos/denatran-transparent.png',
+      '/assets/images/logos/inove-cropped-resized.png',
+      '/assets/images/logos/pvra-cropped-resized.png'
     ]
   )
 
@@ -35,18 +36,17 @@ const FirstImpression = ({
       <div className='container text-light'>
         <div className='d-flex flex-column align-items-center text-center'>
           <Link
-            to="/"
+            to='/'
             style={{ display: displayCenteredLogo }}
           >
             <img
-              className='mb-custom'
-              style={{ width: '50%' }}
+              className='mb-custom w-50'
               src={logo}
-              alt="logo"
+              alt='logo'
             />
           </Link>
           <p className='h1 font-weight-bold'>{title}</p>
-          <p className='h5 text-danger font-weight-bold white-background-mark mb-custom'>
+          <p className='h3 text-danger font-weight-bold white-background-mark mb-custom'>
             { courseName } { type }
           </p>
           <p className='h3 text-align-left-important'>
@@ -72,7 +72,7 @@ FirstImpression.propTypes = {
 FirstImpression.defaultProps = {
   logo: '/assets/images/logos/logo-v1-white-resized.png',
   title: 'TITLE',
-  subtitle: 'SUBTITLE',
+  subtitle: '',
   backgroundImage: '/assets/images/backgrounds/mopp.jpeg',
   displayCenteredLogo: 'none'
 }

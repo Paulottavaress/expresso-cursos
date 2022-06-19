@@ -10,6 +10,7 @@ import BuyTheCourse from '../components/sellingpage/BuyTheCourse';
 import CartContext from '../context/cart/cartContext';
 import { upperCaseParseType } from '../utils/ParseType';
 import Testimonials from '../components/sellingpage/Testimonials';
+import CourseCertification from '../components/sellingpage/CourseCertification';
 
 const MoppSellingPage = ({ type }) => {
   const cartContext = useContext(CartContext);
@@ -134,7 +135,6 @@ const MoppSellingPage = ({ type }) => {
         title="FAÇA SEU CURSO NO CONFORTO DA SUA CASA"
         courseName={courseName.toUpperCase()}
         type={upperCaseParseType(type)}
-        subtitle="Não é necessário perder dias de trabalho para fazer o seu curso de transportes especializados. Faça no seu próprio horário, 100% online e saia com um curso devidamente credenciado pelo DETRAN/MG."
         backgroundImage='/assets/images/backgrounds/mopp.jpeg'
       />
       <SchoolInfo />
@@ -148,6 +148,7 @@ const MoppSellingPage = ({ type }) => {
       />
       <CourseMedias medias={courseMedias} />
      <Testimonials />
+     <CourseCertification />
      {(courseInfo.length > 0) && (<BuyTheCourse courseInfo={courseInfo[0]} />)}
     </div>
   )

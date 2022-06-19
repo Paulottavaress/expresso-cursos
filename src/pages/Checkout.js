@@ -4,8 +4,9 @@ import CartContext from '../context/cart/cartContext';
 import CheckoutContext from '../context/checkout/checkoutContext';
 import AlertContext from '../context/alert/alertContext';
 import Registration from '../components/checkout/Registration';
+import MercadoPagoPix from '../components/checkout/MercadoPagoPix';
+import MercadoPagoBankSlip from '../components/checkout/MercadoPagoBankSlip';
 import MercadoPagoCreditCardForm from '../components/checkout/MercadoPagoCreditCardForm';
-import MercadoPagoPixForm from '../components/checkout/MercadoPagoPixForm';
 import MercadoPagoSuccessfulPurchase from '../components/checkout/MercadoPagoSuccessfulPurchase';
 import FormatPhone from '../utils/FormatPhone';
 import { parseType } from '../utils/ParseType';
@@ -26,12 +27,13 @@ const Checkout = () => {
   const {
     currentPage,
     changePage,
-    registrationInfo
+    registrationInfo,
+    setPaymentMethod,
+    paymentMethod
   } = checkoutContext;
 
   const [isError, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState('');
   const [isCardInstatiated, setCardInstance] = useState(false);
   const [description, setDescription] = useState('');
 
@@ -57,10 +59,6 @@ const Checkout = () => {
 
     setDescription(description);
   }, [courses]);
-
-  const onChange = e => {
-    setPaymentMethod(e.target.value)
-  };
 
   const nextPage = (() => {
     if (!isCardInstatiated) {
@@ -205,7 +203,7 @@ const Checkout = () => {
       <div className={(currentPage === 2) ? 'd-block form-payment-info' : 'd-none'}>
         <div
           className={isLoading ? 'd-none' : 'payment-method bg-secondary p-3 my-3'}
-          onChange={onChange}
+          onChange={(e) => setPaymentMethod(e.target.value)}
         >
           <div className="form-radio">
             <input
@@ -235,13 +233,16 @@ const Checkout = () => {
             <label htmlFor="credit-card">Cartão de crédito</label>
           </div>
         </div>
+        <div className={(paymentMethod === 'PIX') ? 'pix-method' : 'd-none'}>
+          <MercadoPagoPix />
+        </div>
+        <div className={(paymentMethod === 'Bank slip') ? 'bank slip-method' : 'd-none'}>
+          <MercadoPagoBankSlip />
+        </div>
         <div className={(paymentMethod === 'Credit card') ? 'credit-card-method' : 'd-none'}>
           <MercadoPagoCreditCardForm isLoading={isLoading}/>
         </div>
-        <div className={(paymentMethod === 'PIX') ? 'pix-method' : 'd-none'}>
-          <MercadoPagoPixForm />
-        </div>
-        {paymentMethod === '' && (
+        {!paymentMethod && (
         <div className='btn-area d-flex align-items-center bg-secondary my-3 p-3'>
           <div className='btn-group d-flex'>
             <button

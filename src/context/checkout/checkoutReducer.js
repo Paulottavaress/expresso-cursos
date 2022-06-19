@@ -1,7 +1,8 @@
 import {
   CHANGE_PAGE,
   SET_REGISTRATION_INFO,
-  SET_PAYMENT_INFO
+  SET_PAYMENT_INFO,
+  SET_PAYMENT_METHOD
 } from '../types';
 
 export const checkoutReducer = (state, action) => {
@@ -23,6 +24,11 @@ export const checkoutReducer = (state, action) => {
       return {
         ...state,
         paymentInfo: action.payload
+      };
+    case SET_PAYMENT_METHOD:
+      return {
+        ...state,
+        paymentMethod: action.payload
       };
     default:
       return state;

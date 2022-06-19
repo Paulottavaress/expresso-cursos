@@ -16,17 +16,13 @@ const CourseContent = ({
     >
       <div className="container py-5">
         <p className='h1 text-center font-weight-bold text-secondary'>MÓDULOS DO CURSO</p>
-        <p
-          className='h4 text-center font-weight-bold text-secondary'
-          style={{ marginBottom: '30px' }}
-        >
+        <p className='h4 text-center font-weight-bold text-secondary mb-custom'>
           {courseName} {upperCaseParseType(type)}
         </p>
         <div className="d-flex flex-column">
           {modules.map((module, i) => (
           <div
-            className='module d-flex mb-2 border border-dark rounded-2'
-            style={{backgroundColor: 'rgba(255, 255, 255, 0.7)'}}
+            className='module d-flex mb-2 rounded-2 bg-mark'
             key={i}
           >
             <div className={i % 2 === 0 ? 'colored-div bg-danger mr-1' : 'colored-div bg-dark mr-1'} />

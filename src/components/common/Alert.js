@@ -10,13 +10,13 @@ const Alert = () => {
 
   return (
   <ul
-    id="personalized-alert"
-    className="container"
+    id='personalized-alert'
+    className='container'
   >
     {alerts && alerts.map((alert) => (
       <div
         className={'alert alert-' + alert.type}
-        role="alert"
+        role='alert'
         key={alert.id}
       >
         <div className='d-flex align-items-center'>
@@ -27,12 +27,13 @@ const Alert = () => {
             <i className='fa fa-exclamation-circle' />
           )}
           {(alert.type === 'success') && (
-            <i class='fa fa-solid fa-check' />
+            <i className='fa fa-solid fa-check text-light' />
           )}
-          <p>{alert.text}</p>
+          <p className={`font-weight-bold ${(alert.type === 'success') ? 'text-light' : 'text-dark'}`}>{alert.text}</p>
           <i
-            className={(alert.type === 'danger' ? 'fa fa-window-close text-light' : 'text-danger')}
-            aria-hidden="true"
+            className={`fa fa-window-close ${(alert.type === 'danger') ? 'text-light' : 'text-danger'}`}
+            aria-hidden='true'
+            role='button'
             onClick={() => removeAlert(alert.id)}
           />
         </div>

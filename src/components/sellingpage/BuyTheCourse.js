@@ -5,10 +5,13 @@ import BuyBtn from '../common/BuyBtn';
 const BuyTheCourse = ({ courseInfo }) => {
   return (
     <div
-      id="buy-the-course"
+      id='buy-the-course'
       className='bg-primary'
     >
-      <div className='container py-5'>
+      <div
+        className='container pt-5'
+        style={{ paddingBottom: '100px'}}
+      >
         <div className="d-flex">
           <div className='img-container d-flex justify-content-center align-items-center'>
             <img src="/assets/images/certifications/7-days-warranty-protection.png" alt="selo de garantia de 100% de satisfação" />
@@ -33,9 +36,6 @@ const BuyTheCourse = ({ courseInfo }) => {
             </div>
           </div>
         </div>
-        {/* <div className='img-container pt-5'>
-          <img src="/assets/images/certifications/safe-purchase.png" alt="Mercado Pago - Meios de pagamento"/>
-        </div> */}
       </div>
     </div>
   )

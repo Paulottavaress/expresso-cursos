@@ -9,15 +9,26 @@ import TransporteEscolarSellingPage from '../../pages/TransporteEscolarSellingPa
 import Alert from '../common/Alert';
 import AlertContext from '../../context/alert/alertContext';
 import WhatsAppWindow from '../common/WhatsAppWindow';
+import WhatsAppModal from '../common/WhatsAppModal';
+import BuyBtnArea from '../sellingpage/BuyBtnArea';
 
 const MainLayout = ({ route }) => {
   const alertContext = useContext(AlertContext);
   const { alerts } = alertContext;
 
   const [showWindow, setShowWindow] = useState(false);
+  const [wppModal, setShowWppModal] = useState(false);
   const [wppMessage, setWppMessage] = useState('');
 
-  const switchWindow = () => setShowWindow((prevShowWindow) => (!prevShowWindow));
+  const switchWindow = () => {
+    if (window.innerWidth >= 768) {
+      setShowWindow((prevShowWindow) => (!prevShowWindow));
+    } else {
+      switchWppModal();
+    }
+  };
+
+  const switchWppModal = () => setShowWppModal((prevShowWppModal) => (!prevShowWppModal));
 
   useEffect(() => {
     switch(route) {
@@ -51,7 +62,10 @@ const MainLayout = ({ route }) => {
   }, [route]);
 
   return (
-    <div className={(route === 'cart') ? 'cart-container' : 'checkout-container'}>
+    <div
+      id='main-layout'
+      className={(route === 'cart') ? 'cart-container' : 'checkout-container'}
+    >
       <Navbar backgroundColor={(route === 'cart' || route === 'checkout') ? 'bg-secondary' : ''} />
       {(route === 'homepage') && (
       <HomePage />
@@ -72,12 +86,20 @@ const MainLayout = ({ route }) => {
       )} {(route === 'transporte-escolar-atualizacao') && (
       <TransporteEscolarSellingPage type='atualizacao' />
       )}
-      {(route !== 'checkout' && (
+      {((route === 'homepage' || route === 'cart') && (
       <WhatsAppWindow
         wppMsg={wppMessage}
         showWindow={showWindow}
         switchWindow={switchWindow}
       />
+      ))}
+      {(wppModal) && (<WhatsAppModal
+        wppMsg={wppMessage}
+        showWindow={showWindow}
+        switchWppModal={switchWppModal} 
+      />)}
+      {((route !== 'homepage' && route !== 'cart' && route !== 'checkout' && !wppModal) && (
+      <BuyBtnArea switchWppModal={switchWppModal} />
       ))}
       {(alerts && alerts.length > 0) && (
       <Alert

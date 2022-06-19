@@ -12,10 +12,9 @@ const Testimonials = () => {
         <div className='d-flex flex-column justify-content-center align-items-center video-container' style={{ height:'400px' }}>
           <video
             className='h-100'
-            src='/assets/videos/testimonials/jonathan-melo-dos-santos.mp4'
+            src='/assets/videos/testimonials/jonathan-melo-dos-santos.mp4#t=0.001'
             type='video/mp4'
             controls
-            preload='metadata'
             style={{ borderRadius: '40px' }}
           />
         </div>

@@ -31,7 +31,7 @@ const MercadoPagoSuccessfulPurchase = () => {
         <div className='d-flex flex-column text-light w-100'>
           <h4>{msg}</h4>
           <h4 className='text-primary'>Número: {FormatPhone(process.env.REACT_APP_CONTACT_NUMBER_MATEUS)}</h4>
-          <h4 className='text-primary mb-5'>E-mail: {FormatPhone(process.env.REACT_APP_EMAIL_ADDRESS)}</h4>
+          <h4 className='text-primary mb-5'>E-mail: {process.env.REACT_APP_EMAIL_ADDRESS}</h4>
           <h4>Horário de funcionamento:</h4>
           <h4>De segunda a sexta: <span className='text-primary'>das 08:00 às 20:00</span></h4>
           <h4>Aos sábados: <span className='text-primary'>das 08:00 às 12:00</span></h4>

@@ -10,7 +10,7 @@ import {
 
 const CheckoutState = props => {
   const initialState = {
-    currentPage: 2,
+    currentPage: 1,
     registrationInfo: {
       "address": "",
       "addressComplement": "",

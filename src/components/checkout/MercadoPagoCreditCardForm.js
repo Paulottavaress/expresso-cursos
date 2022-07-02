@@ -61,7 +61,7 @@ const MercadoPagoCreditCardForm = ({ isLoading }) => {
               htmlFor="form-checkout__cardholderEmail"
               className='font-weight-bold'
             >
-              Email do comprador
+              E-mail do comprador
               <span className='text-danger'> *</span>
             </label>
             <input

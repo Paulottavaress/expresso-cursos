@@ -15,11 +15,11 @@ const MercadoPagoBankSlip = () => {
     <div id='mercado-pago-bank-slip'>
       <div className='d-flex flex-column align-items-center justify-content-center bg-secondary p-3 my-3 rounded-3'>
         <p className='h4 mb-0 text-light mb-5'>Caso precise pagar por boleto bancário, favor nos enviar os dados que você acaba de preencher no formulário anterior para o número ou e-mail disponibilizados abaixo. Emitiremos o boleto para pagamento imediatamente.</p>
-        <h4 className='text-primary'>Número: {FormatPhone(process.env.REACT_APP_CONTACT_NUMBER_MATEUS)}</h4>
-          <h4 className='text-primary mb-5'>E-mail: {process.env.REACT_APP_EMAIL_ADDRESS}</h4>
-          <h4>Horário de funcionamento:</h4>
-          <h4>De segunda a sexta: <span className='text-primary'>das 08:00 às 20:00</span></h4>
-          <h4>Aos sábados: <span className='text-primary'>das 08:00 às 12:00</span></h4>
+        <h4>Número: <span className='text-primary'>{FormatPhone(process.env.REACT_APP_CONTACT_NUMBER_MATEUS)}</span></h4>
+        <h4 className='mb-5'>E-mail: <span className='text-primary'>{process.env.REACT_APP_EMAIL_ADDRESS}</span></h4>
+        <h4>Horário de funcionamento:</h4>
+        <h4>De segunda a sexta: <span className='text-primary'>das 08:00 às 20:00</span></h4>
+        <h4>Aos sábados: <span className='text-primary'>das 08:00 às 12:00</span></h4>
       </div>
       <div className='btn-area d-flex align-items-center bg-secondary my-3 p-3'>
         <div className='btn-group d-flex'>

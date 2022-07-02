@@ -55,29 +55,6 @@ const MercadoPagoPix = () => {
     setError(false);
     setIsLoading(true);
 
-    // const paymentData = {
-    //   "transaction_amount": 1,
-    //   "description": "Transporte Escolar - atualização",
-    //   "payment_method_id": "pix",
-    //   "payer": {
-    //     "email": "paulinho.tavand@gmail.com",
-    //     "first_name": "Paulo",
-    //     "last_name": "Andrade",
-    //     "identification": {
-    //       "type": "CPF",
-    //       "number": "42561574687"
-    //     },
-    //     "address": {
-    //       "zip_code": "30280430",
-    //       "street_name": "Rua Antônio Justino",
-    //       "street_number": "400",
-    //       "neighborhood": "Pompéia",
-    //       "city": "Belo Horizonte",
-    //       "federal_unit": "MG"
-    //     }
-    //   }
-    // }
-
     const splittedName = registrationInfo.fullName.split(' ');
 
     const paymentData = {
@@ -87,14 +64,6 @@ const MercadoPagoPix = () => {
       splittedName
     };
 
-    // fetch(
-      //   'https://api.mercadopago.com/v1/payments', {
-        //     method: 'POST',
-        //     headers: {
-          //       'Content-Type': 'application/json',
-          //       'Authorization': 'Bearer APP_USR-743360719003072-030221-ac37f254a5f8337d388952926fe26199-403095209'
-          //     },
-          //     body: JSON.stringify(paymentData),
     fetch(process.env.REACT_APP_BASE_URL + process.env.REACT_APP_MERCADO_PAGO_PIX_URL, {
       method: 'POST',
       headers: {
@@ -140,7 +109,7 @@ const MercadoPagoPix = () => {
           <p className='h3 mb-custom mx-auto text-center'>Dados da conta de recebimento</p>
           <div className='d-flex flex-column align-items-center'>
             <p className='h6'>{sellerName}</p>
-            <p className='h6'>***.312.716-**</p>
+            <p className='h6'>{process.env.REACT_APP_CNPJ}</p>
             <p className='h6'>MERCADO PAGO IP LTDA.</p>
             <p className='h3 text-success'>{subtotal.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</p>
           </div>

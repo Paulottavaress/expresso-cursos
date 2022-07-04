@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from 'react';
 import Navbar from './Navbar';
+import Footer from './Footer';
 import Cart from '../../pages/Cart';
 import Checkout from '../../pages/Checkout'; 
 import HomePage from '../../pages/HomePage';
@@ -99,14 +100,17 @@ const MainLayout = ({ route }) => {
         switchWppModal={switchWppModal} 
       />)}
       {((route !== 'homepage' && route !== 'cart' && route !== 'checkout' && !wppModal) && (
-      <BuyBtnArea switchWppModal={switchWppModal} />
-      ))}
+        <BuyBtnArea switchWppModal={switchWppModal} />
+        ))}
       {(alerts && alerts.length > 0) && (
-      <Alert
+        <Alert
         key={alert.id}
         type={alert.type}
         text={alert.text}
-      />
+        />
+        )}
+      {(route === 'homepage' || route === 'cart' || route === 'checkout') && (
+        <Footer route={route} />
       )}
     </div>
   );

@@ -67,6 +67,10 @@ img {
   padding: 0 2rem;
 }
 
+.text-size-xs {
+  font-size: 12px;
+}
+
 .white-background-mark {
   background: rgba(255, 255, 255, 0.7);
   padding: 5px 20px;
@@ -174,11 +178,13 @@ img {
 }
 
 .cart-container {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
   background-color: $primary;
 
   .cart {
     padding-top: 150px;
-    min-height: 100vh;
   
     .courses-group {
       border-radius: 10px;

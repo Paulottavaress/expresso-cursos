@@ -1,9 +1,11 @@
 .checkout-container {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
   background-color: $primary;
 
   #checkout {
     padding-top: 150px;
-    min-height: 100vh;
 
     input,
     select {

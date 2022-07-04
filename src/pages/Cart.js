@@ -17,7 +17,7 @@ const Cart = () => {
   }
 
   return (
-    <div className='cart container bg-primary'>
+    <div className='cart container bg-primary pb-5'>
       <h1 className='text-center font-weight-bold text-secondary py-3'>Carrinho de compras</h1>
       <div className='courses-group d-flex flex-column bg-secondary p-3'>
         {(courses && courses.length > 0) ? courses.map((course, i) => (

@@ -8,9 +8,11 @@ import CourseRequirements from '../components/sellingpage/CourseRequirements';
 import CourseMedias from '../components/sellingpage/CourseMedias';
 import BuyTheCourse from '../components/sellingpage/BuyTheCourse';
 import CartContext from '../context/cart/cartContext';
-import { upperCaseParseType } from '../utils/ParseType';
+import CourseFaq from '../components/sellingpage/CourseFaq';
+import DidYouKnow from '../components/sellingpage/DidYouKnow';
 import Testimonials from '../components/sellingpage/Testimonials';
 import CourseCertification from '../components/sellingpage/CourseCertification';
+import { upperCaseParseType } from '../utils/ParseType';
 
 const MoppSellingPage = ({ type }) => {
   const cartContext = useContext(CartContext);
@@ -22,6 +24,25 @@ const MoppSellingPage = ({ type }) => {
   const [courseModules, setCourseModules] = useState([]);
   const [courseRequirements, setCourseRequirements] = useState([]);
   const [courseMedias, setCourseMedias] = useState([]);
+  const [faqData] = useState({
+    rows: [
+      {
+        title: "Esse curso é reconhecido pelo detran?",
+        content: "Sim! Todos os nossos cursos são homologados por instituição credenciada ao detran e de acordo com a Resolução 168/04 do Contran."
+      },
+      {
+        title: "Eu preciso fazer alguma prova?",
+        content: "Mesmo cumprindo a grade integral dos cursos na plataforma de ensino e sendo devidamente aprovado se faz necessário agendamento junto ao CIRETRAN da sua cidade para prova extraordinária no caso de curso de formação."
+      },
+      {
+        title: "Tenho suporte durante o curso?",
+        content: "Todas as suas dúvidas pertinentes no que diz respeito desde compra até a conclusão do curso são de nossa inteira responsabilidade te auxiliar em tudo! Conte conosco!"
+      }
+    ],
+    styles: {
+      bgColor: 'bg-primary'
+    }
+  });
 
   useEffect(() => {
     if (type === 'formacao') {
@@ -147,9 +168,11 @@ const MoppSellingPage = ({ type }) => {
         modules={courseModules}
       />
       <CourseMedias medias={courseMedias} />
-     <Testimonials />
-     <CourseCertification />
-     {(courseInfo.length > 0) && (<BuyTheCourse courseInfo={courseInfo[0]} />)}
+      <CourseFaq faqData={faqData} />
+      <DidYouKnow courseName={courseName}/>
+      <Testimonials />
+      <CourseCertification />
+      {(courseInfo.length > 0) && (<BuyTheCourse courseInfo={courseInfo[0]} />)}
     </div>
   )
 };

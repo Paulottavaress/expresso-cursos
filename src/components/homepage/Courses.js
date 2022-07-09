@@ -1,4 +1,4 @@
-import React, { useContext, useEffect }  from 'react';
+import React, { useContext }  from 'react';
 import { Link } from 'react-router-dom';
 import CartContext from '../../context/cart/cartContext';
 import { upperCaseParseType } from '../../utils/ParseType';
@@ -7,10 +7,6 @@ import BuyBtn from '../common/BuyBtn';
 const Courses = () => {
   const cartContext = useContext(CartContext);
   const { availableCourses } = cartContext;
-
-  useEffect(() => {
-    console.log('availableCourses', availableCourses);
-  }, []);
 
   return (
     <div className='courses-area bg-primary'>

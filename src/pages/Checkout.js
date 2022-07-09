@@ -61,12 +61,34 @@ const Checkout = () => {
   }, [courses]);
 
   const nextPage = (() => {
+    isLoading = true;
+
     if (!isCardInstatiated) {
       loadCard();
       setCardInstance(true);
-    }
+    };
 
-    changePage(2);
+    fetch(process.env.REACT_APP_BASE_URL + process.env.REACT_APP_LEAD_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        registrationInfo,
+        courses,
+        subtotal
+      }),
+    }).then(response => {
+      isLoading = false;
+      return response.json();
+    }).then(result => {
+      isLoading = false;
+      changePage(2);
+    }).catch(error => {
+      // add alert asking the user to get in touch via wpp cuz we are having issues
+      isLoading = false;
+      alert("Unexpected error\n"+JSON.stringify(error));
+    });
   });
 
   const mercadopago = useMercadopago.v2(

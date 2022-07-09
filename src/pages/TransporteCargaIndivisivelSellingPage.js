@@ -14,12 +14,12 @@ import CourseCertification from '../components/sellingpage/CourseCertification';
 import BuyTheCourse from '../components/sellingpage/BuyTheCourse';
 import { upperCaseParseType } from '../utils/ParseType';
 
-const TransporteEscolarSellingPage = ({ type }) => {
+const TransporteCargaIndivisivelSellingPage = ({ type }) => {
   const cartContext = useContext(CartContext);
   const { availableCourses } = cartContext;
 
-  const courseName = 'TRANSPORTE ESCOLAR';
-  const baseCourseUrl = 'transporte-escolar';
+  const courseName = 'Transporte Carga Indivisível';
+  const baseCourseUrl = 'transporte-carga-indivisivel';
   const [courseInfo, setCourseInfo] = useState([]);
   const [courseModules, setCourseModules] = useState([]);
   const [courseRequirements, setCourseRequirements] = useState([]);
@@ -64,14 +64,14 @@ const TransporteEscolarSellingPage = ({ type }) => {
         },
         {
           number: 'Módulo IV',
-          name: 'Relacionamento Interpessoal',
+          name: 'Movimentação de Carga',
           duration: '15 (quinze) horas aula'
         }
       ]);
 
       setCourseRequirements([
         'Ser maior de 21 anos',
-        'Estar habilitado na categoria “D” ou "E"',
+        'Estar habilitado em uma das categorias “C” ou “E”',
         'Não ter cometido nenhuma infração grave ou gravíssima ou ser reincidente em infrações médias durante os últimos 12 (doze) meses',
         'Não estar cumprindo pena de suspensão'
       ]);
@@ -84,7 +84,7 @@ const TransporteEscolarSellingPage = ({ type }) => {
         },
         {
           name: 'vídeo(s)',
-          amount: 21,
+          amount: 22,
           icon: 'fas fa-video'
         },
         {
@@ -117,17 +117,17 @@ const TransporteEscolarSellingPage = ({ type }) => {
         },
         {
           number: 'Módulo IV',
-          name: 'Relacionamento Interpessoal',
+          name: 'Movimentação de Cargas',
           duration: '5 (cinco) horas aula'
         }
       ]);
 
-      setCourseRequirements(['Ter o curso de capacitação de Transporte Escolar descrito no campo de observações da CNH']);
+      setCourseRequirements(['Ter o curso de capacitação de Movimentação de Produtos Perigosos descrito no campo de observações da CNH']);
 
       setCourseMedias([
         {
           name: 'texto(s)',
-          amount: 11,
+          amount: 13,
           icon: 'fas fa-book-open'
         },
         {
@@ -146,17 +146,17 @@ const TransporteEscolarSellingPage = ({ type }) => {
 
   useEffect(() => {
     if (availableCourses.length > 0) {
-      setCourseInfo(availableCourses.filter((course) => (course.id.slice(0, 8) === process.env.REACT_APP_TRANSPORTE_ESCOLAR_BASE_ID) && (course.type === type)));
+      setCourseInfo(availableCourses.filter((course) => (course.id.slice(0, 8) === process.env.REACT_APP_CARGA_INDIVISIVEL_BASE_ID) && (course.type === type)));
     }
   }, [availableCourses]);
 
   return (
     <div>
       <FirstImpression
-        title='FAÇA SEU CURSO NO CONFORTO DA SUA CASA'
+        title="FAÇA SEU CURSO NO CONFORTO DA SUA CASA"
         courseName={courseName.toUpperCase()}
         type={upperCaseParseType(type)}
-        backgroundImage='/assets/images/backgrounds/school-bus.jpg'
+        backgroundImage='/assets/images/backgrounds/indivisible-load.jpg'
       />
       <SchoolInfo />
       <AboutTheCourse />
@@ -177,8 +177,8 @@ const TransporteEscolarSellingPage = ({ type }) => {
   )
 };
 
-TransporteEscolarSellingPage.propTypes = {
+TransporteCargaIndivisivelSellingPage.propTypes = {
   type: PropTypes.string.isRequired
 }
 
-export default TransporteEscolarSellingPage;
+export default TransporteCargaIndivisivelSellingPage;

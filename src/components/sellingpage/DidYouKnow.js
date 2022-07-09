@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const DidYouKnow = ({courseName}) => {
   return (
     <div
-      id='courseFaq'
+      id='didYouKnow'
       className='bg-secondary'
     >
       <div className='container py-5 d-flex flex-column'>
@@ -13,5 +14,9 @@ const DidYouKnow = ({courseName}) => {
     </div>
   )
 };
+
+DidYouKnow.propTypes = {
+  courseName: PropTypes.string.isRequired
+}
 
 export default DidYouKnow;

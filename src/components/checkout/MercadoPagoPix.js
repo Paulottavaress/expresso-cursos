@@ -59,7 +59,7 @@ const MercadoPagoPix = () => {
 
     const paymentData = {
       ...registrationInfo,
-      subtotal,
+      subtotal: subtotal * process.env.REACT_APP_PIX_DISCOUNT,
       description,
       splittedName
     };
@@ -111,7 +111,7 @@ const MercadoPagoPix = () => {
             <p className='h6'>{sellerName}</p>
             <p className='h6'>{process.env.REACT_APP_CNPJ}</p>
             <p className='h6'>MERCADO PAGO IP LTDA.</p>
-            <p className='h3 text-success'>{subtotal.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</p>
+            <p className='h3 text-success'>{(subtotal * process.env.REACT_APP_PIX_DISCOUNT).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</p>
           </div>
         </div>
       </div>

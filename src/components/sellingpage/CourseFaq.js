@@ -1,10 +1,11 @@
 import React from 'react';
 import Faq from 'react-faq-component';
+import PropTypes from 'prop-types';
 
 const CourseFaq = ({faqData}) => {
   return (
     <div
-      id='courseFaq'
+      id='course-faq'
       className='bg-primary'
     >
       <div className='container py-5 d-flex flex-column'>
@@ -16,6 +17,10 @@ const CourseFaq = ({faqData}) => {
       </div>
     </div>
   )
+}
+
+CourseFaq.propTypes = {
+  faqData: PropTypes.object.isRequired
 }
 
 export default CourseFaq;

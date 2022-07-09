@@ -14,12 +14,12 @@ import CourseCertification from '../components/sellingpage/CourseCertification';
 import BuyTheCourse from '../components/sellingpage/BuyTheCourse';
 import { upperCaseParseType } from '../utils/ParseType';
 
-const TransporteEscolarSellingPage = ({ type }) => {
+const VeiculosDeEmergenciaSellingPage = ({ type }) => {
   const cartContext = useContext(CartContext);
   const { availableCourses } = cartContext;
 
-  const courseName = 'TRANSPORTE ESCOLAR';
-  const baseCourseUrl = 'transporte-escolar';
+  const courseName = 'Veículos de Emergência';
+  const baseCourseUrl = 'veiculos-emergencia';
   const [courseInfo, setCourseInfo] = useState([]);
   const [courseModules, setCourseModules] = useState([]);
   const [courseRequirements, setCourseRequirements] = useState([]);
@@ -64,14 +64,14 @@ const TransporteEscolarSellingPage = ({ type }) => {
         },
         {
           number: 'Módulo IV',
-          name: 'Relacionamento Interpessoal',
+          name: 'Relacionamento Interperssoal',
           duration: '15 (quinze) horas aula'
         }
       ]);
 
       setCourseRequirements([
         'Ser maior de 21 anos',
-        'Estar habilitado na categoria “D” ou "E"',
+        'Estar habilitado em uma das categorias "A", “B”, “C”, “D” ou “E”',
         'Não ter cometido nenhuma infração grave ou gravíssima ou ser reincidente em infrações médias durante os últimos 12 (doze) meses',
         'Não estar cumprindo pena de suspensão'
       ]);
@@ -84,7 +84,7 @@ const TransporteEscolarSellingPage = ({ type }) => {
         },
         {
           name: 'vídeo(s)',
-          amount: 21,
+          amount: 22,
           icon: 'fas fa-video'
         },
         {
@@ -122,7 +122,7 @@ const TransporteEscolarSellingPage = ({ type }) => {
         }
       ]);
 
-      setCourseRequirements(['Ter o curso de capacitação de Transporte Escolar descrito no campo de observações da CNH']);
+      setCourseRequirements(['Ter o curso de capacitação de Movimentação de Produtos Perigosos descrito no campo de observações da CNH']);
 
       setCourseMedias([
         {
@@ -137,7 +137,7 @@ const TransporteEscolarSellingPage = ({ type }) => {
         },
         {
           name: 'avaliações',
-          amount: 6,
+          amount: 5,
           icon: 'fa-solid fa-check'
         },
       ])
@@ -146,17 +146,17 @@ const TransporteEscolarSellingPage = ({ type }) => {
 
   useEffect(() => {
     if (availableCourses.length > 0) {
-      setCourseInfo(availableCourses.filter((course) => (course.id.slice(0, 8) === process.env.REACT_APP_TRANSPORTE_ESCOLAR_BASE_ID) && (course.type === type)));
+      setCourseInfo(availableCourses.filter((course) => (course.id.slice(0, 8) === process.env.REACT_APP_VEICULOS_EMERGENCIA_BASE_ID) && (course.type === type)));
     }
   }, [availableCourses]);
 
   return (
     <div>
       <FirstImpression
-        title='FAÇA SEU CURSO NO CONFORTO DA SUA CASA'
+        title="FAÇA SEU CURSO NO CONFORTO DA SUA CASA"
         courseName={courseName.toUpperCase()}
         type={upperCaseParseType(type)}
-        backgroundImage='/assets/images/backgrounds/school-bus.jpg'
+        backgroundImage='/assets/images/backgrounds/ambulance.jpg'
       />
       <SchoolInfo />
       <AboutTheCourse />
@@ -177,8 +177,8 @@ const TransporteEscolarSellingPage = ({ type }) => {
   )
 };
 
-TransporteEscolarSellingPage.propTypes = {
+VeiculosDeEmergenciaSellingPage.propTypes = {
   type: PropTypes.string.isRequired
 }
 
-export default TransporteEscolarSellingPage;
+export default VeiculosDeEmergenciaSellingPage;

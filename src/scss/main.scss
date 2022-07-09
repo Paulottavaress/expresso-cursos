@@ -741,7 +741,7 @@ table th {
   }
 }
 
-#courseFaq {
+#course-faq {
   .row-title {
     font-weight: bold;
   };
@@ -760,6 +760,16 @@ table th {
     margin-bottom: 0.5rem;
     font-weight: bold;
     line-height: 1.2;
+  }
+}
+
+#social-media-tab {
+  transform: translate(0%, -50%);
+  width: 60px;
+  top: 25%;
+
+  img {
+    width: 50px;
   }
 }
 
@@ -919,6 +929,14 @@ table th {
           margin-bottom: 30px;
         }
       }
+    }
+  }
+
+  #social-media-tab {
+    width: 40px;
+  
+    img {
+      width: 30px;
     }
   }
 }

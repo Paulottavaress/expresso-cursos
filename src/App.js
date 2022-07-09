@@ -59,6 +59,22 @@ const App = () => {
                   path='/transporte-escolar-atualizacao'
                   element={<MainLayout route='transporte-escolar-atualizacao' />}
                 />
+                <Route
+                  path='/transporte-carga-indivisivel-formacao'
+                  element={<MainLayout route='transporte-carga-indivisivel-formacao' />}
+                />
+                <Route
+                  path='/transporte-carga-indivisivel-atualizacao'
+                  element={<MainLayout route='transporte-carga-indivisivel-atualizacao' />}
+                />
+                <Route
+                  path='/veiculos-emergencia-formacao'
+                  element={<MainLayout route='veiculos-emergencia-formacao' />}
+                />
+                <Route
+                  path='/veiculos-emergencia-atualizacao'
+                  element={<MainLayout route='veiculos-emergencia-atualizacao' />}
+                />
               </Routes>
             </div>
           </Router>

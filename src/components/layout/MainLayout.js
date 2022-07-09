@@ -7,11 +7,14 @@ import HomePage from '../../pages/HomePage';
 import MoppSellingPage from '../../pages/MoppSellingPage';
 import TransporteColetivoSellingPage from '../../pages/TransporteColetivoSellingPage';
 import TransporteEscolarSellingPage from '../../pages/TransporteEscolarSellingPage';
+import TransporteCargaIndivisivelSellingPage from '../../pages/TransporteCargaIndivisivelSellingPage';
+import VeiculosDeEmergenciaSellingPage from '../../pages/VeiculosDeEmergenciaSellingPage';
 import Alert from '../common/Alert';
 import AlertContext from '../../context/alert/alertContext';
 import WhatsAppWindow from '../common/WhatsAppWindow';
 import WhatsAppModal from '../common/WhatsAppModal';
 import BuyBtnArea from '../sellingpage/BuyBtnArea';
+import SocialMediaTab from './SocialMediaTab';
 
 const MainLayout = ({ route }) => {
   const alertContext = useContext(AlertContext);
@@ -86,7 +89,16 @@ const MainLayout = ({ route }) => {
       <TransporteEscolarSellingPage type='formacao' />
       )} {(route === 'transporte-escolar-atualizacao') && (
       <TransporteEscolarSellingPage type='atualizacao' />
+      )} {(route === 'transporte-carga-indivisivel-formacao') && (
+      <TransporteCargaIndivisivelSellingPage type='formacao' />
+      )} {(route === 'transporte-carga-indivisivel-atualizacao') && (
+      <TransporteCargaIndivisivelSellingPage type='atualizacao' />
+      )} {(route === 'veiculos-emergencia-formacao') && (
+      <VeiculosDeEmergenciaSellingPage type='formacao' />
+      )} {(route === 'veiculos-emergencia-atualizacao') && (
+      <VeiculosDeEmergenciaSellingPage type='atualizacao' />
       )}
+      <SocialMediaTab />
       {((route === 'homepage' || route === 'cart') && (
       <WhatsAppWindow
         wppMsg={wppMessage}

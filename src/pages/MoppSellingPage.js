@@ -6,12 +6,12 @@ import AboutTheCourse from '../components/sellingpage/AboutTheCourse';
 import CourseContent from '../components/sellingpage/CourseContent';
 import CourseRequirements from '../components/sellingpage/CourseRequirements';
 import CourseMedias from '../components/sellingpage/CourseMedias';
-import BuyTheCourse from '../components/sellingpage/BuyTheCourse';
 import CartContext from '../context/cart/cartContext';
 import CourseFaq from '../components/sellingpage/CourseFaq';
 import DidYouKnow from '../components/sellingpage/DidYouKnow';
 import Testimonials from '../components/sellingpage/Testimonials';
 import CourseCertification from '../components/sellingpage/CourseCertification';
+import BuyTheCourse from '../components/sellingpage/BuyTheCourse';
 import { upperCaseParseType } from '../utils/ParseType';
 
 const MoppSellingPage = ({ type }) => {
@@ -169,7 +169,7 @@ const MoppSellingPage = ({ type }) => {
       />
       <CourseMedias medias={courseMedias} />
       <CourseFaq faqData={faqData} />
-      <DidYouKnow courseName={courseName}/>
+      <DidYouKnow courseName={courseName} />
       <Testimonials />
       <CourseCertification />
       {(courseInfo.length > 0) && (<BuyTheCourse courseInfo={courseInfo[0]} />)}

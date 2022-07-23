@@ -101,6 +101,21 @@ const MercadoPagoPix = () => {
     });
   }
 
+  const copyKey = () => {
+    const copyText = document.getElementById('copy-key');
+
+    copyText.select();
+    copyText.setSelectionRange(0, 99999);
+
+    navigator.clipboard.writeText(copyText.value);
+
+    setAlert({
+      type: 'success',
+      text: 'A chave PIX foi copiada para sua área de transferência!',
+      time: 5000
+    });
+  }
+
   return (
     <div id='mercado-pago-pix'>
       { (qrCodeBase64) && (
@@ -131,7 +146,7 @@ const MercadoPagoPix = () => {
             role='status' 
           />
           ) : (
-          'Gerar QR Code'
+          'Mostrar chave PIX'
           )}
         </button>
         ) : (
@@ -153,12 +168,12 @@ const MercadoPagoPix = () => {
             <div className='d-flex flex-column justify-content-center align-items-center w-100'>
               <label
                 className='h4 text-center'
-                htmlFor='copy'
+                htmlFor='copy-hash'
               >Copiar hash PIX para realizar pagamento:</label>
-              <div className='d-flex justify-content-center align-items-center w-100'>
+              <div className='d-flex justify-content-center align-items-center w-100 mb-3'>
                 <i
                   className='fas fa-copy fa-2xl pr-1'
-                  role="button"
+                  role='button'
                   onClick={() => copyHash()}
                 />
                 <input
@@ -166,6 +181,24 @@ const MercadoPagoPix = () => {
                   className='m-0'
                   id='copy-hash'
                   value={qrCode}
+                  readOnly 
+                />
+              </div>
+              <label
+                className='h4 text-center'
+                htmlFor='copy-key'
+              >Copiar chave PIX (CNPJ):</label>
+              <div className='d-flex justify-content-center align-items-center w-100'>
+                <i
+                  className='fas fa-copy fa-2xl pr-1'
+                  role='button'
+                  onClick={() => copyKey()}
+                />
+                <input
+                  type='text'
+                  className='m-0'
+                  id='copy-key'
+                  value={process.env.REACT_APP_CNPJ}
                   readOnly 
                 />
               </div>

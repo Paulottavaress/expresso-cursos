@@ -13,15 +13,15 @@ const DockedAlert = ({
     >
       <div className='d-flex align-items-center'>
         {(type === 'warning') && (
-          <i className='fa fa-triangle-exclamation'/>
+          <i className='fa fa-triangle-exclamation pr-05'/>
         )}
         {(type === 'danger') && (
-          <i className='fa fa-exclamation-circle' />
+          <i className='fa fa-exclamation-circle pr-05' />
         )}
         {(type === 'success') && (
-          <i className='fa fa-solid fa-check text-light' />
+          <i className='fa fa-solid fa-check text-light pr-05' />
         )}
-        <p className={`font-weight-bold text-center ${(type === 'success') ? 'text-light' : 'text-dark'}`}>{text}</p>
+        <p className={`font-weight-bold text-center text-break ${(type === 'success') ? 'text-light' : 'text-dark'}`}>{text}</p>
       </div>
     </div>
   )

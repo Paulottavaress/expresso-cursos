@@ -4,7 +4,7 @@ const SocialMediaTab = () => {
   return (
     <div
       id='social-media-tab'
-      className='bg-mark position-fixed rounded-2'
+      className='bg-mark position-fixed rounded-2 z-index-3'
     >
       <div className='container d-flex flex-column justify-content-center align-items-center h-100'>
         <a

@@ -8,6 +8,7 @@ import MercadoPagoPix from '../components/checkout/MercadoPagoPix';
 import MercadoPagoBankSlip from '../components/checkout/MercadoPagoBankSlip';
 import MercadoPagoCreditCardForm from '../components/checkout/MercadoPagoCreditCardForm';
 import MercadoPagoSuccessfulPurchase from '../components/checkout/MercadoPagoSuccessfulPurchase';
+import NotAllowedDialog from '../components/dialogs/NotAllowedDialog';
 import FormatPhone from '../utils/FormatPhone';
 import { parseType } from '../utils/ParseType';
 // import Review from '../components/checkout/Review';
@@ -213,6 +214,7 @@ const Checkout = () => {
       className='container'
       onSubmit={() => { isLoading = true }}
     >
+      <NotAllowedDialog />
       <h1 className='text-center font-weight-bold text-secondary py-3'>
         { currentPage === 1 && 'Dados para a matrícula' }
         { currentPage === 2 && 'Dados para pagamento' }

@@ -37,8 +37,8 @@ const Testimonials = () => {
                 key={i}
                 className='bg-primary'
               >
-                <p className='h1 font-weight-bold text-center'>TESTEMUNHOS</p>
-                <p className='h4 font-weight-bold text-center mb-custom'>Veja os testemunhos de quem já comprou com a gente</p>
+                <p className='h1 font-weight-bold text-center'>DEPOIMENTOS</p>
+                <p className='h4 font-weight-bold text-center mb-custom'>Veja os depoimentos de quem já comprou com a gente</p>
                 <div
                   className='d-flex flex-column justify-content-center align-items-center video-container'
                   style={{ height:'400px' }}

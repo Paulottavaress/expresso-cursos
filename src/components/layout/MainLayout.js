@@ -15,10 +15,14 @@ import WhatsAppWindow from '../common/WhatsAppWindow';
 import WhatsAppModal from '../common/WhatsAppModal';
 import BuyBtnArea from '../sellingpage/BuyBtnArea';
 import SocialMediaTab from './SocialMediaTab';
+import NotAllowedDialog from '../dialogs/NotAllowedDialog';
 
 const MainLayout = ({ route }) => {
   const alertContext = useContext(AlertContext);
-  const { alerts } = alertContext;
+  const { 
+    alerts,
+    notAllowedDialog 
+  } = alertContext;
 
   const [showWindow, setShowWindow] = useState(false);
   const [wppModal, setShowWppModal] = useState(false);
@@ -116,11 +120,14 @@ const MainLayout = ({ route }) => {
         ))}
       {(alerts && alerts.length > 0) && (
         <Alert
-        key={alert.id}
-        type={alert.type}
-        text={alert.text}
+          key={alert.id}
+          type={alert.type}
+          text={alert.text}
         />
-        )}
+      )}
+      { (notAllowedDialog) && (
+        <NotAllowedDialog dialog={notAllowedDialog} />
+      )}
       {(route === 'homepage' || route === 'cart' || route === 'checkout') && (
         <Footer route={route} />
       )}

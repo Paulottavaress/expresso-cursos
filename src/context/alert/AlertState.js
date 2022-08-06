@@ -3,13 +3,15 @@ import AlertContext from './alertContext';
 import { alertReducer } from './alertReducer';
 import {
   SET_ALERT,
-  REMOVE_ALERT
+  REMOVE_ALERT,
+  SWITCH_NOT_ALLOWED_DIALOG
 } from '../types';
 
 const AlertState = props => {
   const initialState = {
     alerts: [],
-    lastAlertId: 0
+    lastAlertId: 0,
+    notAllowedDialog: null
   }
 
   const [state, dispatch] = useReducer(alertReducer, initialState);
@@ -35,13 +37,22 @@ const AlertState = props => {
     })
   }
 
+  const switchNotAllowedDialog = alert => {
+    dispatch({
+      type: SWITCH_NOT_ALLOWED_DIALOG,
+      payload: alert
+    })
+  }
+
   return (
     <AlertContext.Provider
       value={{
         alerts: state.alerts,
         lastAlertId: state.lastAlertId,
+        notAllowedDialog: state.notAllowedDialog,
         setAlert,
-        removeAlert
+        removeAlert,
+        switchNotAllowedDialog
       }}
     >
       { props.children }

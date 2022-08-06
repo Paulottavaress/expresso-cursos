@@ -8,14 +8,16 @@ import MercadoPagoPix from '../components/checkout/MercadoPagoPix';
 import MercadoPagoBankSlip from '../components/checkout/MercadoPagoBankSlip';
 import MercadoPagoCreditCardForm from '../components/checkout/MercadoPagoCreditCardForm';
 import MercadoPagoSuccessfulPurchase from '../components/checkout/MercadoPagoSuccessfulPurchase';
-import NotAllowedDialog from '../components/dialogs/NotAllowedDialog';
 import FormatPhone from '../utils/FormatPhone';
 import { parseType } from '../utils/ParseType';
 // import Review from '../components/checkout/Review';
 
 const Checkout = () => {
   const alertContext = useContext(AlertContext);
-  const { setAlert } = alertContext;
+  const { 
+    setAlert,
+    switchNotAllowedDialog
+  } = alertContext;
 
   const cartContext = useContext(CartContext);
   const {
@@ -39,6 +41,16 @@ const Checkout = () => {
   const [description, setDescription] = useState('');
 
   let isLoading = false;
+
+  useEffect(() => {
+    console.log('courses.length === 0', courses.length === 0);
+    if (courses.length === 0) switchNotAllowedDialog({
+      dialogTitle: 'Por favor, adicione algum dos nossos cursos ao carrinho',
+      dialogText: 'Para que você possa fazer sua matrícula, é necessário clicar no botão "COMPRAR" do curso desejado. Os botões ficam na página inicial ou nas páginas de venda de cada curso.',
+      dialogBtnText: 'Ver nossos cursos',
+      redirectTo: '/'
+    });
+  }, []);
 
   useEffect(() => {
     if (isError) {
@@ -214,7 +226,6 @@ const Checkout = () => {
       className='container'
       onSubmit={() => { isLoading = true }}
     >
-      <NotAllowedDialog />
       <h1 className='text-center font-weight-bold text-secondary py-3'>
         { currentPage === 1 && 'Dados para a matrícula' }
         { currentPage === 2 && 'Dados para pagamento' }

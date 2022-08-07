@@ -48,7 +48,8 @@ const Checkout = () => {
       dialogTitle: 'Por favor, adicione algum dos nossos cursos ao carrinho',
       dialogText: 'Para que você possa fazer sua matrícula, é necessário clicar no botão "COMPRAR" do curso desejado. Os botões ficam na página inicial ou nas páginas de venda de cada curso.',
       dialogBtnText: 'Ver nossos cursos',
-      redirectTo: '/'
+      redirectTo: '/',
+      scrollTo: { scrollTo: 'courses' }
     });
   }, []);
 

@@ -5,7 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, createSearchParams } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AlertContext from '../../context/alert/alertContext';
 
@@ -18,8 +18,17 @@ const NotAllowedDialog = ({ dialog }) => {
     dialogTitle,
     dialogText,
     dialogBtnText,
-    redirectTo
+    redirectTo,
+    scrollTo
   } = dialog;
+
+  const onClick = () => {
+    switchNotAllowedDialog(null);
+    navigate({
+      pathname: redirectTo,
+      search: `?${createSearchParams(scrollTo)}`
+    });
+  };
 
   return (
     <Dialog
@@ -32,7 +41,7 @@ const NotAllowedDialog = ({ dialog }) => {
         <DialogContentText id='alert-dialog-slide-description'>{dialogText}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => {switchNotAllowedDialog(null); navigate(redirectTo)}}>{dialogBtnText}</Button>
+        <Button onClick={() => onClick()}>{dialogBtnText}</Button>
       </DialogActions>
     </Dialog>
   );

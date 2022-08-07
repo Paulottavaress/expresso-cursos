@@ -124,11 +124,9 @@ const MainLayout = ({ route }) => {
           type={alert.type}
           text={alert.text}
         />
-      )}
-      { (notAllowedDialog) && (
+      )} {(notAllowedDialog) && (
         <NotAllowedDialog dialog={notAllowedDialog} />
-      )}
-      {(route === 'homepage' || route === 'cart' || route === 'checkout') && (
+      )} {(route === 'homepage' || route === 'cart' || route === 'checkout') && (
         <Footer route={route} />
       )}
     </div>

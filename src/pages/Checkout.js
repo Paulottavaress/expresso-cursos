@@ -14,7 +14,10 @@ import { parseType } from '../utils/ParseType';
 
 const Checkout = () => {
   const alertContext = useContext(AlertContext);
-  const { setAlert } = alertContext;
+  const { 
+    setAlert,
+    switchNotAllowedDialog
+  } = alertContext;
 
   const cartContext = useContext(CartContext);
   const {
@@ -38,6 +41,17 @@ const Checkout = () => {
   const [description, setDescription] = useState('');
 
   let isLoading = false;
+
+  useEffect(() => {
+    console.log('courses.length === 0', courses.length === 0);
+    if (courses.length === 0) switchNotAllowedDialog({
+      dialogTitle: 'Por favor, adicione algum dos nossos cursos ao carrinho',
+      dialogText: 'Para que você possa fazer sua matrícula, é necessário clicar no botão "COMPRAR" do curso desejado. Os botões ficam na página inicial ou nas páginas de venda de cada curso.',
+      dialogBtnText: 'Ver nossos cursos',
+      redirectTo: '/',
+      scrollTo: { scrollTo: 'courses' }
+    });
+  }, []);
 
   useEffect(() => {
     if (isError) {

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import Partners from '../components/sellingpage/Partners';
 import SchoolInfo from '../components/common/SchoolInfo';
 import Courses from '../components/homepage/Courses';
@@ -7,16 +8,13 @@ import Team from '../components/common/Team';
 const HomePage = () => {
   const [backgroundImage] = useState('/assets/images/backgrounds/truck-in-a-road.jpg');
   const [title] = useState('CURSOS RÁPIDOS, 100% ONLINE E CREDENCIADOS');
-  // const [subtitle] = useState('Não é necessário perder dias de trabalho para fazer o seu curso de transportes especializados. Faça no seu próprio horário, 100% online e saia com um curso devidamente credenciado pelo DETRAN/MG.');
-
   const [partnersLogos] = useState(
     [
       '/assets/images/logos/denatran-transparent.png',
       '/assets/images/logos/inove-cropped-resized.png',
       '/assets/images/logos/pvra-cropped-resized.png'
     ]
-  )
-
+  );
   const [teamMember] = useState([
     {
       name: 'Mateus Battaglin',
@@ -33,7 +31,18 @@ const HomePage = () => {
       photo: '/assets/images/common/laura-photo.jpg',
       position: 'Marketing'
     }
-  ])
+  ]);
+
+  const search = useLocation().search;
+  const coursesComponent = useRef(null)
+
+  useEffect(() => {
+    const scrollTo = new URLSearchParams(search).get('scrollTo');
+
+    setTimeout(() => {
+      if (scrollTo) coursesComponent.current.scrollIntoView(({ behavior: 'smooth', block: 'start' }));
+    }, 250)
+  }, []);
 
   return (
     <div className='homepage'>
@@ -52,14 +61,15 @@ const HomePage = () => {
         <div className='container text-light'>
           <div className='d-flex flex-column align-items-center text-center'>
             <p className='h1 font-weight-bold mb-custom'>{title}</p>
-            {/* <p className='h3 text-align-left-important'>{subtitle}</p> */}
           </div>
         </div>
         <Partners logos={partnersLogos} />
       </div>
       <SchoolInfo />
       <Team teamMember={teamMember}/>
-      <Courses />
+      <div ref={coursesComponent}>
+        <Courses />
+      </div>
     </div>
   )
 }

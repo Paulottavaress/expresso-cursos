@@ -1,6 +1,7 @@
 import {
   SET_ALERT,
-  REMOVE_ALERT
+  REMOVE_ALERT,
+  SWITCH_NOT_ALLOWED_DIALOG
 } from '../types';
 
 export const alertReducer = (state, action) => {
@@ -18,6 +19,11 @@ export const alertReducer = (state, action) => {
       return {
         ...state,
         alerts: state.alerts.filter(alert => action.payload !== alert.id)
+      };
+    case SWITCH_NOT_ALLOWED_DIALOG:
+      return {
+        ...state,
+        notAllowedDialog: action.payload
       };
     default:
       return state;

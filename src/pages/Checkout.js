@@ -43,15 +43,16 @@ const Checkout = () => {
   let isLoading = false;
 
   useEffect(() => {
-    console.log('courses.length === 0', courses.length === 0);
-    if (courses.length === 0) switchNotAllowedDialog({
+    const cart = localStorage.getItem('expresso-cursos-cart')
+
+    if (cart && JSON.parse(cart).length === 0) switchNotAllowedDialog({
       dialogTitle: 'Por favor, adicione algum dos nossos cursos ao carrinho',
       dialogText: 'Para que você possa fazer sua matrícula, é necessário clicar no botão "COMPRAR" do curso desejado. Os botões ficam na página inicial ou nas páginas de venda de cada curso.',
       dialogBtnText: 'Ver nossos cursos',
       redirectTo: '/',
       scrollTo: { scrollTo: 'courses' }
     });
-  }, []);
+  }, [courses]);
 
   useEffect(() => {
     if (isError) {
@@ -82,7 +83,7 @@ const Checkout = () => {
       setCardInstance(true);
     };
 
-    fetch(process.env.REACT_APP_BASE_URL + process.env.REACT_APP_LEAD_URL, {
+    fetch(process.env.REACT_APP_BASE_URL + process.env.REACT_APP_POST_LEAD_URL, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

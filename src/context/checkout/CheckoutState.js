@@ -17,17 +17,19 @@ const CheckoutState = props => {
       "addressNumber": "",
       "birthDate": "",
       "city": "",
+      "company": "company",
       "country": "Brasil",
       "driversLicenseCategory": "Categoria A",
       "driversLicenseExpiryDate": "",
       "driversLicenseNumber": "",
       "email": "",
+      "firstDriversLicenseIssueDate": "",
       "fullName": "",
       "identificationNumber": "",
       "identificationType": "PF",
       "neighbourhood": "",
       "phoneNumber": "",
-      "state": "Acre",
+      "state": "AC",
       "zipCode": ""
     },
     paymentInfo: null,
@@ -44,6 +46,8 @@ const CheckoutState = props => {
   };
 
   const setRegistrationInfo = e => {
+    if (e.target.name === 'phoneNumber' || e.target.name === 'identificationNumber') e.target.value = e.target.value.replace(/[^\w\s]/gi, '').replace(/\s/g, '');
+
     dispatch({
       type: SET_REGISTRATION_INFO,
       payload: e

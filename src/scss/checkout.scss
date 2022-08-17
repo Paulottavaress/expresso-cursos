@@ -31,6 +31,10 @@
       .form-basic-info {
         border-radius: 10px;
       }
+
+      .css-18nu0jg-MuiFormLabel-root-MuiInputLabel-root {
+        margin-left: 5px;
+      }
     }
 
     .form-payment-info {
@@ -46,27 +50,45 @@
     .form-group {
       display: flex;
       margin: 0.6rem 0;
+      gap: 16px;
+
+      .form-field > div > .MuiInputBase-root {
+        width: 100%;
+      }
 
       .form-field {
         display: flex;
         flex-direction: column;
         width: 50%;
 
-        &:first-child {
-          margin-right: 5px;
-        }
-
-        &:last-child {
-          margin-left: 5px;
-        }
-
         input {
-          margin: 0.2rem 0;
-          line-height: 23px;
+          color: #ffffff;
+          background-color: #343434;
+          border: none;
+        }
+
+        #form-register__cardholderEmail,
+        #form_driver-license-category,
+        #form__country,
+        #form_state_brazil {
+          color: #ffffff;
+          border-radius: 5px;
+          background-color: #343434;
+          padding: 0.4rem;
+          font-size: 1.2rem;
+        }
+
+        label {
+          color: #ffffff;
+          z-index: 100;
         }
 
         select {
           margin: 0.2rem 0;
+        }
+
+        .css-9npbnl-MuiFormLabel-root-MuiInputLabel-root {
+          font-size: 0.75rem;
         }
       }
     }

@@ -1,6 +1,11 @@
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
+import InputMask from 'react-input-mask';
 import AlertContext from '../../context/alert/alertContext';
 import CheckoutContext from '../../context/checkout/checkoutContext';
 
@@ -20,9 +25,7 @@ const Registration = ({ nextPage }) => {
   let errorMsg = '';
 
   const onChange = e => {
-    if (e.target.name === 'zipCode' && e.target.value.length === 8 && registrationInfo.country === 'Brasil') {
-      getCep(e.target.value);
-    } 
+    if (e.target.name === 'zipCode' && e.target.value.trim().length === 9 && registrationInfo.country === 'Brasil') getCep(e.target.value);
 
     setRegistrationInfo(e);
   };
@@ -34,12 +37,22 @@ const Registration = ({ nextPage }) => {
       return res.json();
     }).then(data => {
       if (!data.hasOwnProperty('erro')) {
+        const clickedFieldClasses = ['css-1r74e2h-MuiFormLabel-root-MuiInputLabel-root', 'MuiInputLabel-shrink', 'MuiFormLabel-filled'];
+        const unclickedFieldClass = 'css-18nu0jg-MuiFormLabel-root-MuiInputLabel-root';
+
         const address = {
           target: {}
         };
+
         address.target.name = 'address';
         address.target.value = document.getElementById('form__address').value =`${data.logradouro}`;
         setRegistrationInfo(address);
+
+        if (data.logradouro) {
+          const addressFieldLabel = document.querySelector('#form__address_container label');
+          addressFieldLabel.classList.remove(unclickedFieldClass);
+          clickedFieldClasses.forEach(fieldClass => addressFieldLabel.classList.add(fieldClass));
+        }
         
         const addressComplement = {
           target: {}
@@ -49,13 +62,25 @@ const Registration = ({ nextPage }) => {
         addressComplement.target.value = document.getElementById('form__address-complement').value =`${data.complemento}`;
         setRegistrationInfo(addressComplement);
 
+        if (data.complemento) {
+          const addressComplementFieldLabel = document.querySelector('#form__address-complement_container label');
+          addressComplementFieldLabel.classList.remove(unclickedFieldClass);
+          clickedFieldClasses.forEach(fieldClass => addressComplementFieldLabel.classList.add(fieldClass));
+        }
+
         const neighbourhood = {
           target: {}
         };
-  
+
         neighbourhood.target.name = 'neighbourhood';
         neighbourhood.target.value = document.getElementById('form__neighbourhood').value =`${data.bairro}`;
         setRegistrationInfo(neighbourhood);
+
+        if (data.bairro) {
+          const neighbourhoodFieldLabel = document.querySelector('#form__neighbourhood_container label');
+          neighbourhoodFieldLabel.classList.remove(unclickedFieldClass);
+          clickedFieldClasses.forEach(fieldClass => neighbourhoodFieldLabel.classList.add(fieldClass));
+        }
   
         const city = {
           target: {}
@@ -64,6 +89,12 @@ const Registration = ({ nextPage }) => {
         city.target.name = 'city';
         city.target.value = document.getElementById('form__city').value =`${data.localidade}`;
         setRegistrationInfo(city);
+
+        if (data.localidade) {
+          const cityFieldLabel = document.querySelector('#form__city_container label');
+          cityFieldLabel.classList.remove(unclickedFieldClass);
+          clickedFieldClasses.forEach(fieldClass => cityFieldLabel.classList.add(fieldClass));
+        }
 
         const state = {
           target: {}
@@ -85,28 +116,26 @@ const Registration = ({ nextPage }) => {
 
     const fields = Object.values(registrationInfo);
 
-    const emptyFields = fields.filter((field) => {
-      return field === '';
-    });
+    const emptyFields = fields.filter(field => field.replace(/[^\w\s]/gi, '') === '');
 
-    if (emptyFields.length >= 1 && registrationInfo.addressComplement !== '') { 
+    if (emptyFields.length >= 2 && registrationInfo.addressComplement !== '') { 
       errorMsg = 'Favor preencher todos os campos. O único campo opcional é o de complemento.';
-    } else if (registrationInfo.phoneNumber.length < 10) {
-      errorMsg = 'Favor incluir o DDD. O número do telefone deve conter, no mínimo, 10 caracteres.';
-    } else if (!registrationInfo.email.includes('@')) {
+    } else if (registrationInfo.phoneNumber.trim().length < 11) {
+      errorMsg = 'Favor incluir o DDD. O número do telefone deve conter 11 caracteres.';
+    } else if (!registrationInfo.email.includes('@') || !registrationInfo.email.includes('.com')) {
       errorMsg = 'Favor inserir um e-mail válido.';
     } else if (validateBirthday()) {
       errorMsg = 'Favor inserir a data de aniversário no formato DD/MM/AAAA, com as barras. Por exemplo: 01/01/2000. Você precisa ser ter 21 anos completos para realizar a compra.';
-    } else if (registrationInfo.identificationType === 'PF' && registrationInfo.identificationNumber.length !== 11) {
+    } else if (registrationInfo.identificationType === 'PF' && registrationInfo.identificationNumber.trim().length !== 11) {
       errorMsg = 'Favor conferir o CPF inserido. O número deve conter 11 caracteres, sem traços e pontos.';
-    } else if (registrationInfo.identificationType === 'PJ' && registrationInfo.identificationNumber.length !== 14) {
+    } else if (registrationInfo.identificationType === 'PJ' && registrationInfo.identificationNumber.trim().length !== 14) {
       errorMsg = 'Favor conferir o CNPJ inserido. O número deve conter 14 caracteres, sem traços e pontos.';
-    } else if (registrationInfo.driversLicenseNumber.length !== 11) {
-      errorMsg = 'Favor conferir o CNH inserido. O número deve conter 11 caracteres, sem traços e pontos.';
+    } else if (registrationInfo.driversLicenseNumber.trim().length !== 11) {
+      errorMsg = 'Favor conferir o CNH inserido. O número deve conter 11 caracteres.';
     } else if (validateCNH()) {
-      errorMsg = 'Favor inserir a de vencimento do CNH no formato DD/MM/AAAA. com as barras. Por exemplo: 01/01/2027. A sua CNH não pode estar vencida para realizar a compra.';
-    } else if (registrationInfo.zipCode.length !== 8) {
-      errorMsg = 'Favor conferir o número do CEP inserido. O número deve conter 8 caracteres, sem traços e pontos.';
+      errorMsg = 'Favor inserir a data de vencimento da CNH no formato DD/MM/AAAA. A sua CNH não pode estar vencida para realizar a compra.';
+    } else if (registrationInfo.zipCode.trim().length !== 9) {
+      errorMsg = 'Favor conferir o número do CEP inserido. O número deve conter 8 caracteres.';
     } else {
       isError = false;
     }
@@ -164,542 +193,632 @@ const Registration = ({ nextPage }) => {
 
   return (
     <form
-      id="form-register"
+      id='form-register'
       onSubmit={(e) => validateFields(e)}
     >
-      <div className="form-basic-info bg-secondary p-3">
+      <div className='form-basic-info bg-secondary p-3'>
         <div className='form-group'>
           <div className='form-field'>
-            <label
-              htmlFor="form__full-name"
-              className='font-weight-bold'
-            >Nome completo<span className='text-danger'> *</span></label>
-            <input
-              id="form__full-name"
-              type="text"
-              name="fullName"
+            <TextField
+              id='form__full-name'
+              name='fullName'
+              type='text'
+              label='Nome completo'
+              variant='standard'
+              color='warning'
               required
               onChange={onChange}
             />
           </div>
           <div className='form-field'>
-            <label
-              htmlFor="form_phone"
-              className='font-weight-bold'
-            >Celular com DDD<span className='text-danger'> *</span></label>
-            <input
-              id="form_phone"
-              type="text"
-              name="phoneNumber"
-              placeholder={`exemplo: ${process.env.REACT_APP_CONTACT_NUMBER_MATEUS.slice(2)}`}
+            <InputMask
+              mask="(99) 9 9999 9999"
+              onChange={onChange}
+              maskChar=" "
+            >
+              {() => 
+                <TextField
+                  id='form_phone'
+                  name='phoneNumber'
+                  type='text'
+                  variant='standard'
+                  color='warning'
+                  label='Celular'
+                  required 
+                />
+              }
+            </InputMask>
+          </div>
+        </div>
+        <div className='form-group'>
+          <div className='form-field'>
+            <TextField
+              id='form-register__cardholderEmail'
+              name='email'
+              type='text'
+              label='E-mail'
+              variant='standard'
+              color='warning'
               required
+              onChange={onChange}
+            />
+          </div>
+          <div className='form-field'>
+            <InputMask
+              mask='99/99/9999'
+              onChange={onChange}
+              maskChar=' '
+            >
+              {() => 
+                <TextField
+                  id='form_birth-date'
+                  name='birthDate'
+                  type='text'
+                  variant='standard'
+                  color='warning'
+                  label='Data de nascimento'
+                  required 
+                />
+              }
+            </InputMask>
+          </div>
+          <div className='form-field'>
+            <TextField
+              id='form_company'
+              name='company'
+              type='text'
+              variant='standard'
+              color='warning'
+              label='Empresa para qual trabalha (opcional)'
               onChange={onChange}
             />
           </div>
         </div>
         <div className='form-group'>
           <div className='form-field'>
-            <label
-              htmlFor="form-register__cardholderEmail"
-              className='font-weight-bold'
-            >E-mail<span className='text-danger'> *</span></label>
-            <input
-              id="form-register__cardholderEmail"
-              type="text"
-              name="email"
+            <InputLabel id='form-register__identificationType_label'>Tipo de pessoa</InputLabel>
+            <Select
+              id='form-register__cardholderEmail'
+              labelId='form-register__identificationType_label'
+              label='Tipo de pessoa'
+              value={registrationInfo.identificationType}
+              name='email'
+              type='text'
+              variant='standard'
+              color='warning'
               required
-              onChange={onChange}
-            />
-          </div>
-          <div className='form-field'>
-            <label
-              htmlFor="form_birth-date"
-              className='font-weight-bold'
-            >Data de nascimento<span className='text-danger'> *</span></label>
-            <input
-              id="form_birth-date"
-              type="text"
-              placeholder="dd/mm/aaaa"
-              name="birthDate"
-              required
-              onChange={onChange}
-            />
-          </div>
-        </div>
-        <div className='form-group'>
-          <div className="form-field">
-            <label
-              htmlFor="form-register__identificationType"
-              className='font-weight-bold'
-            >Tipo de pessoa<span className='text-danger'> *</span></label>
-            <select
-              id="form-register__identificationType"
-              name="identificationType"
               onChange={onChange}
             >
-              <option value="PF">Pessoa física</option>
-              <option value="PJ">Pessoa jurídica</option>
-            </select>
+              <MenuItem value='PF'>Pessoa física</MenuItem>
+              <MenuItem value='PJ' disabled>Pessoa jurídica</MenuItem>
+            </Select>
+          </div>
+          <div className='form-field justify-content-end'>
+            <InputMask
+              mask="999.999.999-99"
+              onChange={onChange}
+              maskChar=" "
+            >
+              {() => 
+                <TextField
+                  id='form-register__identificationNumber'
+                  name='identificationNumber'
+                  type='text'
+                  variant='standard'
+                  color='warning'
+                  label={registrationInfo.identificationType === 'PF' ? 'CPF' : 'CNPJ'}
+                  required 
+                />
+              }
+            </InputMask>
+          </div>
+          <div className='form-field justify-content-end'>
+            <InputMask
+              mask="99/99/9999"
+              onChange={onChange}
+              maskChar=" "
+            >
+              {() => 
+                <TextField
+                  id='form_driver-first-license-issue-date'
+                  name='firstDriversLicenseIssueDate'
+                  type='text'
+                  variant='standard'
+                  color='warning'
+                  label='Data de emissão da primeira habilitação'
+                  required 
+                />
+              }
+            </InputMask>
+          </div>
+        </div>
+        <div className='form-group'>
+          <div className='form-field justify-content-end'>
+            <InputMask
+              mask='99999999999'
+              onChange={onChange}
+              maskChar=' '
+            >
+              {() => 
+                <TextField
+                  id='form_driver-license-number'
+                  name='driversLicenseNumber'
+                  type='text'
+                  variant='standard'
+                  color='warning'
+                  label='Número da CNH'
+                  required 
+                />
+              }
+            </InputMask>
           </div>
           <div className='form-field'>
-            <label
-              htmlFor="form-register__identificationNumber"
-              className='font-weight-bold'
-            >{registrationInfo.identificationType === 'PF' ? 'CPF' : 'CNPJ'}<span className='text-danger'> *</span></label>
-            <input
-              id="form-register__identificationNumber"
-              type="number"
-              name="identificationNumber"
-              maxLength={registrationInfo.identificationType === 'PF' ? "11" : "14"}
+            <InputLabel id='form_driver-license-category_label'>Categoria da CNH</InputLabel>
+            <Select
+              id='form_driver-license-category'
+              labelId='form_driver-license-category_label'
+              label='Categoria da CNH'
+              value={registrationInfo.driversLicenseCategory}
+              name='driversLicenseCategory'
+              type='text'
+              variant='standard'
+              color='warning'
               required
               onChange={onChange}
-            />
+            >
+              <MenuItem value='Categoria A'>Categoria A</MenuItem>
+              <MenuItem value='Categoria B'>Categoria B</MenuItem>
+              <MenuItem value='Categoria C'>Categoria C</MenuItem>
+              <MenuItem value='Categoria D'>Categoria D</MenuItem>
+              <MenuItem value='Categoria E'>Categoria E</MenuItem>
+              <MenuItem value='Categoria AB'>Categoria AB</MenuItem>
+              <MenuItem value='Categoria AC'>Categoria AC</MenuItem>
+              <MenuItem value='Categoria AD'>Categoria AD</MenuItem>
+              <MenuItem value='Categoria AE'>Categoria AE</MenuItem>
+              <MenuItem value='Permissão ACC'>Permissão ACC</MenuItem>
+            </Select>
+          </div>
+          <div className='form-field justify-content-end'>
+            <InputMask
+              mask="99/99/9999"
+              onChange={onChange}
+              maskChar=" "
+            >
+              {() => 
+                <TextField
+                  id='form_driver-license-expiry-date'
+                  name='driversLicenseExpiryDate'
+                  type='text'
+                  variant='standard'
+                  color='warning'
+                  label='Data de vencimento da CNH'
+                  required 
+                />
+              }
+            </InputMask>
           </div>
         </div>
         <div className='form-group'>
           <div className='form-field'>
-            <label
-              htmlFor="form_driver-license-number"
-              className='font-weight-bold'
-            >Número da CNH<span className='text-danger'> *</span></label>
-            <input
-              id="form_driver-license-number"
-              type="text"
-              name="driversLicenseNumber"
+            <InputLabel id='form__country_label'>País</InputLabel>
+            <Select
+              id='form__country'
+              labelId='form__country_label'
+              label='País'
+              value={registrationInfo.country}
+              name='country'
+              type='text'
+              variant='standard'
+              color='warning'
               required
-              onChange={onChange}
-            />
-          </div>
-          <div className='form-field'>
-            <label
-              htmlFor="form_driver-license-category"
-              className='font-weight-bold'
-            >Categoria da CNH<span className='text-danger'> *</span></label>
-            <select
-              id="form_drivers_license_category"
-              name="driversLicenseCategory"
               onChange={onChange}
             >
-              <option value="Categoria A">Categoria A</option>
-              <option value="Categoria B">Categoria B</option>
-              <option value="Categoria C">Categoria C</option>
-              <option value="Categoria D">Categoria D</option>
-              <option value="Categoria E">Categoria E</option>
-              <option value="Categoria AB">Categoria AB</option>
-              <option value="Categoria AC">Categoria AC</option>
-              <option value="Categoria AD">Categoria AD</option>
-              <option value="Categoria AE">Categoria AE</option>
-              <option value="Permissão ACC">Permissão ACC</option>
-            </select>
+              <MenuItem value='Brasil'>Brasil</MenuItem>
+              <MenuItem value='Afeganistão'>Afeganistão</MenuItem>
+              <MenuItem value='África do Sul'>África do Sul</MenuItem>
+              <MenuItem value='Albânia'>Albânia</MenuItem>
+              <MenuItem value='Alemanha'>Alemanha</MenuItem>
+              <MenuItem value='Andorra'>Andorra</MenuItem>
+              <MenuItem value='Angola'>Angola</MenuItem>
+              <MenuItem value='Anguilla'>Anguilla</MenuItem>
+              <MenuItem value='Antilhas Holandesas'>Antilhas Holandesas</MenuItem>
+              <MenuItem value='Antárctida'>Antárctida</MenuItem>
+              <MenuItem value='Antígua e Barbuda'>Antígua e Barbuda</MenuItem>
+              <MenuItem value='Argentina'>Argentina</MenuItem>
+              <MenuItem value='Argélia'>Argélia</MenuItem>
+              <MenuItem value='Armênia'>Armênia</MenuItem>
+              <MenuItem value='Aruba'>Aruba</MenuItem>
+              <MenuItem value='Arábia Saudita'>Arábia Saudita</MenuItem>
+              <MenuItem value='Austrália'>Austrália</MenuItem>
+              <MenuItem value='Áustria'>Áustria</MenuItem>
+              <MenuItem value='Azerbaijão'>Azerbaijão</MenuItem>
+              <MenuItem value='Bahamas'>Bahamas</MenuItem>
+              <MenuItem value='Bahrein'>Bahrein</MenuItem>
+              <MenuItem value='Bangladesh'>Bangladesh</MenuItem>
+              <MenuItem value='Barbados'>Barbados</MenuItem>
+              <MenuItem value='Belize'>Belize</MenuItem>
+              <MenuItem value='Benim'>Benim</MenuItem>
+              <MenuItem value='Bermudas'>Bermudas</MenuItem>
+              <MenuItem value='Bielorrússia'>Bielorrússia</MenuItem>
+              <MenuItem value='Bolívia'>Bolívia</MenuItem>
+              <MenuItem value='Botswana'>Botswana</MenuItem>
+              <MenuItem value='Brunei'>Brunei</MenuItem>
+              <MenuItem value='Bulgária'>Bulgária</MenuItem>
+              <MenuItem value='Burkina Faso'>Burkina Faso</MenuItem>
+              <MenuItem value='Burundi'>Burundi</MenuItem>
+              <MenuItem value='Butão'>Butão</MenuItem>
+              <MenuItem value='Bélgica'>Bélgica</MenuItem>
+              <MenuItem value='Bósnia e Herzegovina'>Bósnia e Herzegovina</MenuItem>
+              <MenuItem value='Cabo Verde'>Cabo Verde</MenuItem>
+              <MenuItem value='Camarões'>Camarões</MenuItem>
+              <MenuItem value='Camboja'>Camboja</MenuItem>
+              <MenuItem value='Canadá'>Canadá</MenuItem>
+              <MenuItem value='Catar'>Catar</MenuItem>
+              <MenuItem value='Cazaquistão'>Cazaquistão</MenuItem>
+              <MenuItem value='Chade'>Chade</MenuItem>
+              <MenuItem value='Chile'>Chile</MenuItem>
+              <MenuItem value='China'>China</MenuItem>
+              <MenuItem value='Chipre'>Chipre</MenuItem>
+              <MenuItem value='Colômbia'>Colômbia</MenuItem>
+              <MenuItem value='Comores'>Comores</MenuItem>
+              <MenuItem value='Coreia do Norte'>Coreia do Norte</MenuItem>
+              <MenuItem value='Coreia do Sul'>Coreia do Sul</MenuItem>
+              <MenuItem value='Costa do Marfim'>Costa do Marfim</MenuItem>
+              <MenuItem value='Costa Rica'>Costa Rica</MenuItem>
+              <MenuItem value='Croácia'>Croácia</MenuItem>
+              <MenuItem value='Cuba'>Cuba</MenuItem>
+              <MenuItem value='Dinamarca'>Dinamarca</MenuItem>
+              <MenuItem value='Djibouti'>Djibouti</MenuItem>
+              <MenuItem value='Dominica'>Dominica</MenuItem>
+              <MenuItem value='Egito'>Egito</MenuItem>
+              <MenuItem value='El Salvador'>El Salvador</MenuItem>
+              <MenuItem value='Emirados Árabes Unidos'>Emirados Árabes Unidos</MenuItem>
+              <MenuItem value='Equador'>Equador</MenuItem>
+              <MenuItem value='Eritreia'>Eritreia</MenuItem>
+              <MenuItem value='Escócia'>Escócia</MenuItem>
+              <MenuItem value='Eslováquia'>Eslováquia</MenuItem>
+              <MenuItem value='Eslovênia'>Eslovênia</MenuItem>
+              <MenuItem value='Espanha'>Espanha</MenuItem>
+              <MenuItem value='Estados Federados da Micronésia'>Estados Federados da Micronésia</MenuItem>
+              <MenuItem value='Estados Unidos'>Estados Unidos</MenuItem>
+              <MenuItem value='Estônia'>Estônia</MenuItem>
+              <MenuItem value='Etiópia'>Etiópia</MenuItem>
+              <MenuItem value='Fiji'>Fiji</MenuItem>
+              <MenuItem value='Filipinas'>Filipinas</MenuItem>
+              <MenuItem value='Finlândia'>Finlândia</MenuItem>
+              <MenuItem value='França'>França</MenuItem>
+              <MenuItem value='Gabão'>Gabão</MenuItem>
+              <MenuItem value='Gana'>Gana</MenuItem>
+              <MenuItem value='Geórgia'>Geórgia</MenuItem>
+              <MenuItem value='Gibraltar'>Gibraltar</MenuItem>
+              <MenuItem value='Granada'>Granada</MenuItem>
+              <MenuItem value='Gronelândia'>Gronelândia</MenuItem>
+              <MenuItem value='Grécia'>Grécia</MenuItem>
+              <MenuItem value='Guadalupe'>Guadalupe</MenuItem>
+              <MenuItem value='Guam'>Guam</MenuItem>
+              <MenuItem value='Guatemala'>Guatemala</MenuItem>
+              <MenuItem value='Guernesei'>Guernesei</MenuItem>
+              <MenuItem value='Guiana'>Guiana</MenuItem>
+              <MenuItem value='Guiana Francesa'>Guiana Francesa</MenuItem>
+              <MenuItem value='Guiné'>Guiné</MenuItem>
+              <MenuItem value='Guiné Equatorial'>Guiné Equatorial</MenuItem>
+              <MenuItem value='Guiné-Bissau'>Guiné-Bissau</MenuItem>
+              <MenuItem value='Gâmbia'>Gâmbia</MenuItem>
+              <MenuItem value='Haiti'>Haiti</MenuItem>
+              <MenuItem value='Honduras'>Honduras</MenuItem>
+              <MenuItem value='Hong Kong'>Hong Kong</MenuItem>
+              <MenuItem value='Hungria'>Hungria</MenuItem>
+              <MenuItem value='Ilha Bouvet'>Ilha Bouvet</MenuItem>
+              <MenuItem value='Ilha de Man'>Ilha de Man</MenuItem>
+              <MenuItem value='Ilha do Natal'>Ilha do Natal</MenuItem>
+              <MenuItem value='Ilha Heard e Ilhas McDonald'>Ilha Heard e Ilhas McDonald</MenuItem>
+              <MenuItem value='Ilha Norfolk'>Ilha Norfolk</MenuItem>
+              <MenuItem value='Ilhas Cayman'>Ilhas Cayman</MenuItem>
+              <MenuItem value='Ilhas Cocos (Keeling)'>Ilhas Cocos (Keeling)</MenuItem>
+              <MenuItem value='Ilhas Cook'>Ilhas Cook</MenuItem>
+              <MenuItem value='Ilhas Feroé'>Ilhas Feroé</MenuItem>
+              <MenuItem value='Ilhas Geórgia do Sul e Sandwich do Sul'>Ilhas Geórgia do Sul e Sandwich do Sul</MenuItem>
+              <MenuItem value='Ilhas Malvinas'>Ilhas Malvinas</MenuItem>
+              <MenuItem value='Ilhas Marshall'>Ilhas Marshall</MenuItem>
+              <MenuItem value='Ilhas Menores Distantes dos Estados Unidos'>Ilhas Menores Distantes dos Estados Unidos</MenuItem>
+              <MenuItem value='Ilhas Salomão'>Ilhas Salomão</MenuItem>
+              <MenuItem value='Ilhas Virgens Americanas'>Ilhas Virgens Americanas</MenuItem>
+              <MenuItem value='Ilhas Virgens Britânicas'>Ilhas Virgens Britânicas</MenuItem>
+              <MenuItem value='Ilhas Åland'>Ilhas Åland</MenuItem>
+              <MenuItem value='Indonésia'>Indonésia</MenuItem>
+              <MenuItem value='Inglaterra'>Inglaterra</MenuItem>
+              <MenuItem value='Índia'>Índia</MenuItem>
+              <MenuItem value='Iraque'>Iraque</MenuItem>
+              <MenuItem value='Irlanda do Norte'>Irlanda do Norte</MenuItem>
+              <MenuItem value='Irlanda'>Irlanda</MenuItem>
+              <MenuItem value='Irã'>Irã</MenuItem>
+              <MenuItem value='Islândia'>Islândia</MenuItem>
+              <MenuItem value='Israel'>Israel</MenuItem>
+              <MenuItem value='Itália'>Itália</MenuItem>
+              <MenuItem value='Iêmen'>Iêmen</MenuItem>
+              <MenuItem value='Jamaica'>Jamaica</MenuItem>
+              <MenuItem value='Japão'>Japão</MenuItem>
+              <MenuItem value='Jersey'>Jersey</MenuItem>
+              <MenuItem value='Jordânia'>Jordânia</MenuItem>
+              <MenuItem value='Kiribati'>Kiribati</MenuItem>
+              <MenuItem value='Kuwait'>Kuwait</MenuItem>
+              <MenuItem value='Laos'>Laos</MenuItem>
+              <MenuItem value='Lesoto'>Lesoto</MenuItem>
+              <MenuItem value='Letônia'>Letônia</MenuItem>
+              <MenuItem value='Libéria'>Libéria</MenuItem>
+              <MenuItem value='Liechtenstein'>Liechtenstein</MenuItem>
+              <MenuItem value='Lituânia'>Lituânia</MenuItem>
+              <MenuItem value='Luxemburgo'>Luxemburgo</MenuItem>
+              <MenuItem value='Líbano'>Líbano</MenuItem>
+              <MenuItem value='Líbia'>Líbia</MenuItem>
+              <MenuItem value='Macau'>Macau</MenuItem>
+              <MenuItem value='Macedônia'>Macedônia</MenuItem>
+              <MenuItem value='Madagáscar'>Madagáscar</MenuItem>
+              <MenuItem value='Malawi'>Malawi</MenuItem>
+              <MenuItem value='Maldivas'>Maldivas</MenuItem>
+              <MenuItem value='Mali'>Mali</MenuItem>
+              <MenuItem value='Malta'>Malta</MenuItem>
+              <MenuItem value='Malásia'>Malásia</MenuItem>
+              <MenuItem value='Marianas Setentrionais'>Marianas Setentrionais</MenuItem>
+              <MenuItem value='Marrocos'>Marrocos</MenuItem>
+              <MenuItem value='Martinica'>Martinica</MenuItem>
+              <MenuItem value='Mauritânia'>Mauritânia</MenuItem>
+              <MenuItem value='Maurícia'>Maurícia</MenuItem>
+              <MenuItem value='Mayotte'>Mayotte</MenuItem>
+              <MenuItem value='Moldávia'>Moldávia</MenuItem>
+              <MenuItem value='Mongólia'>Mongólia</MenuItem>
+              <MenuItem value='Montenegro'>Montenegro</MenuItem>
+              <MenuItem value='Montserrat'>Montserrat</MenuItem>
+              <MenuItem value='Moçambique'>Moçambique</MenuItem>
+              <MenuItem value='Myanmar'>Myanmar</MenuItem>
+              <MenuItem value='México'>México</MenuItem>
+              <MenuItem value='Mônaco'>Mônaco</MenuItem>
+              <MenuItem value='Namíbia'>Namíbia</MenuItem>
+              <MenuItem value='Nauru'>Nauru</MenuItem>
+              <MenuItem value='Nepal'>Nepal</MenuItem>
+              <MenuItem value='Nicarágua'>Nicarágua</MenuItem>
+              <MenuItem value='Nigéria'>Nigéria</MenuItem>
+              <MenuItem value='Niue'>Niue</MenuItem>
+              <MenuItem value='Noruega'>Noruega</MenuItem>
+              <MenuItem value='Nova Caledônia'>Nova Caledônia</MenuItem>
+              <MenuItem value='Nova Zelândia'>Nova Zelândia</MenuItem>
+              <MenuItem value='Níger'>Níger</MenuItem>
+              <MenuItem value='Omã'>Omã</MenuItem>
+              <MenuItem value='Palau'>Palau</MenuItem>
+              <MenuItem value='Palestina'>Palestina</MenuItem>
+              <MenuItem value='Panamá'>Panamá</MenuItem>
+              <MenuItem value='Papua-Nova Guiné'>Papua-Nova Guiné</MenuItem>
+              <MenuItem value='Paquistão'>Paquistão</MenuItem>
+              <MenuItem value='Paraguai'>Paraguai</MenuItem>
+              <MenuItem value='País de Gales'>País de Gales</MenuItem>
+              <MenuItem value='Países Baixos'>Países Baixos</MenuItem>
+              <MenuItem value='Peru'>Peru</MenuItem>
+              <MenuItem value='Pitcairn'>Pitcairn</MenuItem>
+              <MenuItem value='Polinésia Francesa'>Polinésia Francesa</MenuItem>
+              <MenuItem value='Polônia'>Polônia</MenuItem>
+              <MenuItem value='Porto Rico'>Porto Rico</MenuItem>
+              <MenuItem value='Portugal'>Portugal</MenuItem>
+              <MenuItem value='Quirguistão'>Quirguistão</MenuItem>
+              <MenuItem value='Quênia'>Quênia</MenuItem>
+              <MenuItem value='Reino Unido'>Reino Unido</MenuItem>
+              <MenuItem value='República Centro-Africana'>República Centro-Africana</MenuItem>
+              <MenuItem value='República Checa'>República Checa</MenuItem>
+              <MenuItem value='República Democrática do Congo'>República Democrática do Congo</MenuItem>
+              <MenuItem value='República do Congo'>República do Congo</MenuItem>
+              <MenuItem value='República Dominicana'>República Dominicana</MenuItem>
+              <MenuItem value='Reunião'>Reunião</MenuItem>
+              <MenuItem value='Romênia'>Romênia</MenuItem>
+              <MenuItem value='Ruanda'>Ruanda</MenuItem>
+              <MenuItem value='Rússia'>Rússia</MenuItem>
+              <MenuItem value='Saara Ocidental'>Saara Ocidental</MenuItem>
+              <MenuItem value='Saint Martin'>Saint Martin</MenuItem>
+              <MenuItem value='Saint-Barthélemy'>Saint-Barthélemy</MenuItem>
+              <MenuItem value='Saint-Pierre e Miquelon'>Saint-Pierre e Miquelon</MenuItem>
+              <MenuItem value='Samoa Americana'>Samoa Americana</MenuItem>
+              <MenuItem value='Samoa'>Samoa</MenuItem>
+              <MenuItem value='Santa Helena, Ascensão e Tristão da Cunha'>Santa Helena, Ascensão e Tristão da Cunha</MenuItem>
+              <MenuItem value='Santa Lúcia'>Santa Lúcia</MenuItem>
+              <MenuItem value='Senegal'>Senegal</MenuItem>
+              <MenuItem value='Serra Leoa'>Serra Leoa</MenuItem>
+              <MenuItem value='Seychelles'>Seychelles</MenuItem>
+              <MenuItem value='Singapura'>Singapura</MenuItem>
+              <MenuItem value='Somália'>Somália</MenuItem>
+              <MenuItem value='Sri Lanka'>Sri Lanka</MenuItem>
+              <MenuItem value='Suazilândia'>Suazilândia</MenuItem>
+              <MenuItem value='Sudão'>Sudão</MenuItem>
+              <MenuItem value='Suriname'>Suriname</MenuItem>
+              <MenuItem value='Suécia'>Suécia</MenuItem>
+              <MenuItem value='Suíça'>Suíça</MenuItem>
+              <MenuItem value='Svalbard e Jan Mayen'>Svalbard e Jan Mayen</MenuItem>
+              <MenuItem value='São Cristóvão e Nevis'>São Cristóvão e Nevis</MenuItem>
+              <MenuItem value='São Marino'>São Marino</MenuItem>
+              <MenuItem value='São Tomé e Príncipe'>São Tomé e Príncipe</MenuItem>
+              <MenuItem value='São Vicente e Granadinas'>São Vicente e Granadinas</MenuItem>
+              <MenuItem value='Sérvia'>Sérvia</MenuItem>
+              <MenuItem value='Síria'>Síria</MenuItem>
+              <MenuItem value='Tadjiquistão'>Tadjiquistão</MenuItem>
+              <MenuItem value='Tailândia'>Tailândia</MenuItem>
+              <MenuItem value='Taiwan'>Taiwan</MenuItem>
+              <MenuItem value='Tanzânia'>Tanzânia</MenuItem>
+              <MenuItem value='Terras Austrais e Antárticas Francesas'>Terras Austrais e Antárticas Francesas</MenuItem>
+              <MenuItem value='Território Britânico do Oceano Índico'>Território Britânico do Oceano Índico</MenuItem>
+              <MenuItem value='Timor-Leste'>Timor-Leste</MenuItem>
+              <MenuItem value='Togo'>Togo</MenuItem>
+              <MenuItem value='Tonga'>Tonga</MenuItem>
+              <MenuItem value='Toquelau'>Toquelau</MenuItem>
+              <MenuItem value='Trinidad e Tobago'>Trinidad e Tobago</MenuItem>
+              <MenuItem value='Tunísia'>Tunísia</MenuItem>
+              <MenuItem value='Turcas e Caicos'>Turcas e Caicos</MenuItem>
+              <MenuItem value='Turquemenistão'>Turquemenistão</MenuItem>
+              <MenuItem value='Turquia'>Turquia</MenuItem>
+              <MenuItem value='Tuvalu'>Tuvalu</MenuItem>
+              <MenuItem value='Ucrânia'>Ucrânia</MenuItem>
+              <MenuItem value='Uganda'>Uganda</MenuItem>
+              <MenuItem value='Uruguai'>Uruguai</MenuItem>
+              <MenuItem value='Uzbequistão'>Uzbequistão</MenuItem>
+              <MenuItem value='Vanuatu'>Vanuatu</MenuItem>
+              <MenuItem value='Vaticano'>Vaticano</MenuItem>
+              <MenuItem value='Venezuela'>Venezuela</MenuItem>
+              <MenuItem value='Vietname'>Vietname</MenuItem>
+              <MenuItem value='Wallis e Futuna'>Wallis e Futuna</MenuItem>
+              <MenuItem value='Zimbabwe'>Zimbabwe</MenuItem>
+              <MenuItem value='Zâmbia'>Zâmbia</MenuItem>
+            </Select>
           </div>
-          <div className='form-field'>
-            <label
-              htmlFor="form_driver-license-expiry-date"
-              className='font-weight-bold'
-            >Data de vencimento da CNH<span className='text-danger'> *</span></label>
-            <input
-              id="form_driver-license-expiry-date"
-              type="text"
-              placeholder="dd/mm/aaaa"
-              name="driversLicenseExpiryDate"
-              required
+          <div className='form-field justify-content-end'>
+          <InputMask
+              mask="99999-999"
               onChange={onChange}
-            />
-          </div>
-        </div>
-        <div className='form-group'>
-          <div className='form-field'>
-            <label
-              htmlFor="form__country"
-              className='font-weight-bold'
-            >País<span className='text-danger'> *</span></label>
-            <select
-              id="form__country"
-              name="country"
-              onChange={onChange}
+              maskChar=" "
             >
-              <option value="Brasil">Brasil</option>
-              <option value="Afeganistão">Afeganistão</option>
-              <option value="África do Sul">África do Sul</option>
-              <option value="Albânia">Albânia</option>
-              <option value="Alemanha">Alemanha</option>
-              <option value="Andorra">Andorra</option>
-              <option value="Angola">Angola</option>
-              <option value="Anguilla">Anguilla</option>
-              <option value="Antilhas Holandesas">Antilhas Holandesas</option>
-              <option value="Antárctida">Antárctida</option>
-              <option value="Antígua e Barbuda">Antígua e Barbuda</option>
-              <option value="Argentina">Argentina</option>
-              <option value="Argélia">Argélia</option>
-              <option value="Armênia">Armênia</option>
-              <option value="Aruba">Aruba</option>
-              <option value="Arábia Saudita">Arábia Saudita</option>
-              <option value="Austrália">Austrália</option>
-              <option value="Áustria">Áustria</option>
-              <option value="Azerbaijão">Azerbaijão</option>
-              <option value="Bahamas">Bahamas</option>
-              <option value="Bahrein">Bahrein</option>
-              <option value="Bangladesh">Bangladesh</option>
-              <option value="Barbados">Barbados</option>
-              <option value="Belize">Belize</option>
-              <option value="Benim">Benim</option>
-              <option value="Bermudas">Bermudas</option>
-              <option value="Bielorrússia">Bielorrússia</option>
-              <option value="Bolívia">Bolívia</option>
-              <option value="Botswana">Botswana</option>
-              <option value="Brunei">Brunei</option>
-              <option value="Bulgária">Bulgária</option>
-              <option value="Burkina Faso">Burkina Faso</option>
-              <option value="Burundi">Burundi</option>
-              <option value="Butão">Butão</option>
-              <option value="Bélgica">Bélgica</option>
-              <option value="Bósnia e Herzegovina">Bósnia e Herzegovina</option>
-              <option value="Cabo Verde">Cabo Verde</option>
-              <option value="Camarões">Camarões</option>
-              <option value="Camboja">Camboja</option>
-              <option value="Canadá">Canadá</option>
-              <option value="Catar">Catar</option>
-              <option value="Cazaquistão">Cazaquistão</option>
-              <option value="Chade">Chade</option>
-              <option value="Chile">Chile</option>
-              <option value="China">China</option>
-              <option value="Chipre">Chipre</option>
-              <option value="Colômbia">Colômbia</option>
-              <option value="Comores">Comores</option>
-              <option value="Coreia do Norte">Coreia do Norte</option>
-              <option value="Coreia do Sul">Coreia do Sul</option>
-              <option value="Costa do Marfim">Costa do Marfim</option>
-              <option value="Costa Rica">Costa Rica</option>
-              <option value="Croácia">Croácia</option>
-              <option value="Cuba">Cuba</option>
-              <option value="Dinamarca">Dinamarca</option>
-              <option value="Djibouti">Djibouti</option>
-              <option value="Dominica">Dominica</option>
-              <option value="Egito">Egito</option>
-              <option value="El Salvador">El Salvador</option>
-              <option value="Emirados Árabes Unidos">Emirados Árabes Unidos</option>
-              <option value="Equador">Equador</option>
-              <option value="Eritreia">Eritreia</option>
-              <option value="Escócia">Escócia</option>
-              <option value="Eslováquia">Eslováquia</option>
-              <option value="Eslovênia">Eslovênia</option>
-              <option value="Espanha">Espanha</option>
-              <option value="Estados Federados da Micronésia">Estados Federados da Micronésia</option>
-              <option value="Estados Unidos">Estados Unidos</option>
-              <option value="Estônia">Estônia</option>
-              <option value="Etiópia">Etiópia</option>
-              <option value="Fiji">Fiji</option>
-              <option value="Filipinas">Filipinas</option>
-              <option value="Finlândia">Finlândia</option>
-              <option value="França">França</option>
-              <option value="Gabão">Gabão</option>
-              <option value="Gana">Gana</option>
-              <option value="Geórgia">Geórgia</option>
-              <option value="Gibraltar">Gibraltar</option>
-              <option value="Granada">Granada</option>
-              <option value="Gronelândia">Gronelândia</option>
-              <option value="Grécia">Grécia</option>
-              <option value="Guadalupe">Guadalupe</option>
-              <option value="Guam">Guam</option>
-              <option value="Guatemala">Guatemala</option>
-              <option value="Guernesei">Guernesei</option>
-              <option value="Guiana">Guiana</option>
-              <option value="Guiana Francesa">Guiana Francesa</option>
-              <option value="Guiné">Guiné</option>
-              <option value="Guiné Equatorial">Guiné Equatorial</option>
-              <option value="Guiné-Bissau">Guiné-Bissau</option>
-              <option value="Gâmbia">Gâmbia</option>
-              <option value="Haiti">Haiti</option>
-              <option value="Honduras">Honduras</option>
-              <option value="Hong Kong">Hong Kong</option>
-              <option value="Hungria">Hungria</option>
-              <option value="Ilha Bouvet">Ilha Bouvet</option>
-              <option value="Ilha de Man">Ilha de Man</option>
-              <option value="Ilha do Natal">Ilha do Natal</option>
-              <option value="Ilha Heard e Ilhas McDonald">Ilha Heard e Ilhas McDonald</option>
-              <option value="Ilha Norfolk">Ilha Norfolk</option>
-              <option value="Ilhas Cayman">Ilhas Cayman</option>
-              <option value="Ilhas Cocos (Keeling)">Ilhas Cocos (Keeling)</option>
-              <option value="Ilhas Cook">Ilhas Cook</option>
-              <option value="Ilhas Feroé">Ilhas Feroé</option>
-              <option value="Ilhas Geórgia do Sul e Sandwich do Sul">Ilhas Geórgia do Sul e Sandwich do Sul</option>
-              <option value="Ilhas Malvinas">Ilhas Malvinas</option>
-              <option value="Ilhas Marshall">Ilhas Marshall</option>
-              <option value="Ilhas Menores Distantes dos Estados Unidos">Ilhas Menores Distantes dos Estados Unidos</option>
-              <option value="Ilhas Salomão">Ilhas Salomão</option>
-              <option value="Ilhas Virgens Americanas">Ilhas Virgens Americanas</option>
-              <option value="Ilhas Virgens Britânicas">Ilhas Virgens Britânicas</option>
-              <option value="Ilhas Åland">Ilhas Åland</option>
-              <option value="Indonésia">Indonésia</option>
-              <option value="Inglaterra">Inglaterra</option>
-              <option value="Índia">Índia</option>
-              <option value="Iraque">Iraque</option>
-              <option value="Irlanda do Norte">Irlanda do Norte</option>
-              <option value="Irlanda">Irlanda</option>
-              <option value="Irã">Irã</option>
-              <option value="Islândia">Islândia</option>
-              <option value="Israel">Israel</option>
-              <option value="Itália">Itália</option>
-              <option value="Iêmen">Iêmen</option>
-              <option value="Jamaica">Jamaica</option>
-              <option value="Japão">Japão</option>
-              <option value="Jersey">Jersey</option>
-              <option value="Jordânia">Jordânia</option>
-              <option value="Kiribati">Kiribati</option>
-              <option value="Kuwait">Kuwait</option>
-              <option value="Laos">Laos</option>
-              <option value="Lesoto">Lesoto</option>
-              <option value="Letônia">Letônia</option>
-              <option value="Libéria">Libéria</option>
-              <option value="Liechtenstein">Liechtenstein</option>
-              <option value="Lituânia">Lituânia</option>
-              <option value="Luxemburgo">Luxemburgo</option>
-              <option value="Líbano">Líbano</option>
-              <option value="Líbia">Líbia</option>
-              <option value="Macau">Macau</option>
-              <option value="Macedônia">Macedônia</option>
-              <option value="Madagáscar">Madagáscar</option>
-              <option value="Malawi">Malawi</option>
-              <option value="Maldivas">Maldivas</option>
-              <option value="Mali">Mali</option>
-              <option value="Malta">Malta</option>
-              <option value="Malásia">Malásia</option>
-              <option value="Marianas Setentrionais">Marianas Setentrionais</option>
-              <option value="Marrocos">Marrocos</option>
-              <option value="Martinica">Martinica</option>
-              <option value="Mauritânia">Mauritânia</option>
-              <option value="Maurícia">Maurícia</option>
-              <option value="Mayotte">Mayotte</option>
-              <option value="Moldávia">Moldávia</option>
-              <option value="Mongólia">Mongólia</option>
-              <option value="Montenegro">Montenegro</option>
-              <option value="Montserrat">Montserrat</option>
-              <option value="Moçambique">Moçambique</option>
-              <option value="Myanmar">Myanmar</option>
-              <option value="México">México</option>
-              <option value="Mônaco">Mônaco</option>
-              <option value="Namíbia">Namíbia</option>
-              <option value="Nauru">Nauru</option>
-              <option value="Nepal">Nepal</option>
-              <option value="Nicarágua">Nicarágua</option>
-              <option value="Nigéria">Nigéria</option>
-              <option value="Niue">Niue</option>
-              <option value="Noruega">Noruega</option>
-              <option value="Nova Caledônia">Nova Caledônia</option>
-              <option value="Nova Zelândia">Nova Zelândia</option>
-              <option value="Níger">Níger</option>
-              <option value="Omã">Omã</option>
-              <option value="Palau">Palau</option>
-              <option value="Palestina">Palestina</option>
-              <option value="Panamá">Panamá</option>
-              <option value="Papua-Nova Guiné">Papua-Nova Guiné</option>
-              <option value="Paquistão">Paquistão</option>
-              <option value="Paraguai">Paraguai</option>
-              <option value="País de Gales">País de Gales</option>
-              <option value="Países Baixos">Países Baixos</option>
-              <option value="Peru">Peru</option>
-              <option value="Pitcairn">Pitcairn</option>
-              <option value="Polinésia Francesa">Polinésia Francesa</option>
-              <option value="Polônia">Polônia</option>
-              <option value="Porto Rico">Porto Rico</option>
-              <option value="Portugal">Portugal</option>
-              <option value="Quirguistão">Quirguistão</option>
-              <option value="Quênia">Quênia</option>
-              <option value="Reino Unido">Reino Unido</option>
-              <option value="República Centro-Africana">República Centro-Africana</option>
-              <option value="República Checa">República Checa</option>
-              <option value="República Democrática do Congo">República Democrática do Congo</option>
-              <option value="República do Congo">República do Congo</option>
-              <option value="República Dominicana">República Dominicana</option>
-              <option value="Reunião">Reunião</option>
-              <option value="Romênia">Romênia</option>
-              <option value="Ruanda">Ruanda</option>
-              <option value="Rússia">Rússia</option>
-              <option value="Saara Ocidental">Saara Ocidental</option>
-              <option value="Saint Martin">Saint Martin</option>
-              <option value="Saint-Barthélemy">Saint-Barthélemy</option>
-              <option value="Saint-Pierre e Miquelon">Saint-Pierre e Miquelon</option>
-              <option value="Samoa Americana">Samoa Americana</option>
-              <option value="Samoa">Samoa</option>
-              <option value="Santa Helena, Ascensão e Tristão da Cunha">Santa Helena, Ascensão e Tristão da Cunha</option>
-              <option value="Santa Lúcia">Santa Lúcia</option>
-              <option value="Senegal">Senegal</option>
-              <option value="Serra Leoa">Serra Leoa</option>
-              <option value="Seychelles">Seychelles</option>
-              <option value="Singapura">Singapura</option>
-              <option value="Somália">Somália</option>
-              <option value="Sri Lanka">Sri Lanka</option>
-              <option value="Suazilândia">Suazilândia</option>
-              <option value="Sudão">Sudão</option>
-              <option value="Suriname">Suriname</option>
-              <option value="Suécia">Suécia</option>
-              <option value="Suíça">Suíça</option>
-              <option value="Svalbard e Jan Mayen">Svalbard e Jan Mayen</option>
-              <option value="São Cristóvão e Nevis">São Cristóvão e Nevis</option>
-              <option value="São Marino">São Marino</option>
-              <option value="São Tomé e Príncipe">São Tomé e Príncipe</option>
-              <option value="São Vicente e Granadinas">São Vicente e Granadinas</option>
-              <option value="Sérvia">Sérvia</option>
-              <option value="Síria">Síria</option>
-              <option value="Tadjiquistão">Tadjiquistão</option>
-              <option value="Tailândia">Tailândia</option>
-              <option value="Taiwan">Taiwan</option>
-              <option value="Tanzânia">Tanzânia</option>
-              <option value="Terras Austrais e Antárticas Francesas">Terras Austrais e Antárticas Francesas</option>
-              <option value="Território Britânico do Oceano Índico">Território Britânico do Oceano Índico</option>
-              <option value="Timor-Leste">Timor-Leste</option>
-              <option value="Togo">Togo</option>
-              <option value="Tonga">Tonga</option>
-              <option value="Toquelau">Toquelau</option>
-              <option value="Trinidad e Tobago">Trinidad e Tobago</option>
-              <option value="Tunísia">Tunísia</option>
-              <option value="Turcas e Caicos">Turcas e Caicos</option>
-              <option value="Turquemenistão">Turquemenistão</option>
-              <option value="Turquia">Turquia</option>
-              <option value="Tuvalu">Tuvalu</option>
-              <option value="Ucrânia">Ucrânia</option>
-              <option value="Uganda">Uganda</option>
-              <option value="Uruguai">Uruguai</option>
-              <option value="Uzbequistão">Uzbequistão</option>
-              <option value="Vanuatu">Vanuatu</option>
-              <option value="Vaticano">Vaticano</option>
-              <option value="Venezuela">Venezuela</option>
-              <option value="Vietname">Vietname</option>
-              <option value="Wallis e Futuna">Wallis e Futuna</option>
-              <option value="Zimbabwe">Zimbabwe</option>
-              <option value="Zâmbia">Zâmbia</option>
-            </select>
-          </div>
-          <div className='form-field'>
-            <label
-              htmlFor="form__zip-code"
-              className='font-weight-bold'
-            >CEP<span className='text-danger'> *</span></label>
-            <input
-              id="form__zip-code"
-              type="text"
-              name="zipCode"
-              required
-              onChange={onChange}
-            />
+              {() => 
+                <TextField
+                  id='form__zip-code'
+                  name='zipCode'
+                  type='text'
+                  variant='standard'
+                  color='warning'
+                  label='CEP'
+                  required 
+                />
+              }
+            </InputMask>
           </div>
         </div>
-        <div className={((registrationInfo.country === 'Brasil' && registrationInfo.zipCode.length === 8) || registrationInfo.country !== 'Brasil') ? 'd-block' : 'd-none'}>
+        <div className={((registrationInfo.country === 'Brasil' && registrationInfo.zipCode.trim().length === 9) || registrationInfo.country !== 'Brasil') ? 'd-block' : 'd-none'}>
           <div className='form-group'>
-            <div className='form-field'>
-              <label
-                htmlFor="form__address"
-                className='font-weight-bold'
-              >Endereço<span className='text-danger'> *</span></label>
-              <input
-                id="form__address"
-                type="text"
-                placeholder="Nome da rua"
-                name="address"
-                required={((registrationInfo.country === 'Brasil' && registrationInfo.zipCode.length === 8) || registrationInfo.country !== 'Brasil')}
-                onChange={onChange}
-              />
-            </div>
-            <div className='form-field'>
-              <label
-                htmlFor="form__address-number"
-                className='font-weight-bold'
-              >Número<span className='text-danger'> *</span></label>
-              <input
-                id="form__address-number"
-                type="text"
-                name="addressNumber"
-                required={((registrationInfo.country === 'Brasil' && registrationInfo.zipCode.length === 8) || registrationInfo.country !== 'Brasil')}
-                onChange={onChange}
-              />
-            </div>
-            <div className='form-field'>
-              <label
-                htmlFor="form__address-complement"
-                className='font-weight-bold'
-              >Complemento (opcional)</label>
-              <input
-                id="form__address-complement"
-                type="text"
-                placeholder="Apartamento, suíte, unidade, bloco, etc... (opcional)"
-                name="addressComplement"
-                onChange={onChange}
-              />
-            </div>
-          </div>
-          <div className='form-group'>
-            <div className='form-field'>
-              <label
-                htmlFor="form__neighbourhood"
-                className='font-weight-bold'
-              >Bairro<span className='text-danger'> *</span></label>
-              <input
-                id="form__neighbourhood"
-                type="text"
-                name="neighbourhood"
-                required={((registrationInfo.country === 'Brasil' && registrationInfo.zipCode.length === 8) || registrationInfo.country !== 'Brasil')}
-                onChange={onChange}
-              />
-            </div>
-            <div className='form-field'>
-              <label
-                htmlFor="form__city"
-                className='font-weight-bold'
-              >Cidade<span className='text-danger'> *</span></label>
-              <input
-                id="form__city"
-                type="text"
-                name="city"
-                required={((registrationInfo.country === 'Brasil' && registrationInfo.zipCode.length === 8) || registrationInfo.country !== 'Brasil')}
-                onChange={onChange}
-              />
-            </div>
-            <div className='form-field'>
-              <label
-                htmlFor={registrationInfo.country === 'Brasil' ? 'form_state_brazil' : 'form_state'}
-                className='font-weight-bold'
-              >Estado<span className='text-danger'> *</span></label>
-              {registrationInfo.country === 'Brasil' ? (
-              <select
-                id="form_state_brazil"
-                type="text"
-                name="state"
-                onChange={onChange}
-              >
-                <option value="AC">Acre</option>
-                <option value="AL">Alagoas</option>
-                <option value="AP">Amapá</option>
-                <option value="AM">Amazonas</option>
-                <option value="BA">Bahia</option>
-                <option value="CE">Ceará</option>
-                <option value="DF">Distrito Federal</option>
-                <option value="ES">Espírito Santo</option>
-                <option value="GO">Goiás</option>
-                <option value="MA">Maranhão</option>
-                <option value="MT">Mato Grosso</option>
-                <option value="MS">Mato Grosso do Sul</option>
-                <option value="MG">Minas Gerais</option>
-                <option value="PA">Pará</option>
-                <option value="PB">Paraíba</option>
-                <option value="PR">Paraná</option>
-                <option value="PE">Pernambuco</option>
-                <option value="PI">Piauí</option>
-                <option value="RJ">Rio de Janeiro</option>
-                <option value="RN">Rio Grande do Norte</option>
-                <option value="RS">Rio Grande do Sul</option>
-                <option value="RO">Rondônia</option>
-                <option value="RR">Roraima</option>
-                <option value="SC">Santa Catarina</option>
-                <option value="SP">São Paulo</option>
-                <option value="SE">Sergipe</option>
-                <option value="TO">Tocantins</option>
-              </select>
-              ) : (
-              <input
-                id="form_state"
-                type="text"
-                name="state"
+            <div
+              id='form__address_container'
+              className='form-field'
+            >
+              <TextField
+                id='form__address'
+                name='address'
+                type='text'
+                label='Endereço'
+                variant='standard'
+                color='warning'
                 required
+                onChange={onChange}
+              />
+            </div>
+            <div
+              id='form__address-number_container'
+              className='form-field'
+            >
+              <TextField
+                id='form__address-number'
+                name='addressNumber'
+                type='text'
+                label='Número'
+                variant='standard'
+                color='warning'
+                required={((registrationInfo.country === 'Brasil' && registrationInfo.zipCode.length === 9) || registrationInfo.country !== 'Brasil')}
+                onChange={onChange}
+              />
+            </div>
+            <div
+              id='form__address-complement_container'
+              className='form-field'
+            >
+              <TextField
+                id='form__address-complement'
+                name='addressComplement'
+                type='text'
+                label='Complemento (opcional)'
+                variant='standard'
+                color='warning'
+                onChange={onChange}
+              />
+            </div>
+          </div>
+          <div className='form-group address-line'>
+            <div
+              id='form__neighbourhood_container'
+              className='form-field justify-content-end'
+            >
+              <TextField
+                id='form__neighbourhood'
+                name='neighbourhood'
+                type='text'
+                label='Bairro'
+                variant='standard'
+                color='warning'
+                required={((registrationInfo.country === 'Brasil' && registrationInfo.zipCode.length === 9) || registrationInfo.country !== 'Brasil')}
+                onChange={onChange}
+              />
+            </div>
+            <div
+              id='form__city_container'
+              className='form-field justify-content-end'
+            >
+              <TextField
+                id='form__city'
+                name='city'
+                type='text'
+                label='Cidade'
+                variant='standard'
+                color='warning'
+                required={((registrationInfo.country === 'Brasil' && registrationInfo.zipCode.length === 9) || registrationInfo.country !== 'Brasil')}
+                onChange={onChange}
+              />
+            </div>
+            <div
+              id='form_state_container'
+              className='form-field'
+            >
+              {registrationInfo.country === 'Brasil' ? (
+              <div>
+                <InputLabel id='form_state_brazil_label'>Estado</InputLabel>
+                <Select
+                  id='form_state_brazil'
+                  labelId='form_state_brazil_label'
+                  label='Estado'
+                  value={registrationInfo.state}
+                  name='state'
+                  type='text'
+                  variant='standard'
+                  color='warning'
+                  required
+                  onChange={onChange}
+                >
+                  <MenuItem value='AC'>Acre</MenuItem>
+                  <MenuItem value='AL'>Alagoas</MenuItem>
+                  <MenuItem value='AP'>Amapá</MenuItem>
+                  <MenuItem value='AM'>Amazonas</MenuItem>
+                  <MenuItem value='BA'>Bahia</MenuItem>
+                  <MenuItem value='CE'>Ceará</MenuItem>
+                  <MenuItem value='DF'>Distrito Federal</MenuItem>
+                  <MenuItem value='ES'>Espírito Santo</MenuItem>
+                  <MenuItem value='GO'>Goiás</MenuItem>
+                  <MenuItem value='MA'>Maranhão</MenuItem>
+                  <MenuItem value='MT'>Mato Grosso</MenuItem>
+                  <MenuItem value='MS'>Mato Grosso do Sul</MenuItem>
+                  <MenuItem value='MG'>Minas Gerais</MenuItem>
+                  <MenuItem value='PA'>Pará</MenuItem>
+                  <MenuItem value='PB'>Paraíba</MenuItem>
+                  <MenuItem value='PR'>Paraná</MenuItem>
+                  <MenuItem value='PE'>Pernambuco</MenuItem>
+                  <MenuItem value='PI'>Piauí</MenuItem>
+                  <MenuItem value='RJ'>Rio de Janeiro</MenuItem>
+                  <MenuItem value='RN'>Rio Grande do Norte</MenuItem>
+                  <MenuItem value='RS'>Rio Grande do Sul</MenuItem>
+                  <MenuItem value='RO'>Rondônia</MenuItem>
+                  <MenuItem value='RR'>Roraima</MenuItem>
+                  <MenuItem value='SC'>Santa Catarina</MenuItem>
+                  <MenuItem value='SP'>São Paulo</MenuItem>
+                  <MenuItem value='SE'>Sergipe</MenuItem>
+                  <MenuItem value='TO'>Tocantins</MenuItem>
+                </Select>
+              </div>
+              ) : (
+              <TextField
+                id='form_state'
+                name='state'
+                type='text'
+                label='Bairro'
+                variant='standard'
+                color='warning'
                 onChange={onChange}
               />
               )}

@@ -1,23 +1,23 @@
-export const parseType = (type) => {
+export const parseType = type => {
   return type === 'formacao' ? 'formação' : 'atualização';
 };
 
-export const upperCaseParseType = (type) => {
+export const upperCaseParseType = type => {
   return (type === 'formacao' ? 'formação' : 'atualização').toUpperCase();
 };
 
-export const firstLetterUpperCaseParseType = (type) => {
-  return (type === 'formacao' ? 'formação' : 'atualização').charAt(0).toUpperCase() + type.slice(1);
+export const firstLetterUpperCaseParseType = type => {
+  return (type === 'formacao' ? 'Formação' : 'Atualização');
 };
 
-export const reverseParseType = (type) => {
+export const reverseParseType = type => {
   return type === 'formacao' ? 'atualização' : 'formação';
 }
 
-export const reverseUpperCaseParseType = (type) => {
+export const reverseUpperCaseParseType = type => {
   return (type === 'formacao' ? 'atualização' : 'formação').toUpperCase();
 }
 
-export const reverseFirstLetterUpperCaseParseType = (type) => {
-  return (type === 'formacao' ? 'atualização' : 'formação').charAt(0).toUpperCase() + type.slice(1);
+export const reverseFirstLetterUpperCaseParseType = type => {
+  return (type === 'formacao' ? 'Atualização' : 'Formação');
 }

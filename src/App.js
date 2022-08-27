@@ -28,6 +28,14 @@ const App = () => {
                   element={<MainLayout route='homepage' />}
                 />
                 <Route
+                  path='/management'
+                  element={<MainLayout route='management' />}
+                />
+                <Route
+                  path='/management/leads'
+                  element={<MainLayout route='management/leads' />}
+                />
+                <Route
                   path='/cart'
                   element={<MainLayout route='cart' />}
                 />

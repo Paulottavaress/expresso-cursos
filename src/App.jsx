@@ -12,6 +12,9 @@ import CartState from './context/cart/CartState';
 import CheckoutState from './context/checkout/CheckoutState';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './scss/main.scss';
+import ManagementLayout from './pages/management/ManagementLayout';
+import Leads from './pages/management/Leads';
+import Lead from './pages/management/Lead';
 
 const App = () => {
   return (
@@ -26,7 +29,40 @@ const App = () => {
                 <Route
                   path='/'
                   element={<MainLayout route='homepage' />}
-                />
+                >
+                </Route>
+                <Route
+                  path='/management'
+                  element={<ManagementLayout />}
+                >
+                  <Route
+                    path='/management/leads'
+                    element={<Leads />}
+                  />
+                    <Route
+                      path='/management/leads/create'
+                      element={<Lead />}
+                    />
+                    <Route
+                      path='/management/leads/:identificationNumber/visualize'
+                      element={<Lead />}
+                    />
+                    <Route
+                      path='/management/leads/:identificationNumber/edit'
+                      element={<Lead />}
+                    />
+                  <Route
+                    path='*'
+                    element={
+                      <main
+                        className='d-flex justify-content-center align-items-center font-weight-bold'
+                        style={{ height: '100vh' }}
+                      >
+                        <p className='h3'>Está perdido? Acho que você errou o caminho.</p>
+                      </main>
+                    }
+                  />
+                </Route>
                 <Route
                   path='/cart'
                   element={<MainLayout route='cart' />}

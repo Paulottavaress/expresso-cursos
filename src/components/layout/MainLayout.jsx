@@ -1,9 +1,10 @@
 import React, { useContext, useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Navbar from './Navbar';
+import HomePage from '../../pages/HomePage';
 import Footer from './Footer';
 import Cart from '../../pages/Cart';
 import Checkout from '../../pages/Checkout'; 
-import HomePage from '../../pages/HomePage';
 import MoppSellingPage from '../../pages/MoppSellingPage';
 import TransporteColetivoSellingPage from '../../pages/TransporteColetivoSellingPage';
 import TransporteEscolarSellingPage from '../../pages/TransporteEscolarSellingPage';
@@ -74,7 +75,9 @@ const MainLayout = ({ route }) => {
       id='main-layout'
       className={(route === 'cart') ? 'cart-container' : 'checkout-container'}
     >
-      <Navbar backgroundColor={(route === 'cart' || route === 'checkout') ? 'bg-secondary' : ''} />
+      {(!route.startsWith('management')) && (
+        <Navbar backgroundColor={(route === 'cart' || route === 'checkout') ? 'bg-secondary' : ''} />
+      )}
       {(route === 'homepage') && (
       <HomePage />
       )} {(route === 'cart') && (
@@ -102,7 +105,9 @@ const MainLayout = ({ route }) => {
       )} {(route === 'veiculos-emergencia-atualizacao') && (
       <VeiculosDeEmergenciaSellingPage type='atualizacao' />
       )}
-      <SocialMediaTab />
+      {(!route.startsWith('management')) && (
+        <SocialMediaTab />
+      )}
       {((route === 'homepage' || route === 'cart') && (
       <WhatsAppWindow
         wppMsg={wppMessage}
@@ -115,22 +120,25 @@ const MainLayout = ({ route }) => {
         showWindow={showWindow}
         switchWppModal={switchWppModal} 
       />)}
-      {((route !== 'homepage' && route !== 'cart' && route !== 'checkout' && !wppModal) && (
+      {((route !== 'homepage' && route !== 'cart' && route !== 'checkout' && !route.startsWith('management') && !wppModal) && (
         <BuyBtnArea switchWppModal={switchWppModal} />
-        ))}
+      ))}
       {(alerts && alerts.length > 0) && (
         <Alert
           key={alert.id}
           type={alert.type}
           text={alert.text}
         />
-      )} {(notAllowedDialog) && (
-        <NotAllowedDialog dialog={notAllowedDialog} />
-      )} {(route === 'homepage' || route === 'cart' || route === 'checkout') && (
+        )}
+      {(route === 'homepage' || route === 'cart' || route === 'checkout') && (
         <Footer route={route} />
       )}
     </div>
   );
+}
+
+MainLayout.propTypes = {
+  route: PropTypes.string.isRequired
 }
 
 export default MainLayout;

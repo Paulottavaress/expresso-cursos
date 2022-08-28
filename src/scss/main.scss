@@ -393,6 +393,9 @@ img {
 .pr-3 {
   padding-right: 3rem;
 }
+.pl-05 {
+  padding-left: 0.5rem;
+}
 .pl-1 {
   padding-left: 1rem;
 }
@@ -401,6 +404,11 @@ img {
 }
 .pl-3 {
   padding-left: 3rem;
+}
+
+/* Border Radius */
+.br-5 {
+  border-radius: 5px;
 }
 
 /* Margin */
@@ -960,6 +968,39 @@ table th {
   
     img {
       width: 30px;
+    }
+  }
+}
+
+#management-layout {
+  min-width: 100vw;
+  min-height: 100vh;
+}
+
+.actions-table {
+  .actions-table-center {
+    border: 3px solid #000000;
+    overflow: auto;
+
+    .status {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+    }
+  }
+
+  .actions-table-button {
+    background: none;
+    border: none;
+  }
+
+  .cell {
+    border: 1px solid #333;
+
+    .cell-text {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis; 
     }
   }
 }

@@ -138,17 +138,15 @@ const Registration = ({ nextPage }) => {
       errorMsg = 'Favor conferir o número do CEP inserido. O número deve conter 8 caracteres.';
     } else {
       isError = false;
-    }
+    };
 
-    if (!isError) {
-      nextPage();
-    } else {
-      setAlert({
+    (!isError)
+      ? nextPage()
+      : setAlert({
         type: 'danger',
         text: errorMsg,
         time: 5000
       });
-    }; 
   }
 
   const validateBirthday = () => {
@@ -831,7 +829,7 @@ const Registration = ({ nextPage }) => {
           <button
             className="form-previous-page contact-btn btn btn-remove d-flex align-items-center"
             type="button"
-            onClick={() => navigate('/cart')}
+            onClick={() => navigate('/carrinho')}
           >
             Voltar
           </button>

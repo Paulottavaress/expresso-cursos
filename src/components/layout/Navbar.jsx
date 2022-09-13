@@ -17,7 +17,7 @@ const Navbar = ({
       </Link>
       <ul>
         <li>
-          <Link to='/cart'>
+          <Link to='/carrinho'>
             {(window.innerWidth > 319) ? (
             <h3>Carrinho 
               <i className="fa-solid fa-cart-shopping" />

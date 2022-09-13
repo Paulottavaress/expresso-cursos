@@ -7,11 +7,6 @@ import {
 
 export const checkoutReducer = (state, action) => {
   switch(action.type) {
-    case CHANGE_PAGE:
-      return {
-        ...state,
-        currentPage: action.payload
-      };
     case SET_REGISTRATION_INFO:
       return {
         ...state,

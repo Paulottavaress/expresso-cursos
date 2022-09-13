@@ -1,4 +1,5 @@
-import React, { useState, useContext, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useMercadopago } from 'react-sdk-mercadopago';
 import CartContext from '../context/cart/cartContext';
 import CheckoutContext from '../context/checkout/checkoutContext';
@@ -13,6 +14,9 @@ import { parseType } from '../utils/ParseType';
 // import Review from '../components/checkout/Review';
 
 const Checkout = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const alertContext = useContext(AlertContext);
   const { 
     setAlert,
@@ -28,8 +32,6 @@ const Checkout = () => {
 
   const checkoutContext = useContext(CheckoutContext);
   const {
-    currentPage,
-    changePage,
     registrationInfo,
     setPaymentMethod,
     paymentMethod
@@ -98,7 +100,7 @@ const Checkout = () => {
       return response.json();
     }).then(result => {
       isLoading = false;
-      changePage(2);
+      navigate('/checkout/pagamento');
     }).catch(error => {
       // add alert asking the user to get in touch via wpp cuz we are having issues
       isLoading = false;
@@ -204,7 +206,7 @@ const Checkout = () => {
               courses.forEach((course) => {
                 removeFromCart(course.id);
               });
-              changePage(4);
+              navigate('/checkout/confirmacao-de-compra');
             } else {
               setErrorMsg(`Ocorreu um erro ao tentar realizar o pagamento. Por favor, confira seus dados e tente novamente. Se o erro persistir, entre em contato conosco pelo número ${FormatPhone(process.env.REACT_APP_CONTACT_NUMBER_MATEUS)}`)
               setError(true);
@@ -224,20 +226,20 @@ const Checkout = () => {
 
   return (
     <div 
-      id="checkout" 
-      className='container'
+      id='checkout'
+      className='container' 
       onSubmit={() => { isLoading = true }}
     >
       <h1 className='text-center font-weight-bold text-secondary py-3'>
-        { currentPage === 1 && 'Dados para a matrícula' }
-        { currentPage === 2 && 'Dados para pagamento' }
-        { currentPage === 3 && 'Revise a sua compra' }
-        { currentPage === 4 && 'Obrigado por comprar com a gente!' }
+        { location.pathname.includes('checkout/matricula') && 'Dados para a matrícula' }
+        { location.pathname.includes('checkout/pagamento') && 'Dados para pagamento' }
+        {/* { currentPage === 3 && 'Revise a sua compra' } */}
+        { location.pathname.includes('checkout/confirmacao-de-compra') && 'Obrigado por comprar com a gente!' }
       </h1>
-      <div className={(currentPage === 1) ?  'd-block' : 'd-none'}>
+      <div className={location.pathname.includes('checkout/matricula') ?  'd-block' : 'd-none'}>
         <Registration nextPage={nextPage} />
       </div>
-      <div className={(currentPage === 2) ? 'd-block form-payment-info' : 'd-none'}>
+      <div className={location.pathname.includes('checkout/pagamento') ? 'd-block form-payment-info' : 'd-none'}>
         <div
           className={isLoading ? 'd-none' : 'payment-method bg-secondary p-3 my-3'}
           onChange={(e) => setPaymentMethod(e.target.value)}
@@ -285,7 +287,7 @@ const Checkout = () => {
             <button
               className="form-previous-page contact-btn btn btn-remove d-flex align-items-center"
               type="button"
-              onClick={() => changePage(1)}
+              onClick={() => navigate('/checkout/matricula')}
             >
               Voltar
             </button>
@@ -296,7 +298,7 @@ const Checkout = () => {
       {/* { (currentPage === 3 ) &&
         <Review />
       } */}
-      { (currentPage === 4 ) &&
+      { location.pathname.includes('checkout/confirmacao-de-compra') &&
         <MercadoPagoSuccessfulPurchase />
       }
     </div>

@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 const WhatsAppModal = ({
@@ -80,7 +79,7 @@ WhatsAppModal.propTypes = {
 WhatsAppModal.defaultProps = {
   btnText: 'Chamar agora!',
   textSize: 'h4',
-  wppMsg: 'Oi! Pode me ajudar?',
+  wppMsg: 'Tenho uma dúvida. Pode me ajudar?',
   phone: process.env.REACT_APP_CONTACT_NUMBER_MATEUS
 }
 

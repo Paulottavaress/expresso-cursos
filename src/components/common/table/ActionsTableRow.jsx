@@ -8,7 +8,7 @@ const ActionsTableRow = ({
 }) => {
 
   useEffect(() => {
-    console.log('rows', rows);
+    // console.log('rows', rows);
     // console.log('columnsWidth', columnsWidth);
     // console.log('rowsColors', rowsColors);
   });

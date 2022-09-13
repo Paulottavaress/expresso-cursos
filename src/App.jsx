@@ -6,15 +6,25 @@ import {
 } from 'react-router-dom';
 import ScrollToTop from './utils/ScrollToTop';
 import SetCart from './utils/SetCart';
-import MainLayout from './components/layout/MainLayout';
 import AlertState from './context/alert/AlertState';
 import CartState from './context/cart/CartState';
 import CheckoutState from './context/checkout/CheckoutState';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './scss/main.scss';
-import ManagementLayout from './pages/management/ManagementLayout';
+import MainLayout from './components/layout/MainLayout';
+import Cart from './pages/Cart';
+import HomePage from './pages/HomePage';
+import CheckoutLayout from './components/layout/CheckoutLayout';
+import Checkout from './pages/Checkout';
+import SellingPageLayout from './components/layout/SellingPageLayout';
+import MoppSellingPage from './pages/sellingpage/MoppSellingPage';
+import TransporteColetivoSellingPage from './pages/sellingpage/TransporteColetivoSellingPage';
+import TransporteEscolarSellingPage from './pages/sellingpage/TransporteEscolarSellingPage';
+import TransporteCargaIndivisivelSellingPage from './pages/sellingpage/TransporteCargaIndivisivelSellingPage';
+import VeiculosDeEmergenciaSellingPage from './pages/sellingpage/VeiculosDeEmergenciaSellingPage';
+import ManagementLayout from './components/layout/ManagementLayout';
 import Leads from './pages/management/Leads';
-import Lead from './pages/management/Lead';
+import Lead from './components/management/Lead';
 
 const App = () => {
   return (
@@ -26,91 +36,43 @@ const App = () => {
               <ScrollToTop />
               <SetCart />
               <Routes>
-                <Route
-                  path='/'
-                  element={<MainLayout route='homepage' />}
+                <Route path='/' element={<MainLayout />}>
+                  <Route path='/carrinho' element={<Cart />} />
+                  <Route index element={<HomePage />} />
+                </Route>
+                <Route path='/checkout' element={<CheckoutLayout />}>
+                  <Route path='/checkout/matricula' element={<Checkout />} />
+                  <Route path='/checkout/pagamento' element={<Checkout />} />
+                  <Route path='/checkout/confirmacao-de-compra' element={<Checkout />} />
+                </Route>
+                <Route path='/cursos' element={<SellingPageLayout />}>
+                  <Route path='/cursos/mopp/formacao' element={<MoppSellingPage />} />
+                  <Route path='/cursos/mopp/atualizacao' element={<MoppSellingPage />} />
+                  <Route path='/cursos/transporte-coletivo/formacao' element={<TransporteColetivoSellingPage />} />
+                  <Route path='/cursos/transporte-coletivo/atualizacao' element={<TransporteColetivoSellingPage />} />
+                  <Route path='/cursos/transporte-escolar/formacao' element={<TransporteEscolarSellingPage />} />
+                  <Route path='/cursos/transporte-escolar/atualizacao' element={<TransporteEscolarSellingPage />} />
+                  <Route path='/cursos/transporte-carga-indivisivel/formacao' element={<TransporteCargaIndivisivelSellingPage />} />
+                  <Route path='/cursos/transporte-carga-indivisivel/atualizacao' element={<TransporteCargaIndivisivelSellingPage />} />
+                  <Route path='/cursos/veiculos-de-emergencia/formacao' element={<VeiculosDeEmergenciaSellingPage />} />
+                  <Route path='/cursos/veiculos-de-emergencia/atualizacao' element={<VeiculosDeEmergenciaSellingPage />} />
+                </Route>
+                <Route path='/management' element={<ManagementLayout />}>
+                  <Route path='/management/leads' element={<Leads />} />
+                  <Route path='/management/leads/create' element={<Lead />} />
+                  <Route path='/management/leads/:identificationNumber/visualize' element={<Lead />} />
+                  <Route path='/management/leads/:identificationNumber/edit' element={<Lead />} />
+                </Route>
+                <Route path='*' element={
+                    <main
+                      className='d-flex justify-content-center align-items-center font-weight-bold'
+                      style={{ height: '100vh' }}
+                    >
+                      <p className='h3'>Está perdido? Acho que você errou o caminho.</p>
+                    </main>
+                  }
                 >
                 </Route>
-                <Route
-                  path='/management'
-                  element={<ManagementLayout />}
-                >
-                  <Route
-                    path='/management/leads'
-                    element={<Leads />}
-                  />
-                    <Route
-                      path='/management/leads/create'
-                      element={<Lead />}
-                    />
-                    <Route
-                      path='/management/leads/:identificationNumber/visualize'
-                      element={<Lead />}
-                    />
-                    <Route
-                      path='/management/leads/:identificationNumber/edit'
-                      element={<Lead />}
-                    />
-                  <Route
-                    path='*'
-                    element={
-                      <main
-                        className='d-flex justify-content-center align-items-center font-weight-bold'
-                        style={{ height: '100vh' }}
-                      >
-                        <p className='h3'>Está perdido? Acho que você errou o caminho.</p>
-                      </main>
-                    }
-                  />
-                </Route>
-                <Route
-                  path='/cart'
-                  element={<MainLayout route='cart' />}
-                />
-                <Route
-                  path='/checkout'
-                  element={<MainLayout route='checkout' />}
-                />
-                <Route
-                  path='/mopp-formacao'
-                  element={<MainLayout route='mopp-formacao' />}
-                />
-                <Route
-                  path='/mopp-atualizacao'
-                  element={<MainLayout route='mopp-atualizacao' />}
-                />
-                <Route
-                  path='/transporte-coletivo-formacao'
-                  element={<MainLayout route='transporte-coletivo-formacao' />}
-                />
-                <Route
-                  path='/transporte-coletivo-atualizacao'
-                  element={<MainLayout route='transporte-coletivo-atualizacao' />}
-                />
-                <Route
-                  path='/transporte-escolar-formacao'
-                  element={<MainLayout route='transporte-escolar-formacao' />}
-                />
-                <Route
-                  path='/transporte-escolar-atualizacao'
-                  element={<MainLayout route='transporte-escolar-atualizacao' />}
-                />
-                <Route
-                  path='/transporte-carga-indivisivel-formacao'
-                  element={<MainLayout route='transporte-carga-indivisivel-formacao' />}
-                />
-                <Route
-                  path='/transporte-carga-indivisivel-atualizacao'
-                  element={<MainLayout route='transporte-carga-indivisivel-atualizacao' />}
-                />
-                <Route
-                  path='/veiculos-emergencia-formacao'
-                  element={<MainLayout route='veiculos-emergencia-formacao' />}
-                />
-                <Route
-                  path='/veiculos-emergencia-atualizacao'
-                  element={<MainLayout route='veiculos-emergencia-atualizacao' />}
-                />
               </Routes>
             </div>
           </Router>
@@ -118,6 +80,6 @@ const App = () => {
       </CartState>
     </AlertState>
   );
-}
+};
 
 export default App;

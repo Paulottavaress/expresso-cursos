@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CartContext from '../../context/cart/cartContext';
 import CheckoutContext from '../../context/checkout/checkoutContext';
 import { parseType } from '../../utils/ParseType';
@@ -7,6 +8,8 @@ import FormatPhone from '../../utils/FormatPhone';
 import DockedAlert from '../common/DockedAlert';
 
 const MercadoPagoPix = () => {
+  const navigate = useNavigate();
+
   const alertContext = useContext(AlertContext);
   const { setAlert } = alertContext;
 
@@ -17,10 +20,7 @@ const MercadoPagoPix = () => {
   } = cartContext;
 
   const checkoutContext = useContext(CheckoutContext);
-  const { 
-    registrationInfo,
-    changePage
-  } = checkoutContext;
+  const { registrationInfo } = checkoutContext;
 
   const [isError, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState(false);
@@ -212,7 +212,7 @@ const MercadoPagoPix = () => {
             className='form-previous-page contact-btn btn btn-remove d-flex align-items-center'
             type='button'
             disabled={isLoading}
-            onClick={() => changePage(1)}
+            onClick={() => navigate('/checkout/matricula')}
           >
             {isLoading ? (
             <span
@@ -229,7 +229,7 @@ const MercadoPagoPix = () => {
             className='btn btn-success text-white'
             type='button'
             disabled={isLoading}
-            onClick={() => changePage(4)}
+            onClick={() => navigate('/checkout/confirmacao-de-compra') && navigate('/checkout/confirmacao-de-compra')}
           >
             {isLoading ? (
             <span

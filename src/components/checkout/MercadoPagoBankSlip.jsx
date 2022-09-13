@@ -1,20 +1,20 @@
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CheckoutContext from '../../context/checkout/checkoutContext';
 import FormatPhone from '../../utils/FormatPhone';
 
 const MercadoPagoBankSlip = () => {
+  const navigate = useNavigate();
+
   const checkoutContext = useContext(CheckoutContext);
-  const { 
-    registrationInfo,
-    changePage
-  } = checkoutContext;
+  const { registrationInfo } = checkoutContext;
 
   const [isLoading, setIsLoading] = useState(false);
 
   return (
     <div id='mercado-pago-bank-slip'>
       <div className='d-flex flex-column align-items-center justify-content-center bg-secondary p-3 my-3 rounded-3'>
-        <p className='h4 mb-0 text-light mb-5'>Caso precise pagar por boleto bancário, favor nos enviar os dados que você acaba de preencher no formulário anterior para o número ou e-mail disponibilizados abaixo. Emitiremos o boleto para pagamento imediatamente.</p>
+        <p className='h4 mb-0 text-light mb-5'>Caso precise pagar por boleto bancário, favor entrar em contato pelo número ou e-mail disponibilizados abaixo. Já registramos os seus dados preenchidos no formulário e emitiremos o boleto para pagamento imediatamente.</p>
         <h4>Número: <span className='text-primary'>{FormatPhone(process.env.REACT_APP_CONTACT_NUMBER_MATEUS)}</span></h4>
         <h4 className='mb-5'>E-mail: <span className='text-primary'>{process.env.REACT_APP_EMAIL_ADDRESS}</span></h4>
         <h4>Horário de funcionamento:</h4>
@@ -27,7 +27,7 @@ const MercadoPagoBankSlip = () => {
             className='form-previous-page contact-btn btn btn-remove d-flex align-items-center'
             type='button'
             disabled={isLoading}
-            onClick={() => changePage(1)}
+            onClick={() => navigate('/checkout/matricula')}
           >
             {isLoading ? (
             <span
@@ -43,7 +43,7 @@ const MercadoPagoBankSlip = () => {
             className='btn btn-success text-white'
             type='button'
             disabled={isLoading}
-            onClick={() => changePage(4)}
+            onClick={() => navigate('/checkout/confirmacao-de-compra');}
           >
             {isLoading ? (
             <span

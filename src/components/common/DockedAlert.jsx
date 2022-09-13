@@ -8,10 +8,10 @@ const DockedAlert = ({
   return (
     <div
       id='docked-personalized-alert'
-      className={'p-2 rounded-2 w-100 alert-' + type}
+      className='p-2 rounded-2 w-100'
       role='alert'
     >
-      <div className='d-flex align-items-center'>
+      <div className={'d-flex align-items-center docked-alert-' + type}>
         {(type === 'warning') && (
           <i className='fa fa-triangle-exclamation pr-05'/>
         )}

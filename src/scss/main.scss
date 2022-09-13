@@ -178,11 +178,6 @@ img {
 }
 
 .cart-container {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-  background-color: $primary;
-
   .cart {
     padding-top: 150px;
   
@@ -634,6 +629,14 @@ img {
   border: #ccc solid 1px;
 }
 
+.btn-remove:hover {
+  background-color: #007185ba;
+}
+
+.btn-remove:focus {
+  background-color: $remove;
+}
+
 .btn:hover {
   opacity: 0.8;
 }
@@ -715,7 +718,7 @@ table th {
   justify-content: space-between;
   align-items: center;
   padding: 0.7rem 2rem;
-  z-index: 1;
+  z-index: 1000;
   width: 100%;
   margin-bottom: 1rem;
 
@@ -972,9 +975,14 @@ table th {
   }
 }
 
-#management-layout {
-  min-width: 100vw;
+#main-layout,
+#selling-page-layout,
+#management-layout,
+#checkout-layout {
+  display: flex;
   min-height: 100vh;
+  flex-direction: column;
+  background-color: #f2bb05;
 }
 
 .actions-table {

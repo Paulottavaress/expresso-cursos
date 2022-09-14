@@ -4,7 +4,7 @@ import ActionsTable from '../../components/common/table/ActionsTable';
 import { formatDayOfTheWeekPT } from '../../utils/ParseDayOfTheWeek';
 import { colorStatuses, translateStatuses } from '../../utils/ParseLeadStatuses';
 import { firstLetterUpperCaseParseType } from '../../utils/ParseType';
-import formatPersonalName from '../../utils/FormatPersonalName';
+import { uppercaseAllPersonalNames } from '../../utils/FormatPersonalName';
 import { useNavigate } from 'react-router-dom';
 
 const Leads = () => {
@@ -64,7 +64,7 @@ const Leads = () => {
           ],
           name: [
             'Nome',
-            formatPersonalName(fullName)
+            uppercaseAllPersonalNames(fullName)
           ],
           state: [
             'Estado',

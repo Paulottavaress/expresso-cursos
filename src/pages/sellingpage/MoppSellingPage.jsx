@@ -175,7 +175,7 @@ const MoppSellingPage = () => {
       <CourseMedias medias={courseMedias} />
       <CourseFaq faqData={faqData} />
       <DidYouKnow courseName={courseName} />
-      <Testimonials />
+      <Testimonials carousel={false}/>
       <CourseCertification />
       {(courseInfo.length > 0) && (<BuyTheCourse courseInfo={courseInfo[0]} />)}
     </div>

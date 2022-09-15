@@ -1,9 +1,4 @@
-.checkout-container {
-  display: flex;
-  min-height: 100vh;
-  flex-direction: column;
-  background-color: $primary;
-
+#checkout-layout {
   #checkout {
     padding-top: 150px;
 
@@ -111,7 +106,7 @@
 }
 
 @media (max-width: 768px) {
-  .checkout-container {
+  #checkout-layout {
     #checkout {
       padding-top: 95px;
 
@@ -123,7 +118,7 @@
 }
 
 @media (max-width: 425px) {
-  .checkout-container {
+  #checkout-layout {
     #checkout {
       .form-group {
         flex-direction: column;

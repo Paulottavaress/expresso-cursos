@@ -25,7 +25,7 @@ const BuyBtn = ({
 
     if (isDuplicate) removeFromCart(duplicateCourses[0].id);
     addToCart(e.currentTarget.value);
-    navigate('/cart');
+    navigate('/carrinho');
   };
 
   return (

@@ -14,7 +14,7 @@ const Cart = () => {
 
   const onRemoveBtnClick = (e) => {
     removeFromCart(e.currentTarget.id);
-  }
+  };
 
   return (
     <div className='cart container bg-primary pb-5'>
@@ -58,12 +58,12 @@ const Cart = () => {
           <HelpBtn
             btnText='Entrar em contato'
             textSize='h6'
-            wppMsg='Olá! Gostaria de tirar algumas dúvidas antes de fazer minha matrícula!'
+            wppMsg='Gostaria de tirar algumas dúvidas antes de fazer minha matrícula! Pode me ajudar?'
             phone={process.env.REACT_APP_CONTACT_NUMBER_MATEUS}
           />
           {(courses && courses.length > 0) && (
           <Link
-            to='/checkout'
+            to='/checkout/matricula'
             className='ml-1 btn btn-success text-white'
           >
             Fazer matrícula
@@ -77,12 +77,12 @@ const Cart = () => {
         <HelpBtn
           btnText='Entrar em contato'
           textSize='h6'
-          wppMsg='Oi! Gostaria de tirar algumas dúvidas antes de fazer minha matrícula.'
+          wppMsg='Gostaria de tirar algumas dúvidas antes de fazer minha matrícula.'
           phone={process.env.REACT_APP_CONTACT_NUMBER_MATEUS}
         />
         {(courses && courses.length > 0) && (
         <Link
-          to='/checkout'
+          to='/checkout/matricula'
           className='ml-1 btn btn-success text-white'
         >
           Fazer matrícula

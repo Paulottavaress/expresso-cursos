@@ -7,8 +7,6 @@ const Lead = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [leadInfo, setLeadInfo] = useState(null);
 
-  console.log('REACT_APP_GET_LEAD_URL', process.env.REACT_APP_GET_LEAD_URL);
-
   useEffect(() => {
     getLead();
   }, []);

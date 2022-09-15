@@ -47,7 +47,7 @@ const FirstImpression = ({
           </Link>
           <p className='h1 font-weight-bold'>{title}</p>
           <p className='h3 text-danger font-weight-bold white-background-mark mb-custom'>
-            { courseName } { type }
+            { courseName.toUpperCase() } { type }
           </p>
           <p className='h3 text-align-left-important'>
             {subtitle}

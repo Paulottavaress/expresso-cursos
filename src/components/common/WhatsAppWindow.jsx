@@ -83,7 +83,7 @@ WhatsAppWindow.propTypes = {
 WhatsAppWindow.defaultProps = {
   btnText: 'Chamar agora!',
   textSize: 'h6',
-  wppMsg: 'Oi! Pode me ajudar?',
+  wppMsg: 'Tenho uma dúvida. Pode me ajudar?',
   phone: process.env.REACT_APP_CONTACT_NUMBER_MATEUS
 }
 

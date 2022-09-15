@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 
 const BuyBtnArea = ({ switchWppModal }) => {
   const scrollToPayment = () => {
-    window.scrollTo(0, document.getElementById('main-layout').scrollHeight);
+    window.scrollTo(0, document.getElementById('selling-page-layout').scrollHeight);
   };
 
   return (
-    <div className='bg-mark fixed-bottom'>
-      <div
-        className='container d-flex justify-content-center align-items-center py-3'
-      >
+    <div
+      id='buy-btn-area'
+      className='bg-mark fixed-bottom'
+    >
+      <div className='container d-flex justify-content-center align-items-center py-3'>
         <div className='row gx-1 w-100'>
           <div className='d-flex justify-content-center col-6'>
             <button
@@ -40,10 +41,10 @@ const BuyBtnArea = ({ switchWppModal }) => {
       </div>
     </div>
   )
-}
+};
 
 BuyBtnArea.propTypes = {
   switchWppModal: PropTypes.func.isRequired
-}
+};
 
 export default BuyBtnArea;

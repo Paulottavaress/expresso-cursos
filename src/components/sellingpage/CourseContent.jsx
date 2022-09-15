@@ -1,23 +1,24 @@
 import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { upperCaseParseType, reverseUpperCaseParseType } from '../../utils/ParseType';
 
 const CourseContent = ({
     type,
     courseName,
-    baseCourseUrl,
     modules
   }) => {
-  return (
+  const location = useLocation();
+
+  return (    
     <div
       id='course-content'
       className='bg-primary'
-    >
+    > 
       <div className="container py-5">
         <p className='h1 text-center font-weight-bold text-secondary'>MÓDULOS DO CURSO</p>
         <p className='h4 text-center font-weight-bold text-secondary mb-custom'>
-          {courseName} {upperCaseParseType(type)}
+          {courseName.toUpperCase()} {upperCaseParseType(type)}
         </p>
         <div className="d-flex flex-column">
           {modules.map((module, i) => (
@@ -33,7 +34,7 @@ const CourseContent = ({
           </div>
           ))}
         </div>
-        <Link to={type === 'formacao' ? `/${baseCourseUrl}-atualizacao` : `/${baseCourseUrl}-formacao`} >
+        <Link to={(type === 'formacao') ? location.pathname.replace('formacao', 'atualizacao') : location.pathname.replace('atualizacao', 'formacao') } >
           <p className='h4 mt-4 mb-0 text-danger font-weight-bold text-center cursor-pointer'><u>{`ESTÁ À PROCURA DO CURSO DE ${reverseUpperCaseParseType(type)}? CLIQUE AQUI`}</u></p>
         </Link>
       </div>
@@ -42,8 +43,9 @@ const CourseContent = ({
 }
 
 CourseContent.propTypes = {
-  type: PropTypes.string.isRequired,
-  baseCourseUrl: PropTypes.string.isRequired
+  type: PropTypes.string,
+  courseName: PropTypes.string.isRequired,
+  modules: PropTypes.array.isRequired
 }
 
 export default CourseContent;

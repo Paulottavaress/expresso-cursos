@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import moment from 'moment';
 
-const Footer = ({route}) => {
+const Footer = () => {
+  const location = useLocation();
 
   useEffect(() => {
     const googleMap = document.createElement('iframe');
@@ -16,7 +18,7 @@ const Footer = ({route}) => {
 
     documentContainer.innerHTML = '';
     documentContainer.appendChild(googleMap);
-  }, [route]);
+  }, [location]);
 
   return (
     <footer
@@ -24,7 +26,7 @@ const Footer = ({route}) => {
       className='bg-secondary py-4'
     >
       <main className='container'>
-        { (route === 'homepage' || route === 'cart') && (
+        {['/homepage', '/carrinho'].includes(location.pathname) && (
         <section
           id='company-location'
           className='mb-4'

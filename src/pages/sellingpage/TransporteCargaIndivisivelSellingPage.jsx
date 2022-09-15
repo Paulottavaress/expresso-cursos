@@ -1,25 +1,27 @@
-import React, { useState, useEffect, useContext } from 'react';
-import PropTypes from 'prop-types';
-import FirstImpression from '../components/sellingpage/FirstImpression';
-import SchoolInfo from '../components/common/SchoolInfo';
-import AboutTheCourse from '../components/sellingpage/AboutTheCourse';
-import CourseContent from '../components/sellingpage/CourseContent';
-import CourseRequirements from '../components/sellingpage/CourseRequirements';
-import CourseMedias from '../components/sellingpage/CourseMedias';
-import CartContext from '../context/cart/cartContext';
-import CourseFaq from '../components/sellingpage/CourseFaq';
-import DidYouKnow from '../components/sellingpage/DidYouKnow';
-import Testimonials from '../components/sellingpage/Testimonials';
-import CourseCertification from '../components/sellingpage/CourseCertification';
-import BuyTheCourse from '../components/sellingpage/BuyTheCourse';
-import { upperCaseParseType } from '../utils/ParseType';
+import { useState, useEffect, useContext } from 'react';
+import { useLocation } from 'react-router-dom';
+import FirstImpression from '../../components/sellingpage/FirstImpression';
+import SchoolInfo from '../../components/common/SchoolInfo';
+import AboutTheCourse from '../../components/sellingpage/AboutTheCourse';
+import CourseContent from '../../components/sellingpage/CourseContent';
+import CourseRequirements from '../../components/sellingpage/CourseRequirements';
+import CourseMedias from '../../components/sellingpage/CourseMedias';
+import CartContext from '../../context/cart/cartContext';
+import CourseFaq from '../../components/sellingpage/CourseFaq';
+import DidYouKnow from '../../components/sellingpage/DidYouKnow';
+import Testimonials from '../../components/sellingpage/Testimonials';
+import CourseCertification from '../../components/sellingpage/CourseCertification';
+import BuyTheCourse from '../../components/sellingpage/BuyTheCourse';
+import { upperCaseParseType } from '../../utils/ParseType';
 
-const TransporteEscolarSellingPage = ({ type }) => {
+const TransporteCargaIndivisivelSellingPage = () => {
+  const location = useLocation();
+
   const cartContext = useContext(CartContext);
   const { availableCourses } = cartContext;
 
-  const courseName = 'TRANSPORTE ESCOLAR';
-  const baseCourseUrl = 'transporte-escolar';
+  const courseName = 'Transporte de Carga Indivisível';
+  const [courseType, setCourseType] = useState(null);
   const [courseInfo, setCourseInfo] = useState([]);
   const [courseModules, setCourseModules] = useState([]);
   const [courseRequirements, setCourseRequirements] = useState([]);
@@ -45,7 +47,7 @@ const TransporteEscolarSellingPage = ({ type }) => {
   });
 
   useEffect(() => {
-    if (type === 'formacao') {
+    if (location && location.pathname.includes('formacao')) {
       setCourseModules([
         {
           number: 'Módulo I',
@@ -64,14 +66,14 @@ const TransporteEscolarSellingPage = ({ type }) => {
         },
         {
           number: 'Módulo IV',
-          name: 'Relacionamento Interpessoal',
+          name: 'Movimentação de Carga',
           duration: '15 (quinze) horas aula'
         }
       ]);
 
       setCourseRequirements([
         'Ser maior de 21 anos',
-        'Estar habilitado na categoria “D” ou "E"',
+        'Estar habilitado em uma das categorias “C” ou “E”',
         'Não ter cometido nenhuma infração grave ou gravíssima ou ser reincidente em infrações médias durante os últimos 12 (doze) meses',
         'Não estar cumprindo pena de suspensão'
       ]);
@@ -84,7 +86,7 @@ const TransporteEscolarSellingPage = ({ type }) => {
         },
         {
           name: 'vídeo(s)',
-          amount: 21,
+          amount: 22,
           icon: 'fas fa-video'
         },
         {
@@ -98,7 +100,7 @@ const TransporteEscolarSellingPage = ({ type }) => {
           icon: 'fa-solid fa-check'
         },
       ])
-    } else {
+    } else if (location) {
       setCourseModules([
         {
           number: 'Módulo I',
@@ -117,17 +119,17 @@ const TransporteEscolarSellingPage = ({ type }) => {
         },
         {
           number: 'Módulo IV',
-          name: 'Relacionamento Interpessoal',
+          name: 'Movimentação de Cargas',
           duration: '5 (cinco) horas aula'
         }
       ]);
 
-      setCourseRequirements(['Ter o curso de capacitação de Transporte Escolar descrito no campo de observações da CNH']);
+      setCourseRequirements(['Ter o curso de capacitação de Movimentação de Produtos Perigosos descrito no campo de observações da CNH']);
 
       setCourseMedias([
         {
           name: 'texto(s)',
-          amount: 11,
+          amount: 13,
           icon: 'fas fa-book-open'
         },
         {
@@ -141,30 +143,33 @@ const TransporteEscolarSellingPage = ({ type }) => {
           icon: 'fa-solid fa-check'
         },
       ])
-    }
-  }, [type]);
+    };
+
+    if (location) setCourseType(location.pathname.includes('formacao')
+      ? 'formacao'
+      : 'atualizacao');
+  }, [location]);
 
   useEffect(() => {
     if (availableCourses.length > 0) {
-      setCourseInfo(availableCourses.filter((course) => (course.id.slice(0, 8) === process.env.REACT_APP_TRANSPORTE_ESCOLAR_BASE_ID) && (course.type === type)));
+      setCourseInfo(availableCourses.filter((course) => (course.id.slice(0, 8) === process.env.REACT_APP_CARGA_INDIVISIVEL_BASE_ID) && (location.pathname.includes(course.type))));
     }
   }, [availableCourses]);
 
   return (
     <div>
       <FirstImpression
-        title='FAÇA SEU CURSO NO CONFORTO DA SUA CASA'
-        courseName={courseName.toUpperCase()}
-        type={upperCaseParseType(type)}
-        backgroundImage='/assets/images/backgrounds/school-bus.jpg'
+        title="FAÇA SEU CURSO NO CONFORTO DA SUA CASA"
+        courseName={courseName}
+        type={upperCaseParseType(courseType)}
+        backgroundImage='/assets/images/backgrounds/indivisible-load.jpg'
       />
       <SchoolInfo />
       <AboutTheCourse />
       <CourseRequirements requirements={courseRequirements}/>
       <CourseContent
-        type={type}
+        type={courseType}
         courseName={courseName}
-        baseCourseUrl={baseCourseUrl}
         modules={courseModules}
       />
       <CourseMedias medias={courseMedias} />
@@ -177,8 +182,4 @@ const TransporteEscolarSellingPage = ({ type }) => {
   )
 };
 
-TransporteEscolarSellingPage.propTypes = {
-  type: PropTypes.string.isRequired
-}
-
-export default TransporteEscolarSellingPage;
+export default TransporteCargaIndivisivelSellingPage;

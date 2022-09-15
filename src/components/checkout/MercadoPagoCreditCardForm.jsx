@@ -1,10 +1,8 @@
-import React, { useContext } from 'react';
-import CheckoutContext from '../../context/checkout/checkoutContext';
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 const MercadoPagoCreditCardForm = ({ isLoading }) => {
-  const checkoutContext = useContext(CheckoutContext);
-  const { changePage } = checkoutContext;
+  const navigate = useNavigate();
 
   return (
     <form id="form-checkout">
@@ -158,7 +156,7 @@ const MercadoPagoCreditCardForm = ({ isLoading }) => {
             className="form-previous-page contact-btn btn btn-remove d-flex align-items-center"
             type="button"
             disabled={isLoading}
-            onClick={() => changePage(1)}
+            onClick={() => navigate('/checkout/matricula')}
           >
             {isLoading ? (
             <span className="spinner-border text-light" role="status" />

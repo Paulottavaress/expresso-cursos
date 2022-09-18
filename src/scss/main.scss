@@ -9,6 +9,7 @@ $danger: #d00000;
 $success: #28a745;
 $remove: #007185;
 $mark: rgba(255, 255, 255, 0.7);
+$grey: rgb(189 186 189);
 
 @import '../../node_modules/bootstrap/scss/bootstrap';
 
@@ -102,6 +103,10 @@ img {
 
 .bg-mark {
   background-color: $mark;
+}
+
+.bg-grey {
+  background-color: $grey;
 }
 
 /* Utilities */
@@ -407,7 +412,7 @@ img {
 
 /* Border Radius */
 .br-5 {
-  border-radius: 5px;
+  border-radius: 5px !important;
 }
 
 /* Margin */
@@ -981,13 +986,28 @@ table th {
       width: 30px;
     }
   }
+
+  .drawer {
+    .content-wrapper {
+      flex-direction: column;
+
+      & > div {
+        width: 100% !important;
+      }
+    }
+  }
 }
 
 #main-layout,
 #selling-page-layout,
-#management-layout,
 #checkout-layout {
   display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  background-color: #f2bb05;
+}
+
+#management-layout {
   min-height: 100vh;
   flex-direction: column;
   background-color: #f2bb05;
@@ -1019,6 +1039,10 @@ table th {
       text-overflow: ellipsis; 
     }
   }
+}
+
+.drawer {
+  border: 3px solid #000000;
 }
 
 @media (max-width: 350px) {

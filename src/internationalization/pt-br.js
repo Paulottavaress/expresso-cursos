@@ -33,6 +33,17 @@ const ptBr = {
     type: 'tipo',
     value: 'valor',
     zipCode: 'código postal',
+    collapseUncollapse: 'minimizar/maximizar',
+    edit: 'editar',
+    delete: 'deletar',
+    amountOfRegisters: 'total de registros encontrados',
+    drawerStatus: '{var} o registro',
+    visualizing: 'visualizando',
+    editing: 'editando',
+    confirm: 'confirmar',
+    successEdition: 'A edição do registro {var} foi feita com sucesso!',
+    failureEdition: 'A edição do registro {var} não pode ser concluída',
+    cancelEdition: 'A edição do registro {var} foi cancelada'
   }
 };
 

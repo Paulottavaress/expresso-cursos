@@ -18,3 +18,12 @@ export const firstAndLastNames = personalName => {
 
   return nameArr[0] + ' ' + nameArr[nameArr.length - 1];
 };
+
+export const firstAndLastNamesInitials = personalName => {
+  const nameArr = firstAndLastNames(personalName).split(' ');
+  let output = '';
+
+  nameArr.forEach(name => output += name[0]);
+
+  return output;
+};

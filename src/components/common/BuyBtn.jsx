@@ -20,10 +20,11 @@ const BuyBtn = ({
   } = cartContext;
 
   const onBuyBtnClick = async (e) => {
-    const duplicateCourses = courses.filter(course => (course.id.slice(0, 8) === e.currentTarget.value.slice(0, 8)));
+    const duplicateCourses = courses.filter(course => (course[0].slice(0, 8) === e.currentTarget.value.slice(0, 8)));
     const isDuplicate = (duplicateCourses.length > 0);
 
-    if (isDuplicate) removeFromCart(duplicateCourses[0].id);
+    if (isDuplicate) removeFromCart(duplicateCourses[0][0]);
+
     addToCart(e.currentTarget.value);
     navigate('/carrinho');
   };

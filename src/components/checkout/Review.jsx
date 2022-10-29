@@ -16,11 +16,11 @@ const Review = () => {
       {(courses && courses.length > 0) && courses.map(course => (
         <div
           className='course d-flex'
-          key={course.id}
+          key={course[0]}
         >
           <div className='content-container'>
             <h3 className='text-light'>{course.name} - curso de {course.type.toLowerCase()}</h3>
-            <h4 className='text-success'>{course.value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</h4>
+            <h4 className='text-success'>{course[1].value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</h4>
           </div>
         </div>
       ))}

@@ -152,7 +152,7 @@ const VeiculosDeEmergenciaSellingPage = () => {
 
   useEffect(() => {
     if (availableCourses.length > 0) {
-      setCourseInfo(availableCourses.filter((course) => (course.id.slice(0, 8) === process.env.REACT_APP_VEICULOS_EMERGENCIA_BASE_ID) && (location.pathname.includes(course.type))));
+      setCourseInfo(availableCourses.filter((course) => (course[0].slice(0, 8) === process.env.REACT_APP_VEICULOS_EMERGENCIA_BASE_ID) && (location.pathname.includes(course.type))));
     }
   }, [availableCourses]);
 

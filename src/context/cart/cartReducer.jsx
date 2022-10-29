@@ -20,14 +20,15 @@ export const cartReducer = (state, action) => {
       };
     case REMOVE_FROM_CART:
       localStorage.setItem('expresso-cursos-cart', JSON.stringify(action.payload.courses));
+      const subtotal = state.subtotal - action.payload.removedCourse[0][1].value;
 
       return {
         ...state,
         courses: action.payload.courses,
-        subtotal: state.subtotal - action.payload.removedCourse[0].value
+        subtotal: subtotal
       };
     case ADD_TO_CART:
-      const course = state.availableCourses.filter(course => course.id === action.payload);
+      const course = state.availableCourses.filter(course => course[0] === action.payload);
 
       localStorage.setItem(
         'expresso-cursos-cart',
@@ -43,7 +44,7 @@ export const cartReducer = (state, action) => {
           ...state.courses,
           course[0]
         ],
-        subtotal: state.subtotal + course[0].value
+        subtotal: state.subtotal + course[0][1].value
       };
     default:
       return state;

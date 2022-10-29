@@ -6,7 +6,7 @@ import BuyBtn from '../common/BuyBtn';
 
 const Courses = () => {
   const cartContext = useContext(CartContext);
-  const { availableCourses } = cartContext;
+  let { availableCourses } = cartContext;
 
   return (
     <div className='courses-area bg-primary'>
@@ -19,30 +19,30 @@ const Courses = () => {
         {availableCourses && availableCourses.map((course) => (
           <div
             className='d-flex col-md-4'
-            key={course.id}
+            key={course[0]}
           > 
             <div className='bg-secondary courses-card'>
               <div className='d-flex flex-column align-items-center justify-content-center flex-grow-1'>
-                <h3 className='text-primary font-weight-bold text-center m-0'>{course.name.toUpperCase()}</h3>
-                <h3 className='text-primary font-weight-bold text-center m-0'>{upperCaseParseType(course.type)}</h3>
+                <h3 className='text-primary font-weight-bold text-center m-0'>{course[1].name.toUpperCase()}</h3>
+                <h3 className='text-primary font-weight-bold text-center m-0'>{upperCaseParseType(course[1].type)}</h3>
               </div>
               <div className='img-container my-3'>
-                <Link to={course.sellingPage}>
+                <Link to={course[1].sellingPage}>
                   <img
-                    src={course.image}
-                    alt={`${course.sellingPage} ${course.type}`} 
+                    src={course[1].image}
+                    alt={`${course[1].sellingPage} ${course[1].type}`} 
                   />
                 </Link>
               </div>
               <div className='d-flex flex-column align-items-center justify-content-center w-100'>
                 <Link
-                  to={course.sellingPage}
+                  to={course[1].sellingPage}
                   className='btn btn-block btn-remove'
                 >
                   <h3 className='font-weight-bold m-0 text-light'>SAIBA MAIS</h3>
                 </Link>
                 <BuyBtn
-                  courseId={course.id}
+                  courseId={course[0]}
                   text='COMPRAR'
                   margin='mt-3'
                 />

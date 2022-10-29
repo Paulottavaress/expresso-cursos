@@ -204,7 +204,7 @@ const Checkout = () => {
             if(!result.hasOwnProperty('error_message')) {
               setError(false);
               courses.forEach((course) => {
-                removeFromCart(course.id);
+                removeFromCart(course[0]);
               });
               navigate('/checkout/confirmacao-de-compra');
             } else {

@@ -61,9 +61,11 @@ const Lead = () => {
                   registerNum[1] += data[1].slice(-4);
                 }
                 else if ([
+                  'driversLicenseNumber',
                   'driversLicenseCategory',
+                  'firstDriversLicenseIssueDate',
                   'driversLicenseExpiryDate',
-                  'driversLicenseNumber'
+                  'renachCode'
                 ].includes(data[0])) data[1] = cnhArr.push([data[0], data[1]])
                 else if ([
                   'address',

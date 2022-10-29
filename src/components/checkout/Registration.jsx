@@ -418,7 +418,7 @@ const Registration = ({ nextPage }) => {
                   id='form_renach-code'
                   name='renachCode'
                   type='text'
-                  label='Renach'
+                  label='RENACH'
                   variant='standard'
                   color='warning'
                   required

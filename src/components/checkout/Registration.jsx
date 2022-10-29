@@ -132,6 +132,8 @@ const Registration = ({ nextPage }) => {
       errorMsg = 'Favor conferir o CNPJ inserido. O número deve conter 14 caracteres, sem traços e pontos.';
     } else if (registrationInfo.driversLicenseNumber.trim().length !== 11) {
       errorMsg = 'Favor conferir o CNH inserido. O número deve conter 11 caracteres.';
+    } else if (registrationInfo.renachCode.trim().length !== 11) {
+      errorMsg = 'Favor conferir o RENACH inserido. O código deve conter 11 caracteres.';
     } else if (validateCNH()) {
       errorMsg = 'Favor inserir a data de vencimento da CNH no formato DD/MM/AAAA. A sua CNH não pode estar vencida para realizar a compra.';
     } else if (registrationInfo.zipCode.trim().length !== 9) {
@@ -187,6 +189,14 @@ const Registration = ({ nextPage }) => {
     if (days < 0) return true;
 
     return false;
+  }
+
+  const displayRenachImg = (e) => {
+    const img = document.querySelector('#renach-img');
+
+    img.style.display = (img.style.display === 'none')
+      ? 'block'
+      : 'none';
   }
 
   return (
@@ -397,6 +407,35 @@ const Registration = ({ nextPage }) => {
           </div>
         </div>
         <div className='form-group'>
+          <div className="form-field d-flex">
+            <InputMask
+              mask="aa999999999"
+              onChange={onChange}
+              maskChar=" "
+            >
+              {() => 
+                <TextField
+                  id='form_renach-code'
+                  name='renachCode'
+                  type='text'
+                  label='RENACH'
+                  variant='standard'
+                  color='warning'
+                  required
+                />
+              }
+            </InputMask>
+            <i
+              className="fa-solid fa-circle-info info-icon cursor-pointer"
+              onClick={() => displayRenachImg()}
+            >
+              <img
+                src="/assets/images/forms/where-to-find-the-renach-code.jpeg"
+                alt="Como encontrar o RENACH na carteira de habilitação"
+                id='renach-img'
+              />
+            </i>
+          </div>
           <div className='form-field'>
             <InputLabel id='form__country_label'>País</InputLabel>
             <Select
@@ -664,7 +703,7 @@ const Registration = ({ nextPage }) => {
             </Select>
           </div>
           <div className='form-field justify-content-end'>
-          <InputMask
+            <InputMask
               mask="99999-999"
               onChange={onChange}
               maskChar=" "

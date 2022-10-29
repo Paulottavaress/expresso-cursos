@@ -27,6 +27,7 @@ const CheckoutState = props => {
       "identificationType": "PF",
       "neighbourhood": "",
       "phoneNumber": "",
+      "renachCode": "",
       "state": "AC",
       "zipCode": ""
     },

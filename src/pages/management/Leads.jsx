@@ -106,11 +106,10 @@ const Leads = () => {
         };
 
         fetchedRows.push(Object.entries(row));
-
-        setIsLoading('false');
       });
       setTotalRegistersFound(fetchedRows.length);
       setRows(fetchedRows);
+      setIsLoading('false');
     }).catch(error => {
       // add alert telling that there is an backend user and to get in touch with me
       setIsLoading('false');

@@ -433,6 +433,7 @@ const Registration = ({ nextPage }) => {
                 src="/assets/images/forms/where-to-find-the-renach-code.jpeg"
                 alt="Como encontrar o RENACH na carteira de habilitação"
                 id='renach-img'
+                style={{ display: 'none' }}
               />
             </i>
           </div>

@@ -1,4 +1,10 @@
 const ptBr = {
+  leftSidebar: {
+    profile: 'perfil',
+    leads: 'leads',
+    coupons: 'cupom',
+    courses: 'cursos'
+  },
   lead: {
     address: 'rua',
     addressComplement: 'complemento',

@@ -41,9 +41,7 @@ const CartState = props => {
   const setCart = courses => {
     let subtotal = 0;
 
-    courses.forEach(course => {
-      subtotal = subtotal + course.value;
-    })
+    courses.forEach(course => subtotal = subtotal + course[1].value);
 
     dispatch({
       type: SET_CART,
@@ -62,8 +60,8 @@ const CartState = props => {
   }
 
   const removeFromCart = courseId => {
-    const courses = state.courses.filter(course => course.id !== courseId);
-    const removedCourse = state.courses.filter(course => course.id === courseId);
+    const courses = state.courses.filter(course => course[0] !== courseId);
+    const removedCourse = state.courses.filter(course => course[0] === courseId);
 
     dispatch({
       type: REMOVE_FROM_CART,

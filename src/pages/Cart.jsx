@@ -21,21 +21,21 @@ const Cart = () => {
       <h1 className='text-center font-weight-bold text-secondary py-3'>Carrinho de compras</h1>
       <div className='courses-group d-flex flex-column bg-secondary p-3'>
         {(courses && courses.length > 0) ? courses.map((course, i) => (
-          <div key={course.id}>
+          <div key={course[0]}>
             <div className='course d-flex'>
               <div className='img-container'>
-                <Link to={course.sellingPage}>
-                  <img src={course.image} alt={course.name} />
+                <Link to={course[1].sellingPage}>
+                  <img src={course[1].image} alt={course[1].name} />
                 </Link>
               </div>
               <div className='content-container'>
-                <Link to={course.sellingPage}>
-                  <h3 className='text-light'>{course.name} - curso de {parseType(course.type)}</h3>
+                <Link to={course[1].sellingPage}>
+                  <h3 className='text-light'>{course[1].name} - curso de {parseType(course[1].type)}</h3>
                 </Link>
-                <h4 className='text-success'>{course.value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</h4>
+                <h4 className='text-success'>{course[1].value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</h4>
                 <h6 className='text-light'>Aceitamos PIX ou parcelamos em até 5x sem juros!</h6>
                 <span
-                  id={course.id}
+                  id={course[0]}
                   className='text-primary m-0'
                   onClick={onRemoveBtnClick}
                 >

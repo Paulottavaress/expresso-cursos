@@ -70,7 +70,7 @@ const Checkout = () => {
     let description = '';
 
     courses.forEach((course, i) => {
-      description += `${course.name} - ${parseType(course.type)}`;
+      description += `${course[1].name} - ${parseType(course[1].type)}`;
       if (i !== (courses.length - 1)) description += ' / ';
     });
 

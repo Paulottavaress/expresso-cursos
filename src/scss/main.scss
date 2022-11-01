@@ -126,6 +126,10 @@ img {
   display: flex;
 }
 
+.br-10px {
+  border-radius: 10px;
+}
+
 .box {
   width: 310px;
   height: 620px;
@@ -233,6 +237,17 @@ img {
     .btn-area {
       border-radius: 10px;
     }
+  }
+}
+
+.coupon-field {
+  #discount-coupon-field {
+    border-top: none;
+    border-right: none;
+    border-bottom: 1px dashed $light;
+    border-left: none;
+    color: $light;
+    max-width: 175px;
   }
 }
 

@@ -152,7 +152,8 @@ const MoppSellingPage = () => {
 
   useEffect(() => {
     if (availableCourses.length > 0) {
-      setCourseInfo(availableCourses.filter((course) => (course[0].slice(0, 8) === process.env.REACT_APP_MOPP_BASE_ID) && (location.pathname.includes(course.type))));
+      const courses = availableCourses.filter(course => (course[0].slice(0, 8) === process.env.REACT_APP_MOPP_BASE_ID) && (location.pathname.includes(course[1].type)));
+      setCourseInfo(courses);
     }
   }, [availableCourses]);
 

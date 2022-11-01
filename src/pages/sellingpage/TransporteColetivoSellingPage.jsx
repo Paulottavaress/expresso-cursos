@@ -152,7 +152,7 @@ const TransporteColetivoSellingPage = () => {
 
   useEffect(() => {
     if (availableCourses.length > 0) {
-      setCourseInfo(availableCourses.filter((course) => (course[0].slice(0, 8) === process.env.REACT_APP_TRANSPORTE_COLETIVO_BASE_ID) && (location.pathname.includes(course.type))));
+      setCourseInfo(availableCourses.filter((course) => (course[0].slice(0, 8) === process.env.REACT_APP_TRANSPORTE_COLETIVO_BASE_ID) && (location.pathname.includes(course[1].type))));
     }
   }, [availableCourses]);
 

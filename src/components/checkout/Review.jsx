@@ -19,7 +19,7 @@ const Review = () => {
           key={course[0]}
         >
           <div className='content-container'>
-            <h3 className='text-light'>{course.name} - curso de {course.type.toLowerCase()}</h3>
+            <h3 className='text-light'>{course[1].name} - curso de {course[1].type.toLowerCase()}</h3>
             <h4 className='text-success'>{course[1].value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</h4>
           </div>
         </div>

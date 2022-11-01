@@ -33,7 +33,7 @@ const Cart = () => {
                   <h3 className='text-light'>{course[1].name} - curso de {parseType(course[1].type)}</h3>
                 </Link>
                 <h4 className='text-success'>{course[1].value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</h4>
-                <h6 className='text-light'>Aceitamos PIX ou parcelamos em até 5x sem juros!</h6>
+                <h6 className='text-light'>5% de desconto no PIX ou 5x sem juros no cartão!</h6>
                 <span
                   id={course[0]}
                   className='text-primary m-0'

@@ -26,8 +26,7 @@ const Checkout = () => {
   const cartContext = useContext(CartContext);
   const {
     courses,
-    subtotal,
-    removeFromCart
+    subtotal
   } = cartContext;
 
   const checkoutContext = useContext(CheckoutContext);
@@ -203,9 +202,6 @@ const Checkout = () => {
           }).then(result => {
             if(!result.hasOwnProperty('error_message')) {
               setError(false);
-              courses.forEach((course) => {
-                removeFromCart(course[0]);
-              });
               navigate('/checkout/confirmacao-de-compra');
             } else {
               setErrorMsg(`Ocorreu um erro ao tentar realizar o pagamento. Por favor, confira seus dados e tente novamente. Se o erro persistir, entre em contato conosco pelo número ${FormatPhone(process.env.REACT_APP_CONTACT_NUMBER_MATEUS)}`)

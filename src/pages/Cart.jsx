@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import CartContext from '../context/cart/cartContext';
 import HelpBtn from '../components/common/HelpBtn';
-import Coupon from '../components/cart/Coupon';
+import ApplyCoupon from '../components/cart/ApplyCoupon';
 import { parseType } from '../utils/ParseType';
 
 const Cart = () => {
@@ -53,7 +53,7 @@ const Cart = () => {
         )}
       </div>
       <div className='coupon-area bg-secondary my-3 p-3 br-10px'>
-        <Coupon />
+        <ApplyCoupon />
       </div>
       <div className='subtotal-area d-flex align-items-center justify-content-between bg-secondary my-3 p-3'>
         <h4 className='m-0 text-center'>Subtotal: <span className='text-success'>{subtotal.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</span></h4>

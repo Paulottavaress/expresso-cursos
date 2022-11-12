@@ -3,6 +3,7 @@ import CheckoutContext from './checkoutContext';
 import { checkoutReducer } from './checkoutReducer';
 import {
   SET_REGISTRATION_INFO,
+  SET_REGISTRATION_INFO_COMPLETELY,
   SET_PAYMENT_INFO,
   SET_PAYMENT_METHOD
 } from '../types';
@@ -46,6 +47,17 @@ const CheckoutState = props => {
     })
   };
 
+  const setRegistrationInfoCompletely = registrationInfo => {
+    registrationInfo = Object.entries(registrationInfo);
+
+    registrationInfo.forEach(info => {
+      dispatch({
+        type: SET_REGISTRATION_INFO_COMPLETELY,
+        payload: info
+      });
+    });
+  };
+
   const setPaymentInfo = paymentInfo => {
     dispatch({
       type: SET_PAYMENT_INFO,
@@ -67,6 +79,7 @@ const CheckoutState = props => {
         paymentInfo: state.paymentInfo,
         paymentMethod: state.paymentMethod,
         setRegistrationInfo,
+        setRegistrationInfoCompletely,
         setPaymentInfo,
         setPaymentMethod
       }}

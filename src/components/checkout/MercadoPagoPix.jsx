@@ -84,7 +84,7 @@ const MercadoPagoPix = () => {
     }).finally(() => {
       setIsLoading(false);
     });
-  }
+  };
 
   const copyHash = () => {
     const copyText = document.getElementById('copy-hash');
@@ -99,7 +99,7 @@ const MercadoPagoPix = () => {
       text: 'O hash foi copiado para sua área de transferência!',
       time: 5000
     });
-  }
+  };
 
   const copyKey = () => {
     const copyText = document.getElementById('copy-key');
@@ -114,7 +114,12 @@ const MercadoPagoPix = () => {
       text: 'A chave PIX foi copiada para sua área de transferência!',
       time: 5000
     });
-  }
+  };
+
+  const finalizePurchase = () => {
+    localStorage.setItem('expresso-cursos-purchase-completed', true);
+    navigate('/checkout/confirmacao-de-compra');
+  };
 
   return (
     <div id='mercado-pago-pix'>
@@ -229,7 +234,7 @@ const MercadoPagoPix = () => {
             className='btn btn-success text-white'
             type='button'
             disabled={isLoading}
-            onClick={() => navigate('/checkout/confirmacao-de-compra') && navigate('/checkout/confirmacao-de-compra')}
+            onClick={() => finalizePurchase()}
           >
             {isLoading ? (
             <span

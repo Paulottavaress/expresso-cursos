@@ -1,12 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
 import FormatPhone from '../../utils/FormatPhone';
 import CheckoutContext from '../../context/checkout/checkoutContext';
+import { useNavigate } from 'react-router-dom';
 
 const MercadoPagoSuccessfulPurchase = () => {
+  const navigate = useNavigate();
+
   const checkoutContext = useContext(CheckoutContext);
   const { paymentMethod } = checkoutContext;
 
   const [msg, setMsg] = useState('');
+
+  useEffect(() => {
+    const isUserABuyer = localStorage.getItem('expresso-cursos-purchase-completed');
+
+    if (!isUserABuyer) navigate('/carrinho');
+  });
 
   useEffect(() => {
     switch(paymentMethod) {

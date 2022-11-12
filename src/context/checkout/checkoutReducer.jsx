@@ -1,6 +1,6 @@
 import {
-  CHANGE_PAGE,
   SET_REGISTRATION_INFO,
+  SET_REGISTRATION_INFO_COMPLETELY,
   SET_PAYMENT_INFO,
   SET_PAYMENT_METHOD
 } from '../types';
@@ -13,6 +13,14 @@ export const checkoutReducer = (state, action) => {
         registrationInfo: {
           ...state.registrationInfo,
           [action.payload.target.name]: action.payload.target.value
+        }
+      };
+    case SET_REGISTRATION_INFO_COMPLETELY:
+      return {
+        ...state,
+        registrationInfo: {
+          ...state.registrationInfo,
+          [action.payload[0]]: action.payload[1]
         }
       };
     case SET_PAYMENT_INFO:

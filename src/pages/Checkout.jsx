@@ -32,6 +32,8 @@ const Checkout = () => {
   const checkoutContext = useContext(CheckoutContext);
   const {
     registrationInfo,
+    setRegistrationInfo,
+    setRegistrationInfoCompletely,
     setPaymentMethod,
     paymentMethod
   } = checkoutContext;
@@ -44,15 +46,98 @@ const Checkout = () => {
   let isLoading = false;
 
   useEffect(() => {
-    const cart = localStorage.getItem('expresso-cursos-cart')
+    let userRegistrationInfo = localStorage.getItem('expresso-cursos-registration-info');
 
-    if (cart && JSON.parse(cart).length === 0) switchNotAllowedDialog({
+    if (userRegistrationInfo) {
+      userRegistrationInfo = JSON.parse(userRegistrationInfo);
+
+      switch (location.pathname) {
+        case '/checkout/matricula':
+          const parsedUserRegistrationInfo = Object.entries(userRegistrationInfo);
+
+          parsedUserRegistrationInfo.forEach(info => {
+            const input = document.querySelector(`[name="${info[0]}"]`);
+
+            if (input && (!input.value || input.value === '')) {
+              input.focus();
+              document.execCommand('insertText', false, info[1]);
+            };
+
+            if ([
+              'identificationType',
+              'driversLicenseCategory',
+              'country',
+              'state'
+            ].includes(info[0])) {
+              let output = '';
+
+              if (info[0] === 'identificationType') {
+                output = (info[1] === 'PF')
+                  ? 'Pessoa física'
+                  : 'Pessoa jurídica'
+              } else output = info[1];
+
+              const siblingEl = input.parentElement.querySelector('div');
+              
+              if (siblingEl) {
+                siblingEl.innerHTML = output;
+                const obj = {
+                  target: {}
+                };
+                obj.target.name = info[0];
+                obj.target.value = info[1];
+                setRegistrationInfo(obj);
+              };
+            };
+          });
+
+          if (userRegistrationInfo.addressNumber) {
+            setTimeout(() => {
+              let input = document.querySelector(`[name="addressNumber"]`);
+
+              if (!input.value || input.value === '') {
+                input.focus();
+                document.execCommand('insertText', false, userRegistrationInfo.addressNumber);
+              };
+
+              input = document.querySelector(`[name="addressComplement"]`);
+
+              if (!input.value || input.value === '') {
+                input.focus();
+                document.execCommand('insertText', false, userRegistrationInfo.addressComplement);
+              };
+
+              document.activeElement.blur();
+            }, 500);
+          };
+
+          break;
+        case '/checkout/pagamento':
+          setRegistrationInfoCompletely(userRegistrationInfo);
+          break;
+      };
+    } else if (location.pathname.includes('checkout/pagamento')) navigate('/checkout/matricula');
+  }, [location.pathname]);
+
+  useEffect(() => {
+    const cart = localStorage.getItem('expresso-cursos-cart');
+
+    if (!cart || JSON.parse(cart).length === 0) switchNotAllowedDialog({
       dialogTitle: 'Por favor, adicione algum dos nossos cursos ao carrinho',
       dialogText: 'Para que você possa fazer sua matrícula, é necessário clicar no botão "COMPRAR" do curso desejado. Os botões ficam na página inicial ou nas páginas de venda de cada curso.',
       dialogBtnText: 'Ver nossos cursos',
       redirectTo: '/',
       scrollTo: { scrollTo: 'courses' }
     });
+
+    let description = '';
+
+    courses.forEach((course, i) => {
+      description += `${course[1].name} - ${parseType(course[1].type)}`;
+      if (i !== (courses.length - 1)) description += ' / ';
+    });
+
+    setDescription(description);
   }, [courses]);
 
   useEffect(() => {
@@ -64,17 +149,6 @@ const Checkout = () => {
       });
     }
   }, [isError]);
-
-  useEffect(() => {
-    let description = '';
-
-    courses.forEach((course, i) => {
-      description += `${course[1].name} - ${parseType(course[1].type)}`;
-      if (i !== (courses.length - 1)) description += ' / ';
-    });
-
-    setDescription(description);
-  }, [courses]);
 
   const nextPage = (() => {
     isLoading = true;
@@ -202,6 +276,7 @@ const Checkout = () => {
           }).then(result => {
             if(!result.hasOwnProperty('error_message')) {
               setError(false);
+              localStorage.setItem('expresso-cursos-purchase-completed', true);
               navigate('/checkout/confirmacao-de-compra');
             } else {
               setErrorMsg(`Ocorreu um erro ao tentar realizar o pagamento. Por favor, confira seus dados e tente novamente. Se o erro persistir, entre em contato conosco pelo número ${FormatPhone(process.env.REACT_APP_CONTACT_NUMBER_MATEUS)}`)

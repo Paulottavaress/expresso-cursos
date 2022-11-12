@@ -30,7 +30,7 @@ const Registration = ({ nextPage }) => {
     setRegistrationInfo(e);
   };
 
-  const getCep = (cep) => {
+  const getCep = cep => {
     fetch(process.env.REACT_APP_CEP_API + cep + '/json/', {
       method: "GET"
     }).then((res) => {
@@ -114,9 +114,20 @@ const Registration = ({ nextPage }) => {
     errorMsg = '';
     isError = true;
 
-    const fields = Object.values(registrationInfo);
+    let fields = Object.values(registrationInfo);
 
     const emptyFields = fields.filter(field => field.replace(/[^\w\s]/gi, '') === '');
+
+    fields = Object.entries(registrationInfo);
+
+    fields.forEach(field => {
+      if ([
+        'phoneNumber',
+        'identificationNumber'
+      ].includes(field[0])) {
+        registrationInfo[field[0]] = registrationInfo[field[0]].replace(/[^a-zA-Z0-9 ]/g, '');
+      }
+    });
 
     if (emptyFields.length >= 2 && registrationInfo.addressComplement !== '') { 
       errorMsg = 'Favor preencher todos os campos. O único campo opcional é o de complemento.';
@@ -142,13 +153,16 @@ const Registration = ({ nextPage }) => {
       isError = false;
     };
 
-    (!isError)
-      ? nextPage()
-      : setAlert({
+    if (!isError) {
+      localStorage.setItem('expresso-cursos-registration-info', JSON.stringify(registrationInfo));
+      nextPage();
+    } else {
+      setAlert({
         type: 'danger',
         text: errorMsg,
         time: 5000
       });
+    }
   }
 
   const validateBirthday = () => {
@@ -286,11 +300,11 @@ const Registration = ({ nextPage }) => {
           <div className='form-field'>
             <InputLabel id='form-register__identificationType_label'>Tipo de pessoa</InputLabel>
             <Select
-              id='form-register__cardholderEmail'
+              id='form-register__identificationType'
               labelId='form-register__identificationType_label'
               label='Tipo de pessoa'
               value={registrationInfo.identificationType}
-              name='email'
+              name='identificationType'
               type='text'
               variant='standard'
               color='warning'
@@ -854,7 +868,7 @@ const Registration = ({ nextPage }) => {
                 id='form_state'
                 name='state'
                 type='text'
-                label='Bairro'
+                label='Estado'
                 variant='standard'
                 color='warning'
                 onChange={onChange}

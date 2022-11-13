@@ -33,7 +33,6 @@ const Checkout = () => {
   const {
     registrationInfo,
     setRegistrationInfo,
-    setRegistrationInfoCompletely,
     setPaymentMethod,
     paymentMethod
   } = checkoutContext;
@@ -42,6 +41,7 @@ const Checkout = () => {
   const [errorMsg, setErrorMsg] = useState(false);
   const [isCardInstatiated, setCardInstance] = useState(false);
   const [description, setDescription] = useState('');
+  const [isRefreshed, setRefreshed] = useState(false);
 
   let isLoading = false;
 
@@ -113,7 +113,24 @@ const Checkout = () => {
 
           break;
         case '/checkout/pagamento':
-          setRegistrationInfoCompletely(userRegistrationInfo);
+          if (!isRefreshed) {
+            const returnBtn = document.querySelector('#general-payment-previous-page');
+
+            if (returnBtn) {
+              returnBtn.click();
+
+                const interval = setInterval(() => {
+                  const isFormLoaded = (document.querySelector("[name='address']") !== null);
+    
+                  if (isFormLoaded) {
+                    clearInterval(interval);
+                    document.querySelector('.form-next-page').click();
+                    setRefreshed(true);
+                  };
+                }, 1000)
+              };
+            };
+
           break;
       };
     } else if (location.pathname.includes('checkout/pagamento')) navigate('/checkout/matricula');
@@ -356,6 +373,7 @@ const Checkout = () => {
         <div className='btn-area d-flex align-items-center bg-secondary my-3 p-3'>
           <div className='btn-group d-flex'>
             <button
+              id='general-payment-previous-page'
               className="form-previous-page contact-btn btn btn-remove d-flex align-items-center"
               type="button"
               onClick={() => navigate('/checkout/matricula')}

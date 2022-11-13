@@ -15,7 +15,7 @@ const MercadoPagoSuccessfulPurchase = () => {
     const isUserABuyer = localStorage.getItem('expresso-cursos-purchase-completed');
 
     if (!isUserABuyer) navigate('/carrinho');
-  });
+  }, []);
 
   useEffect(() => {
     switch(paymentMethod) {

@@ -68,6 +68,10 @@ img {
   padding: 0 2rem;
 }
 
+.strike-through {
+  text-decoration: line-through;
+}
+
 .text-size-xs {
   font-size: 12px;
 }
@@ -182,6 +186,55 @@ img {
           margin-right: 0px !important;
         }
       }
+    }
+  }
+}
+
+.centered-modal-container {
+  z-index: 99999;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  display: flex;
+
+  .overlay {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+
+  .centered-modal {
+    background: #ffffff;
+    padding: 32px;
+    border-radius: 8px;
+    width: 400px;
+    max-width: 80%;
+    z-index: 1;
+    position: relative;
+    margin: auto;
+
+    .header-color-mark {
+      background-color: $primary;
+      width: 100%;
+      height: 12px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      border-radius: 4px 4px 0 0;
+    }
+
+    .black-friday-tag {
+      position: absolute;
+      width: 40%;
+      transform: rotate(-60deg);
+      right: -60px;
+      bottom: -120px;
     }
   }
 }
@@ -601,6 +654,7 @@ img {
   max-width: 90%;
   border-radius: 10px;
   margin-right: 0px;
+  line-height: 15px;
 }
 
 .btn-remove,
@@ -952,6 +1006,24 @@ table th {
   }
 }
 
+@media (max-width: 515px) {
+  .centered-modal-container {
+    .centered-modal {
+      padding: 32px 16px;
+    }
+  }
+}
+
+@media (max-width: 450px) {
+  .centered-modal-container {
+    .centered-modal {
+      .black-friday-tag {
+        bottom: -105px;
+      }
+    }
+  }
+}
+
 @media (max-width: 425px) {
   .navbar {
     padding: 0.7rem 1rem;
@@ -1140,6 +1212,17 @@ table th {
   border: 3px solid #000000;
 }
 
+@media (max-width: 400px) {
+  .centered-modal-container {
+    .centered-modal {
+      .black-friday-tag {
+        bottom: -95px;
+        right: -50px;
+      }
+    }
+  }
+}
+
 @media (max-width: 350px) {
   .box {
     i {
@@ -1150,6 +1233,15 @@ table th {
   #course-content {
     .module {
       height: 190px;
+    }
+  }
+
+  .centered-modal-container {
+    .centered-modal {
+      .black-friday-tag {
+        bottom: -80px;
+        right: -45px;
+      }
     }
   }
 }
@@ -1172,6 +1264,15 @@ table th {
 
     p {
       font-size: 20px;
+    }
+  }
+
+  .centered-modal-container {
+    .centered-modal {
+      .black-friday-tag {
+        bottom: -70px;
+        right: -40px;
+      }
     }
   }
 }

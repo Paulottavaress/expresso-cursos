@@ -32,8 +32,8 @@ const Cart = () => {
                 <Link to={course[1].sellingPage}>
                   <h3 className='text-light'>{course[1].name} - curso de {parseType(course[1].type)}</h3>
                 </Link>
-                <h4 className='text-success'>{course[1].value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</h4>
-                <h6 className='text-light'>5% de desconto no PIX ou 5x sem juros no cartão!</h6>
+                <h6 className='text-light'><span className='text-success'>{course[1].value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</span> de 5x sem juros</h6>
+                <h6 className='text-light'><span className='text-success'>{(course[1].value * process.env.REACT_APP_PIX_DISCOUNT).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</span> à vista</h6>
                 <span
                   id={course[0]}
                   className='text-primary m-0'
@@ -52,7 +52,14 @@ const Cart = () => {
         )}
       </div>
       <div className='subtotal-area d-flex align-items-center justify-content-between bg-secondary my-3 p-3'>
-        <h4 className='m-0 text-center'>Subtotal: <span className='text-success'>{subtotal.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</span></h4>
+        <div className='d-flex align-items-center gap-1 flex-wrap'>
+          <h4 className='m-0 text-center'>Subtotal ({courses.length} {(courses.length === 1) ? 'curso' : 'cursos'}):</h4>
+          <div className='d-flex align-items-center gap-1 flex-nowrap'>
+            <p className='h4 text-danger m-0 strike-through'>{(400 * courses.length).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</p>
+            <i className='fa-solid fa-arrow-right'></i>
+            <p className='h4 text-success m-0'>{(subtotal * process.env.REACT_APP_PIX_DISCOUNT).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</p>
+          </div>
+        </div>
         {(window.innerWidth > 768) && (
         <div className='btn-area d-flex'>
           <HelpBtn

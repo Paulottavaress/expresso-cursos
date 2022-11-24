@@ -64,7 +64,6 @@ CenteredModal.propTypes = {
 };
 
 CenteredModal.defaultProps = {
-
   phone: process.env.REACT_APP_CONTACT_NUMBER_MATEUS
 }
 

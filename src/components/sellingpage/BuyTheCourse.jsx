@@ -23,11 +23,14 @@ const BuyTheCourse = ({ courseInfo }) => {
             </div>
             <div className='d-flex flex-column justify-content-center align-items-center mb-5'>
               <p className='h1 font-weight-bold mb-0'>BLACK FRIDAY</p>
-              <p className='h4 font-weight-bold'>EXPRESSO CURSOS</p>
+              <p className='h4'>EXPRESSO CURSOS</p>
               <div className='d-flex align-items-center gap-3 mb-5'>
                 <p className='h1 text-danger font-weight-bold text-center m-0 strike-through'>R$ 400,00</p>
                 <i className='fa-solid fa-arrow-right'></i>
-                <p className="h1 text-success font-weight-bold text-center m-0">{(courseInfo[1].value * 0.9091).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</p>
+                <div className='position-relative'>
+                  <p className='h1 text-success font-weight-bold text-center m-0'>{(courseInfo[1].value * process.env.REACT_APP_PIX_DISCOUNT).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})}</p>
+                  <p className='m-0 position-absolute end-0'>à vista</p>
+                </div>
               </div>
               <p className='h6 text-danger text-center mb-0'>Promoção válida para os primeiros <span className='font-weight-bold'>50</span> compradores até às <span className='font-weight-bold'>23:59</span> de <span className='font-weight-bold'>27/11/2022</span></p>
               <BuyBtn
@@ -35,7 +38,7 @@ const BuyTheCourse = ({ courseInfo }) => {
                 text='Comprar agora!'
                 margin='my-1'
               />
-              <p className='h6 text-success text-center mb-0'>{courseInfo[1].value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})} de 5x sem juros no cartão de crédito ou {(courseInfo[1].value * 0.9091).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})} à vista no PIX ou boleto bancário</p>
+              <p className='h6 text-success text-center mb-0'>{courseInfo[1].value.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})} de 5x sem juros no cartão de crédito ou {(courseInfo[1].value * process.env.REACT_APP_PIX_DISCOUNT).toLocaleString('pt-br',{style: 'currency', currency: 'BRL'})} à vista no PIX ou boleto bancário</p>
             </div>
             <div className='img-container w-100'>
               <img src="https://imgmp.mlstatic.com/org-img/MLB/MP/BANNERS/tipo2_575X40.jpg?v=1" alt="Mercado Pago - Meios de pagamento" />

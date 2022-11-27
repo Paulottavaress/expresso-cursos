@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import CartContext from '../../context/cart/cartContext';
 import PropTypes from 'prop-types';
 
 const WhatsAppModal = ({
@@ -7,6 +9,24 @@ const WhatsAppModal = ({
   wppMsg,
   phone,
 }) => {
+  const cartContext = useContext(CartContext);
+  const { availableCourses } = cartContext;
+
+  const contact = () => {
+    const isPixelLive = document.querySelector('#g-ads-pixel');
+
+    if (!isPixelLive) {
+      const script = document.createElement('script');
+      document.createElement('script');
+      script.setAttribute('id', 'g-ads-pixel');
+      script.type = 'text/javascript';
+      script.text = "gtag('event', 'conversion', {'send_to': 'AW-355317261/cDn2CKTL3dADEI3stqkB','value': 350.0,'currency': 'BRL','transaction_id': ''});";
+      document.head.appendChild(script);
+    };
+
+    window.open('https://api.whatsapp.com/send?phone=' + phone + '&text=' + wppMsg, '_blank');
+  };
+
   return (
     <div
       id='wpp-modal'
@@ -46,11 +66,9 @@ const WhatsAppModal = ({
             alt='Foto do vendedor Mateus' 
           />
         </div>
-        <a
-          href={'https://api.whatsapp.com/send?phone=' + phone + '&text=' + wppMsg}
-          target='_blank'
-          rel='noreferrer'
+        <div
           className='contact-btn btn btn-block btn-remove d-flex justify-content-center align-items-center m-auto'
+          onClick={() => contact()}
         >
           <div
             className='img-container'
@@ -62,7 +80,7 @@ const WhatsAppModal = ({
             />
           </div>
           <p className={'m-0 text-light font-weight-bold flex-grow-1 ' + textSize}>{ btnText }</p>
-        </a>
+        </div>
       </div>
     </div>
   );

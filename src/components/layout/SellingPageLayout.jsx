@@ -1,19 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useLocation, Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
-import CenteredModal from '../common/CenteredModal';
 import SocialMediaTab from './SocialMediaTab';
 import WhatsAppModal from '../../components/common/WhatsAppModal';
 import BuyBtnArea from '../../components/sellingpage/BuyBtnArea';
-import { parseType } from '../../utils/ParseType';
 
 const SellingPageLayout = () => {
   const location = useLocation();
 
   const [showWppModal, setShowWppModal] = useState(false);
   const [wppMessage, setWppMessage] = useState('');
-  const [isPromotionalModalOpen, setModal] = useState(true);
-  const [promotionalWppMsg, setPromotionalWppMessage] = useState('');
 
   useEffect(() => {
     if (location) {
@@ -50,28 +46,29 @@ const SellingPageLayout = () => {
           break;
         default:
           setWppMessage('Gostaria de tirar uma dúvida. Pode me ajudar?');
-      };
-
-      const splittedLocation = window.location.pathname.split('/');
-      let formattedCourse = splittedLocation[2].replaceAll('-', ' ');
-
-      setPromotionalWppMessage(`Gostaria de saber mais sobre a promoção de Black Friday para o curso ${formattedCourse} - ${parseType(splittedLocation[3])}. Pode me ajudar?`)
+      }
     }
   }, [location]);
 
-  const switchPromotionalModal = () => setModal(prevSetModal => !prevSetModal);
+  useEffect(() => {
+    let script = document.createElement('script');
 
-  const switchWppModal = () => setShowWppModal(prevIsPromotionalModalOpen=> !prevIsPromotionalModalOpen);
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-355317261';
+    script.async = true;
+
+    document.head.appendChild(script);
+
+    script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.text = "window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'AW-355317261');";
+    document.head.appendChild(script);
+  }, []);
+
+  const switchWppModal = () => setShowWppModal(prevShowWppModal => !prevShowWppModal);
 
   return (
     <div id='selling-page-layout'>
       <Navbar />
-      {isPromotionalModalOpen && (
-        <CenteredModal 
-          switchPromotionalModal={switchPromotionalModal}
-          wppMsg={promotionalWppMsg}
-        />
-      )}
       <SocialMediaTab />
       <Outlet />
       <BuyBtnArea switchWppModal={switchWppModal} />

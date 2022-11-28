@@ -9,4 +9,13 @@ export const FormatDate = date => {
   return date;
 }
 
-export default FormatDate;
+export const ISOtoBRDate = date => {
+  if (typeof date === 'string') {
+    const splittedDate = date.split('-');
+    let formattedDate = splittedDate[2] + '/' + splittedDate[1] + '/' + splittedDate[0];
+  
+    return formattedDate;
+  }
+
+  return date;
+}

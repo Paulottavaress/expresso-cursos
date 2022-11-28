@@ -236,6 +236,20 @@ img {
       right: -60px;
       bottom: -120px;
     }
+    
+    .christmas-corner-decor {
+      position: absolute;
+      width: 40%;
+      top: -35px;
+      left: -35px;
+    }
+    
+    .christmas-balls-decor {
+      position: absolute;
+      width: 20%;
+      right: 0px;
+      bottom: -120px;
+    }
   }
 }
 
@@ -1020,6 +1034,10 @@ table th {
       .black-friday-tag {
         bottom: -105px;
       }
+
+      .christmas-balls-decor {
+        bottom: -100px;
+      }
     }
   }
 }
@@ -1219,6 +1237,15 @@ table th {
         bottom: -95px;
         right: -50px;
       }
+
+      .christmas-corner-decor {
+        top: -25px;
+        left: -25px;
+      }
+
+      .christmas-balls-decor {
+        bottom: -90px;
+      }
     }
   }
 }
@@ -1241,6 +1268,15 @@ table th {
       .black-friday-tag {
         bottom: -80px;
         right: -45px;
+      }
+
+      .christmas-corner-decor {
+        top: -20px;
+        left: -20px;
+      }
+
+      .christmas-balls-decor {
+        bottom: -75px;
       }
     }
   }
@@ -1272,6 +1308,10 @@ table th {
       .black-friday-tag {
         bottom: -70px;
         right: -40px;
+      }
+
+      .christmas-balls-decor {
+        bottom: -65px;
       }
     }
   }

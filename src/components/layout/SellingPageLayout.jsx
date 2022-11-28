@@ -6,6 +6,7 @@ import SocialMediaTab from './SocialMediaTab';
 import WhatsAppModal from '../../components/common/WhatsAppModal';
 import BuyBtnArea from '../../components/sellingpage/BuyBtnArea';
 import { parseType } from '../../utils/ParseType';
+import { CurrentPromo } from '../../utils/Promotions';
 
 const SellingPageLayout = () => {
   const location = useLocation();
@@ -14,6 +15,8 @@ const SellingPageLayout = () => {
   const [wppMessage, setWppMessage] = useState('');
   const [isPromotionalModalOpen, setModal] = useState(true);
   const [promotionalWppMsg, setPromotionalWppMessage] = useState('');
+
+  const currentPromo = CurrentPromo();
 
   useEffect(() => {
     if (location) {
@@ -55,7 +58,7 @@ const SellingPageLayout = () => {
       const splittedLocation = window.location.pathname.split('/');
       let formattedCourse = splittedLocation[2].replaceAll('-', ' ');
 
-      setPromotionalWppMessage(`Gostaria de saber mais sobre a promoção de Black Friday para o curso ${formattedCourse} - ${parseType(splittedLocation[3])}. Pode me ajudar?`)
+      setPromotionalWppMessage(`Gostaria de saber mais sobre a promoção de ${currentPromo.title.toLowerCase()} para o curso ${formattedCourse} - ${parseType(splittedLocation[3])}. Pode me ajudar?`)
     }
   }, [location]);
 

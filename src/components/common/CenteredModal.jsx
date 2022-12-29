@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { ISOtoBRDate } from '../../utils/FormatDate';
 import { CurrentPromo } from '../../utils/Promotions';
+import moment from 'moment';
+import Countdown from './Countdown';
 
 const CenteredModal = ({ 
   switchPromotionalModal,
@@ -28,6 +30,7 @@ const CenteredModal = ({
         </div>
         <p className='h6 m-0'><span className='font-weight-bold'>TODOS</span> os cursos com até <span className='font-weight-bold'>{currentPromo.percentage}</span> de desconto</p>
         <p className='h6 mb-0'>Promoção válida para os primeiros <span className='font-weight-bold'>{currentPromo.amount}</span> compradores até às <span className='font-weight-bold text-left'>23:59</span> de <span className='font-weight-bold'>{ISOtoBRDate(currentPromo.endDt)}</span></p>
+        <Countdown endDt={currentPromo.endDt}/>
       </main>
       <footer className='header-footer d-flex gap-3'>
         <button
@@ -76,6 +79,17 @@ const CenteredModal = ({
         </>
       }
       {/* END -- Christmas decor -- END*/}
+      {/* START -- New years decor -- START */}
+      { (currentPromo.name === 'new years') &&
+        <>
+          <img
+            className='new-years-top-decor'
+            src='/assets/images/seasonal/new-years-top-decor.png'
+            alt='Confete dourado de ano novo' 
+          />
+        </>
+      }
+      {/* END -- New years decor -- END*/}
     </div>
   </div>
   )

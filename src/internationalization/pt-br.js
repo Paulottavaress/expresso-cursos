@@ -52,6 +52,14 @@ const ptBr = {
     successEdition: 'A edição do registro {var} foi feita com sucesso!',
     failureEdition: 'A edição do registro {var} não pode ser concluída',
     cancelEdition: 'A edição do registro {var} foi cancelada'
+  },
+  countdown: {
+    and: 'e',
+    days: 'dias',
+    finishesIn: 'acaba em',
+    hours: 'horas',
+    minutes: 'minutos',
+    seconds: 'segundos'
   }
 };
 

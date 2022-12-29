@@ -1,4 +1,8 @@
 const ptBr = {
+  applyCoupon: {
+    discountCoupon: 'cupom de desconto',
+    applyDiscount: 'aplicar desconto'
+  },
   leftSidebar: {
     profile: 'perfil',
     leads: 'leads',

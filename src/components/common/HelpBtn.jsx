@@ -12,7 +12,7 @@ const HelpBtn = ({
       href={'https://api.whatsapp.com/send?phone=' + phone + '&text=' + wppMsg}
       target="_blank"
       rel="noreferrer"
-      className="contact-btn btn btn-remove d-flex align-items-center"
+      className="contact-btn btn btn-remove d-flex align-items-center ml-17px"
     >
       <p className={'m-0 text-light ' + textSize}>{ btnText }</p>
     </a>

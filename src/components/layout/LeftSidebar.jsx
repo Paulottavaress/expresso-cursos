@@ -42,7 +42,10 @@ const LeftSidebar = forwardRef((props, ref) => {
           alt='Expresso Cursos Logo'
         />
       </li>
-      <li className='left-sidebar-btn'>
+      <li
+        className='left-sidebar-btn'
+        onClick={() => navigate('/management/profile')}
+      >
         <p><i className='fa-solid fa-id-card-clip' />{capitalizeFirstLetter(ptBr.leftSidebar['profile'])}</p>
       </li>
       <li
@@ -51,10 +54,16 @@ const LeftSidebar = forwardRef((props, ref) => {
       >
         <p><i className='fa-solid fa-magnet' /> {capitalizeFirstLetter(ptBr.leftSidebar['leads'])}</p>
       </li>
-      <li className='left-sidebar-btn'>
+      <li
+        className='left-sidebar-btn'
+        onClick={() => navigate('/management/coupons')}
+      >
         <p><i className='fa-solid fa-ticket' />{capitalizeFirstLetter(ptBr.leftSidebar['coupons'])}</p>
       </li>
-      <li className='left-sidebar-btn'>
+      <li
+        className='left-sidebar-btn'
+        onClick={() => navigate('/management/courses')}
+      >
         <p><i className='fa-sharp fa-solid fa-truck-fast' />{capitalizeFirstLetter(ptBr.leftSidebar['courses'])}</p>
       </li>
     </menu>

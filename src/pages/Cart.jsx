@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import CartContext from '../context/cart/cartContext';
 import HelpBtn from '../components/common/HelpBtn';
+import ApplyCoupon from '../components/cart/ApplyCoupon';
 import { parseType } from '../utils/ParseType';
 
 const Cart = () => {
@@ -50,6 +51,9 @@ const Cart = () => {
             <h4 className='m-0'>Seu carrinho está vazio. Adicione algum curso!</h4>
           </div>
         )}
+      </div>
+      <div className='coupon-area bg-secondary my-3 p-3 br-10px'>
+        <ApplyCoupon />
       </div>
       <div className='subtotal-area d-flex align-items-center justify-content-between bg-secondary my-3 p-3'>
         <div className='d-flex align-items-center gap-1 flex-wrap'>

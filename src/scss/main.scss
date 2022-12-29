@@ -76,6 +76,10 @@ img {
   font-size: 12px;
 }
 
+.white-space-nowrap {
+  white-space: nowrap;
+}
+
 .white-background-mark {
   background: rgba(255, 255, 255, 0.7);
   padding: 5px 20px;
@@ -128,6 +132,10 @@ img {
 
 .d-flex {
   display: flex;
+}
+
+.br-10px {
+  border-radius: 10px;
 }
 
 .box {
@@ -300,6 +308,17 @@ img {
     .btn-area {
       border-radius: 10px;
     }
+  }
+}
+
+.coupon-field {
+  #discount-coupon-field {
+    border-top: none;
+    border-right: none;
+    border-bottom: 1px dashed $light;
+    border-left: none;
+    color: $light;
+    max-width: 175px;
   }
 }
 
@@ -519,6 +538,9 @@ img {
 .mx-3 {
   margin: 0 3rem !important;
 }
+.mr-0px {
+  margin-right: 0px !important;
+}
 .mr {
   margin-right: 0.5rem;
 }
@@ -542,6 +564,9 @@ img {
 }
 .ml-3 {
   margin-left: 3rem;
+}
+.ml-17px {
+  margin-left: 17px;
 }
 
 .text-break-all {

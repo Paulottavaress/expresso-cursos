@@ -23,8 +23,11 @@ import TransporteEscolarSellingPage from './pages/sellingpage/TransporteEscolarS
 import TransporteCargaIndivisivelSellingPage from './pages/sellingpage/TransporteCargaIndivisivelSellingPage';
 import VeiculosDeEmergenciaSellingPage from './pages/sellingpage/VeiculosDeEmergenciaSellingPage';
 import ManagementLayout from './components/layout/ManagementLayout';
+import Profile from './pages/management/Profile';
 import Leads from './pages/management/Leads';
 import Lead from './components/management/Lead';
+import Coupons from './pages/management/Coupons';
+import Courses from './pages/management/Courses';
 
 const App = () => {
   return (
@@ -58,10 +61,13 @@ const App = () => {
                   <Route path='/cursos/veiculos-de-emergencia/atualizacao' element={<VeiculosDeEmergenciaSellingPage />} />
                 </Route>
                 <Route path='/management' element={<ManagementLayout />}>
+                  <Route path='/management/profile' element={<Profile />} />
                   <Route path='/management/leads' element={<Leads />} />
                   <Route path='/management/leads/create' element={<Lead />} />
                   <Route path='/management/leads/:identificationNumber/visualize' element={<Lead />} />
                   <Route path='/management/leads/:identificationNumber/edit' element={<Lead />} />
+                  <Route path='/management/coupons' element={<Coupons />} />
+                  <Route path='/management/courses' element={<Courses />} />
                 </Route>
                 <Route path='*' element={
                     <main

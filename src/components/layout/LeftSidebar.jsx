@@ -54,7 +54,10 @@ const LeftSidebar = forwardRef((props, ref) => {
       <li className='left-sidebar-btn'>
         <p><i className='fa-solid fa-ticket' />{capitalizeFirstLetter(ptBr.leftSidebar['coupons'])}</p>
       </li>
-      <li className='left-sidebar-btn'>
+      <li 
+        className='left-sidebar-btn'
+        onClick={() => navigate('/management/courses')}
+      >
         <p><i className='fa-sharp fa-solid fa-truck-fast' />{capitalizeFirstLetter(ptBr.leftSidebar['courses'])}</p>
       </li>
     </menu>

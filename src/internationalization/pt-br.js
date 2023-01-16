@@ -60,6 +60,14 @@ const ptBr = {
     hours: 'horas',
     minutes: 'minutos',
     seconds: 'segundos'
+  },
+  mCurses: {
+    errSelectACourse: 'é necessário selecionar, pelo menos, 1 curso para serializar a URL',
+    generatedUrl: 'URL gerada:',
+    select: 'selecionar',
+    selectCourses: 'selecione um ou mais cursos',
+    selectedCourses: 'Cursos selecionados:',
+    serialize: 'serializar',
   }
 };
 

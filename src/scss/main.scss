@@ -1203,6 +1203,35 @@ table th {
       }
     }
   }
+
+  #management-courses-page {
+    #serialize-url-form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      input, 
+      select {
+        margin: 0px;
+      }
+
+      #serialize-url-area {
+        display: flex;
+        flex-direction: column;
+
+        #serialize-url-generate-area {
+          display: flex;
+          gap: 10px;
+
+          #serialize-url-btn {
+            background-color: rgb(189, 186, 189);
+            padding: 5px 15px;
+            border: 1px solid #000;
+          }
+        }
+      }
+    }
+  }
 }
 
 .actions-table {

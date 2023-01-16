@@ -1,4 +1,4 @@
-import React, { useContext }  from 'react';
+import { useEffect, useContext }  from 'react';
 import { Link } from 'react-router-dom';
 import CartContext from '../../context/cart/cartContext';
 import { upperCaseParseType } from '../../utils/ParseType';
@@ -6,7 +6,14 @@ import BuyBtn from '../common/BuyBtn';
 
 const Courses = () => {
   const cartContext = useContext(CartContext);
-  let { availableCourses } = cartContext;
+  let { 
+    availableCourses,
+    setAvailableCourses
+   } = cartContext;
+
+   useEffect(() => {
+    setAvailableCourses();
+   },[]);
 
   return (
     <div className='courses-area bg-primary'>
@@ -16,7 +23,7 @@ const Courses = () => {
           <h3>Todos os cursos são 100% online e credenciados</h3>
         </div>
         <div className='grid row g-2'>
-        {availableCourses && availableCourses.map((course) => (
+        {availableCourses && availableCourses.map(course => (
           <div
             className='d-flex col-md-4'
             key={course[0]}

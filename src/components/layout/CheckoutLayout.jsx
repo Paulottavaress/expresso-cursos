@@ -1,5 +1,5 @@
-import React, { useContext } from 'react';
-import { useLocation, Outlet } from 'react-router-dom';
+import React, { useContext, useEffect } from 'react';
+import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import Alert from '../common/Alert';
@@ -14,7 +14,7 @@ const CheckoutLayout = () => {
     notAllowedDialog 
   } = alertContext;
 
-  const location = useLocation();
+  useEffect(() => window.history.replaceState({}, document.title, '/checkout/matricula'), []);
 
   return (
     <div id='checkout-layout'>

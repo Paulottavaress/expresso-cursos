@@ -17,10 +17,6 @@ const CartState = props => {
 
   const [state, dispatch] = useReducer(cartReducer, initialState);
 
-  useEffect(() => {
-    setAvailableCourses();
-  }, []);
-
   const setAvailableCourses = async () => {
     try {
       let res = await fetch(process.env.REACT_APP_BASE_URL + process.env.REACT_APP_AVAILABLE_COURSES_URL, {
@@ -78,6 +74,7 @@ const CartState = props => {
         availableCourses: state.availableCourses,
         courses: state.courses,
         subtotal: state.subtotal,
+        setAvailableCourses,
         setCart,
         addToCart,
         removeFromCart

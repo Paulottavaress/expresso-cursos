@@ -25,6 +25,7 @@ import VeiculosDeEmergenciaSellingPage from './pages/sellingpage/VeiculosDeEmerg
 import ManagementLayout from './components/layout/ManagementLayout';
 import Leads from './pages/management/Leads';
 import Lead from './components/management/Lead';
+import Courses from './pages/management/Courses';
 
 const App = () => {
   return (
@@ -62,6 +63,7 @@ const App = () => {
                   <Route path='/management/leads/create' element={<Lead />} />
                   <Route path='/management/leads/:identificationNumber/visualize' element={<Lead />} />
                   <Route path='/management/leads/:identificationNumber/edit' element={<Lead />} />
+                  <Route path='/management/courses' element={<Courses />} />
                 </Route>
                 <Route path='*' element={
                     <main

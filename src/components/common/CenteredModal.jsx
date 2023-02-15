@@ -90,6 +90,17 @@ const CenteredModal = ({
         </>
       }
       {/* END -- New years decor -- END*/}
+      {/* START -- Carnival decor -- START */}
+      { (currentPromo.name === 'carnival') &&
+        <>
+          <img
+            className='carnival-top-decor'
+            src='/assets/images/seasonal/carnival-top-decor.png'
+            alt='Máscara de carnaval' 
+          />
+        </>
+      }
+      {/* END -- Carnival decor -- END*/}
     </div>
   </div>
   )

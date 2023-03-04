@@ -7,10 +7,14 @@ import AlertContext from '../../context/alert/alertContext';
 import WhatsAppModal from '../common/WhatsAppModal';
 import WhatsAppWindow from '../common/WhatsAppWindow';
 import SocialMediaTab from './SocialMediaTab';
+import CartContext from '../../context/cart/cartContext';
 
 const MainLayout = () => {
   const alertContext = useContext(AlertContext);
   const { alerts } = alertContext;
+  const cartContext = useContext(CartContext);
+
+  let { setAvailableCourses } = cartContext;
 
   const [showWindow, setShowWindow] = useState(false);
   const [wppModal, setShowWppModal] = useState(false);
@@ -23,6 +27,10 @@ const MainLayout = () => {
   const switchWppModal = () => setShowWppModal(prevShowWppModal => !prevShowWppModal);
 
   const location = useLocation();
+
+  useEffect(() => {
+    setAvailableCourses();
+   },[]);
 
   useEffect(() => {
     if (location) {

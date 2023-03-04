@@ -6,14 +6,7 @@ import BuyBtn from '../common/BuyBtn';
 
 const Courses = () => {
   const cartContext = useContext(CartContext);
-  let { 
-    availableCourses,
-    setAvailableCourses
-   } = cartContext;
-
-   useEffect(() => {
-    setAvailableCourses();
-   },[]);
+  let { availableCourses } = cartContext;
 
   return (
     <div className='courses-area bg-primary'>

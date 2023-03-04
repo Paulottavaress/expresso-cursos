@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import CartContext from '../context/cart/cartContext';
 import HelpBtn from '../components/common/HelpBtn';
@@ -9,7 +9,6 @@ const Cart = () => {
   const cartContext = useContext(CartContext);
   const {
     availableCourses,
-    setAvailableCourses,
     courses,
     subtotal,
     removeFromCart,
@@ -17,10 +16,6 @@ const Cart = () => {
   } = cartContext;
 
   const onRemoveBtnClick = (e) => removeFromCart(e.currentTarget.id);
-
-  useEffect(() => {
-    setAvailableCourses();
-  }, []);
 
   useEffect(() => {
     if (availableCourses.length > 0) {

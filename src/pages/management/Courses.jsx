@@ -11,14 +11,7 @@ const Courses = () => {
   const { setAlert } = alertContext;
 
   const cartContext = useContext(CartContext);
-  let {
-    availableCourses,
-    setAvailableCourses
-  } = cartContext;
-
-  useEffect(() => {
-    setAvailableCourses();
-  }, []);
+  let { availableCourses } = cartContext;
 
   const [selectedOptions, setSelectedOptions] = useState([]);
 

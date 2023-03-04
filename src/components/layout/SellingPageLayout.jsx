@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useLocation, Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import CenteredModal from '../common/CenteredModal';
@@ -7,6 +7,7 @@ import WhatsAppModal from '../../components/common/WhatsAppModal';
 import BuyBtnArea from '../../components/sellingpage/BuyBtnArea';
 import { parseType } from '../../utils/ParseType';
 import { CurrentPromo } from '../../utils/Promotions';
+import CartContext from '../../context/cart/cartContext';
 
 const SellingPageLayout = () => {
   const location = useLocation();
@@ -17,6 +18,14 @@ const SellingPageLayout = () => {
   const [promotionalWppMsg, setPromotionalWppMessage] = useState('');
 
   const currentPromo = CurrentPromo();
+
+  const cartContext = useContext(CartContext);
+
+  let { setAvailableCourses } = cartContext;
+
+  useEffect(() => {
+    setAvailableCourses();
+   },[]);
 
   useEffect(() => {
     if (location) {
@@ -58,7 +67,7 @@ const SellingPageLayout = () => {
       const splittedLocation = window.location.pathname.split('/');
       let formattedCourse = splittedLocation[2].replaceAll('-', ' ');
 
-      setPromotionalWppMessage(`Gostaria de saber mais sobre a promoção de ${currentPromo.title.toLowerCase()} para o curso ${formattedCourse} - ${parseType(splittedLocation[3])}. Pode me ajudar?`)
+      if (currentPromo) setPromotionalWppMessage(`Gostaria de saber mais sobre a promoção de ${currentPromo.title.toLowerCase()} para o curso ${formattedCourse} - ${parseType(splittedLocation[3])}. Pode me ajudar?`)
     }
   }, [location]);
 
@@ -69,7 +78,7 @@ const SellingPageLayout = () => {
   return (
     <div id='selling-page-layout'>
       <Navbar />
-      {isPromotionalModalOpen && (
+      {currentPromo && isPromotionalModalOpen && (
         <CenteredModal 
           switchPromotionalModal={switchPromotionalModal}
           wppMsg={promotionalWppMsg}

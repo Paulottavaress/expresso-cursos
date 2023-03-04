@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { ISOtoBRDate } from '../../utils/FormatDate';
 import { CurrentPromo } from '../../utils/Promotions';
-import moment from 'moment';
 import Countdown from './Countdown';
 
 const CenteredModal = ({ 

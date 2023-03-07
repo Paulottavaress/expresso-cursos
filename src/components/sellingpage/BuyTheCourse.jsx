@@ -26,7 +26,7 @@ const BuyTheCourse = ({ courseInfo }) => {
               <p className='h3 text-center m-0 text-success'>Complete seu curso em apenas <span className='font-weight-bold'><u>{courseInfo[1].type === 'formacao' ? 5 : 3} DIAS!</u></span></p>
             </div>
             <div className='d-flex flex-column justify-content-center align-items-center mb-5'>
-              <p className='h1 font-weight-bold mb-0'>{(currentPromo) ? currentPromo.title.toUpperCase() : 'PROMOÇÃO RELÂMPAGO'}</p>
+              <p className='h1 font-weight-bold mb-0 text-center'>{(currentPromo) ? currentPromo.title.toUpperCase() : 'PROMOÇÃO RELÂMPAGO'}</p>
               <p className='h4'>EXPRESSO CURSOS</p>
               <div className='d-flex align-items-center gap-3 mb-5'>
                 <p className='h1 text-danger font-weight-bold text-center m-0 strike-through'>R$ 400,00</p>

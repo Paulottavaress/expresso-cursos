@@ -71,6 +71,20 @@ const SellingPageLayout = () => {
     }
   }, [location]);
 
+  useEffect(() => {
+    let script = document.createElement('script');
+
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=AW-355317261';
+    script.async = true;
+
+    document.head.appendChild(script);
+
+    script = document.createElement('script');
+    script.type = 'text/javascript';
+    script.text = "window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'AW-355317261');";
+    document.head.appendChild(script);
+  }, []);
+
   const switchPromotionalModal = () => setModal(prevSetModal => !prevSetModal);
 
   const switchWppModal = () => setShowWppModal(prevIsPromotionalModalOpen=> !prevIsPromotionalModalOpen);
